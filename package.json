@@ -1,0 +1,35 @@
+{
+  "name": "ftl-cli",
+  "version": "0.0.1",
+  "description": "Official utility for the F.T.L Stack",
+  "bin": {
+    "@saiforceone/create-ftl-stack": "bin/create-ftl-stack.js",
+    "create-ftl-stack": "bin/create-ftl-stack.js"
+  },
+  "main": "dist/cli.js",
+  "scripts": {
+    "start": "npm i && npm run build && npm run dev",
+    "dev": "tsc -w",
+    "build": "tsc",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "cli",
+    "Flask",
+    "Vite",
+    "React",
+    "Vue"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saiforceone/ftl-cli"
+  },
+  "type": "module",
+  "author": "SaiForceOne / Sai",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.6.3",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}
