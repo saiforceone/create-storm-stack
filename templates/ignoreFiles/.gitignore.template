@@ -1,0 +1,21 @@
+# Python & Flask-specific
+instance/
+*.pyc
+*.db
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node-specific ignores
+*.tsbuildinfo
+node_modules
+dist
+
+# IDE-specific ignores
+.idea
+

@@ -1,0 +1,24 @@
+{#
+  Base template for the FTL stack which serves as the entry point for your
+  application. You may update this as you see fit
+#}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>{% app_title %}</title>
+      <!-- custom fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+      <!-- css -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/main.css') }}" />
+      <!-- scripts -->
+      {% ftl_vite_tags %}
+  </head>
+  <body>
+      <div id="app"></div>
+      <ftl-app></ftl-app>
+  </body>
+</html>
