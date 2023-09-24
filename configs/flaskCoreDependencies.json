@@ -1,0 +1,7 @@
+{
+  "packages": {
+    "flask": "*",
+    "jinja2": "*",
+    "jinja2-simple-tags": "*"
+  }
+}
