@@ -28,8 +28,18 @@
   "author": "SaiForceOne / Sai",
   "license": "MIT",
   "devDependencies": {
+    "@types/inquirer": "^9.0.3",
     "@types/node": "^20.6.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "execa": "^8.0.1",
+    "inquirer": "^9.2.11",
+    "ora": "^7.0.1"
   }
 }
