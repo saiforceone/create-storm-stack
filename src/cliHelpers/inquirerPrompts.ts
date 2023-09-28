@@ -20,6 +20,12 @@ export const INQUIRER_PROMPTS: QuestionCollection = [
     },
   },
   // Frontend option prompt
+  {
+    message: 'Which frontend would you like to use',
+    name: 'frontend',
+    type: 'list',
+    choices: ['react', 'lit', 'vue'],
+  },
   // ConsoleLogger Type
   {
     message: 'What kind of logging should we use',

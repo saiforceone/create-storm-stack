@@ -11,6 +11,8 @@ import { preScaffold } from './cliHelpers/preScaffold.js';
 import { postScaffold } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
 import { ConsoleLogger } from './utils/consoleLogger.js';
+import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
+import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
 
 /**
  * @async
@@ -24,15 +26,15 @@ async function cliPrompts(): Promise<Answers> {
 export async function cli() {
   preScaffold();
 
-  const cliAnswers = await cliPrompts();
+  const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
 
   // Process answers
   console.log(cliAnswers);
 
-  ConsoleLogger.printLog('This is an info log test');
-  ConsoleLogger.printLog('This is an warning log test', 'warning');
-  ConsoleLogger.printLog('This is an success log test', 'success');
-  ConsoleLogger.printLog('This is an error log test', 'error');
+  // 1. Scaffold backend / core
+  const coreSetupResult = await scaffoldCore(cliAnswers);
+
+  console.log(coreSetupResult);
 
   postScaffold();
 }
