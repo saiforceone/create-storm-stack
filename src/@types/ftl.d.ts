@@ -33,4 +33,9 @@ declare namespace FTLStackCLI {
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
   };
+
+  // Structure for general FTL package files
+  export type FTLPackageFile = {
+    packages: Record<string, string>;
+  };
 }

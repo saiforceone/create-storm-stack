@@ -33,7 +33,10 @@ export async function scaffoldCore(
 
     // 2. Environment initialization
     const projectPath = path.join(process.cwd(), scaffoldOptions.projectName);
-    const envInitResult = await setupVirtualEnv(projectPath);
+    const envInitResult = await setupVirtualEnv(
+      projectPath,
+      scaffoldOptions.loggerMode
+    );
 
     console.log(envInitResult);
 

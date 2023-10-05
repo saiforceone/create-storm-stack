@@ -6,15 +6,18 @@
 
 // Core & third-party imports
 import path from 'node:path';
-import { access, constants, mkdir } from 'node:fs/promises';
-import { $, execa, execaCommand } from 'execa';
+import { access, constants, mkdir, readFile } from 'node:fs/promises';
+import { execa, execaCommand } from 'execa';
 
 // FTL Imports
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+import LoggerMode = FTLStackCLI.LoggerMode;
+import FTLPackageFile = FTLStackCLI.FTLPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
 import { destinationPathExists } from './fileUtils.js';
 import { PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
 import { CMD_PIPENV } from '../constants/commandConstants.js';
+import { ConsoleLogger } from './consoleLogger.js';
 
 /**
  * @function setupProjectDir
@@ -52,20 +55,54 @@ export async function setupProjectDir(
 }
 
 export async function setupVirtualEnv(
-  projectPath: string
+  projectPath: string,
+  loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
+  const verboseLogs = loggerMode === 'verbose';
   try {
+    if (verboseLogs)
+      ConsoleLogger.printLog(`Changing directory to: ${projectPath}`);
+
     // 1. cd / navigate to project path
     process.chdir(projectPath);
     // 2. execute command to create environment
+    if (verboseLogs)
+      ConsoleLogger.printLog('Setting up virtual environment...');
+
+    await execa(CMD_PIPENV, { stdio: 'pipe' });
     // execaCommand(CMD_PIPENV).stdout?.pipe(process.stdout);
     // const { stdout } = await execaCommand(CMD_PIPENV);
     // console.log(stdout);
-    // console.log('should happen after pipenv shell...');
+    console.log('should happen after pipenv shell...');
     // 3. load flask dependencies and install them
-    // 4. hand off to scaffold core function
+    const currentUrl = import.meta.url;
+    const flaskCoreDepsPath = path.resolve(
+      path.normalize(new URL(currentUrl).pathname),
+      '../../../configs/flaskCoreDependencies.json'
+    );
+    // read the file contents
+    const pkgFile = await readFile(flaskCoreDepsPath, { encoding: 'utf-8' });
+    const pkgData = JSON.parse(pkgFile) as FTLPackageFile;
+    const { packages } = pkgData;
+    console.log('flask core deps: ', flaskCoreDepsPath);
 
+    // construct install string for dependencies
+    const installString = Object.keys(packages)
+      .map((pkg) => pkg)
+      .join(' ');
+
+    if (verboseLogs) ConsoleLogger.printLog('Installing Flask dependencies...');
+
+    const installDepsCommandStr = `pipenv install ${installString}`;
+
+    console.log('install deps string: ', installDepsCommandStr);
+    //
+    // await execa(installDepsCommandStr, { shell: true });
+    // if (verboseLogs)
+    //   ConsoleLogger.printLog('Flask dependencies installed', 'success');
+
+    // 4. hand off to scaffold core function
     output.success = true;
     return output;
   } catch (e) {
