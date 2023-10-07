@@ -8,7 +8,11 @@ import path from 'node:path';
 import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
-import { setupProjectDir, setupVirtualEnv } from '../utils/scaffoldUtils.js';
+import {
+  copyFlaskTemplateFiles,
+  setupProjectDir,
+  setupVirtualEnv,
+} from '../utils/scaffoldUtils.js';
 
 /**
  * @async
@@ -31,14 +35,26 @@ export async function scaffoldCore(
       return output;
     }
 
-    // 2. Environment initialization
+    // 2. Environment initialization and flask installation
     const projectPath = path.join(process.cwd(), scaffoldOptions.projectName);
+
     const envInitResult = await setupVirtualEnv(
       projectPath,
       scaffoldOptions.loggerMode
     );
 
-    console.log(envInitResult);
+    if (!envInitResult.success) {
+      output.message = envInitResult.message;
+      return output;
+    }
+
+    // 3. Copy template files
+    const copyFlaskTemplatesResult = await copyFlaskTemplateFiles(
+      projectPath,
+      scaffoldOptions.loggerMode
+    );
+
+    console.log('copy template result: ', copyFlaskTemplatesResult);
 
     output.success = true;
     return output;

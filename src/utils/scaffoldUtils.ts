@@ -6,8 +6,14 @@
 
 // Core & third-party imports
 import path from 'node:path';
-import { access, constants, mkdir, readFile } from 'node:fs/promises';
-import { execa, execaCommand } from 'execa';
+import {
+  access,
+  constants,
+  cp as copy,
+  mkdir,
+  readFile,
+} from 'node:fs/promises';
+import { execaCommand } from 'execa';
 
 // FTL Imports
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
@@ -16,7 +22,6 @@ import FTLPackageFile = FTLStackCLI.FTLPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
 import { destinationPathExists } from './fileUtils.js';
 import { PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
-import { CMD_PIPENV } from '../constants/commandConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
 
 /**
@@ -54,6 +59,14 @@ export async function setupProjectDir(
   }
 }
 
+/**
+ * @async
+ * @function setupVirtualEnv
+ * @param projectPath
+ * @param loggerMode
+ * @description Executes the commands necessary to set up a virtual environment
+ * and installs the necessary dependencies
+ */
 export async function setupVirtualEnv(
   projectPath: string,
   loggerMode: LoggerMode
@@ -66,43 +79,120 @@ export async function setupVirtualEnv(
 
     // 1. cd / navigate to project path
     process.chdir(projectPath);
+
     // 2. execute command to create environment
     if (verboseLogs)
       ConsoleLogger.printLog('Setting up virtual environment...');
 
-    await execa(CMD_PIPENV, { stdio: 'pipe' });
-    // execaCommand(CMD_PIPENV).stdout?.pipe(process.stdout);
-    // const { stdout } = await execaCommand(CMD_PIPENV);
-    // console.log(stdout);
-    console.log('should happen after pipenv shell...');
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;
+
     const flaskCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       '../../../configs/flaskCoreDependencies.json'
     );
+
     // read the file contents
     const pkgFile = await readFile(flaskCoreDepsPath, { encoding: 'utf-8' });
     const pkgData = JSON.parse(pkgFile) as FTLPackageFile;
     const { packages } = pkgData;
-    console.log('flask core deps: ', flaskCoreDepsPath);
 
     // construct install string for dependencies
     const installString = Object.keys(packages)
       .map((pkg) => pkg)
       .join(' ');
 
-    if (verboseLogs) ConsoleLogger.printLog('Installing Flask dependencies...');
+    if (verboseLogs)
+      ConsoleLogger.printLog(
+        'Setting up virtual environment and installing Flask dependencies...'
+      );
 
     const installDepsCommandStr = `pipenv install ${installString}`;
 
-    console.log('install deps string: ', installDepsCommandStr);
-    //
-    // await execa(installDepsCommandStr, { shell: true });
-    // if (verboseLogs)
-    //   ConsoleLogger.printLog('Flask dependencies installed', 'success');
+    // execute install command
+    await execaCommand(installDepsCommandStr);
+
+    if (verboseLogs)
+      ConsoleLogger.printLog(
+        'Finished setting up virtual environment and installing Flask dependencies',
+        'success'
+      );
 
     // 4. hand off to scaffold core function
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @function copyFlaskTemplateFiles
+ * @param projectPath
+ * @param loggerMode
+ * @description copies required flask template files to the project directory
+ */
+export async function copyFlaskTemplateFiles(
+  projectPath: string,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verboseLogs = loggerMode === 'verbose';
+  try {
+    // 1. get the path to the template files to copy
+    const currentPath = import.meta.url;
+    const normalizedPath = path.normalize(new URL(currentPath).pathname);
+
+    // 2. copy core files
+    const coreAppFilesPath = path.resolve(
+      normalizedPath,
+      '../../../templates/FTLAppCore'
+    );
+
+    if (verboseLogs)
+      ConsoleLogger.printLog('Copying core app files to destination...');
+
+    await copy(coreAppFilesPath, projectPath, { recursive: true });
+
+    if (verboseLogs)
+      ConsoleLogger.printLog('Copied core app files to destination', 'success');
+
+    // 3. copy base template files
+    const baseTemplatePath = path.resolve(
+      normalizedPath,
+      '../../../templates/FTLBaseTemplates'
+    );
+
+    const appTemplateDestPath = path.join(projectPath, 'templates');
+
+    if (verboseLogs)
+      ConsoleLogger.printLog('Copying base template to destination...');
+
+    await copy(baseTemplatePath, appTemplateDestPath, { recursive: true });
+
+    if (verboseLogs)
+      ConsoleLogger.printLog('Copied base template to destination', 'success');
+
+    // 4. copy support files
+    const supportFilesTemplatePath = path.resolve(
+      normalizedPath,
+      '../../../templates/FTLViteTags'
+    );
+
+    const supportFilesDestPath = path.join(projectPath, 'support');
+
+    if (verboseLogs)
+      ConsoleLogger.printLog('Copying support files to destination...');
+
+    await copy(supportFilesTemplatePath, supportFilesDestPath, {
+      recursive: true,
+    });
+
+    if (verboseLogs)
+      ConsoleLogger.printLog('Copied support files to destination', 'success');
+
+    // hand off to scaffold core function
     output.success = true;
     return output;
   } catch (e) {
