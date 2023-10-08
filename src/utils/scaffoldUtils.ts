@@ -23,6 +23,18 @@ import { buildScaffoldOutput } from './generalUtils.js';
 import { destinationPathExists } from './fileUtils.js';
 import { PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
+import {
+  FTL_APP_CORE_TEMPLATE_PATH,
+  FTL_BASE_TEMPLATE_PATH,
+  FTL_FLASK_CORE_DEPS_FILE,
+  FTL_VITE_TAGS_PATH,
+} from '../constants/pathConstants.js';
+import { CMD_PIPENV_INSTALL } from '../constants/commandConstants.js';
+import {
+  SUCCESS_BE_FINISHED_VIRTUAL_ENV,
+  INFO_BE_SET_UP_VIRTUAL_ENV,
+  INFO_BE_COPY_CORE_FILES,
+} from '../constants/stringConstants.js';
 
 /**
  * @function setupProjectDir
@@ -89,7 +101,7 @@ export async function setupVirtualEnv(
 
     const flaskCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      '../../../configs/flaskCoreDependencies.json'
+      FTL_FLASK_CORE_DEPS_FILE
     );
 
     // read the file contents
@@ -102,21 +114,15 @@ export async function setupVirtualEnv(
       .map((pkg) => pkg)
       .join(' ');
 
-    if (verboseLogs)
-      ConsoleLogger.printLog(
-        'Setting up virtual environment and installing Flask dependencies...'
-      );
+    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_SET_UP_VIRTUAL_ENV);
 
-    const installDepsCommandStr = `pipenv install ${installString}`;
+    const installDepsCommandStr = `${CMD_PIPENV_INSTALL} ${installString}`;
 
     // execute install command
     await execaCommand(installDepsCommandStr);
 
     if (verboseLogs)
-      ConsoleLogger.printLog(
-        'Finished setting up virtual environment and installing Flask dependencies',
-        'success'
-      );
+      ConsoleLogger.printLog(SUCCESS_BE_FINISHED_VIRTUAL_ENV, 'success');
 
     // 4. hand off to scaffold core function
     output.success = true;
@@ -147,11 +153,10 @@ export async function copyFlaskTemplateFiles(
     // 2. copy core files
     const coreAppFilesPath = path.resolve(
       normalizedPath,
-      '../../../templates/FTLAppCore'
+      FTL_APP_CORE_TEMPLATE_PATH
     );
 
-    if (verboseLogs)
-      ConsoleLogger.printLog('Copying core app files to destination...');
+    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_CORE_FILES);
 
     await copy(coreAppFilesPath, projectPath, { recursive: true });
 
@@ -161,7 +166,7 @@ export async function copyFlaskTemplateFiles(
     // 3. copy base template files
     const baseTemplatePath = path.resolve(
       normalizedPath,
-      '../../../templates/FTLBaseTemplates'
+      FTL_BASE_TEMPLATE_PATH
     );
 
     const appTemplateDestPath = path.join(projectPath, 'templates');
@@ -177,7 +182,7 @@ export async function copyFlaskTemplateFiles(
     // 4. copy support files
     const supportFilesTemplatePath = path.resolve(
       normalizedPath,
-      '../../../templates/FTLViteTags'
+      FTL_VITE_TAGS_PATH
     );
 
     const supportFilesDestPath = path.join(projectPath, 'support');

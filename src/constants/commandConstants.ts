@@ -4,3 +4,5 @@
  * */
 
 export const CMD_PIPENV = 'pipenv shell';
+
+export const CMD_PIPENV_INSTALL = 'pipenv install';
