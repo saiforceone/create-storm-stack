@@ -10,7 +10,6 @@ import type { Answers } from 'inquirer';
 import { preScaffold } from './cliHelpers/preScaffold.js';
 import { postScaffold } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
-import { ConsoleLogger } from './utils/consoleLogger.js';
 import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
 
@@ -27,9 +26,6 @@ export async function cli() {
   preScaffold();
 
   const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
-
-  // Process answers
-  console.log(cliAnswers);
 
   // 1. Scaffold backend / core
   const coreSetupResult = await scaffoldCore(cliAnswers);

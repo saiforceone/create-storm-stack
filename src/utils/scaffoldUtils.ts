@@ -21,9 +21,11 @@ import LoggerMode = FTLStackCLI.LoggerMode;
 import FTLPackageFile = FTLStackCLI.FTLPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
 import { destinationPathExists } from './fileUtils.js';
-import { PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
+import { ERR_PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
 import {
+  FOLDER_NAME_SUPPORT,
+  FOLDER_NAME_TEMPLATES,
   FTL_APP_CORE_TEMPLATE_PATH,
   FTL_BASE_TEMPLATE_PATH,
   FTL_FLASK_CORE_DEPS_FILE,
@@ -34,6 +36,13 @@ import {
   SUCCESS_BE_FINISHED_VIRTUAL_ENV,
   INFO_BE_SET_UP_VIRTUAL_ENV,
   INFO_BE_COPY_CORE_FILES,
+  SUCCESS_BE_COPY_CORE_FILES,
+  INFO_BE_COPY_BASE_TEMPLATE,
+  SUCCESS_BE_COPY_BASE_TEMPLATE,
+  INFO_BE_COPY_SUPPORT_FILES,
+  SUCCESS_BE_COPY_SUPPORT_FILES,
+  INFO_CHANGING_DIRECTORY_TO,
+  SUCCESS_PROJECT_DIR_OK,
 } from '../constants/stringConstants.js';
 
 /**
@@ -51,7 +60,7 @@ export async function setupProjectDir(
 
     // 1. check the destination
     if (await destinationPathExists(targetPath)) {
-      output.message = 'Project destination already exists';
+      output.message = ERR_PROJECT_DEST_EXISTS;
       // exit
       return output;
     }
@@ -62,7 +71,7 @@ export async function setupProjectDir(
     // 3. check destination access
     await access(targetPath, constants.W_OK);
 
-    output.message = PROJECT_DEST_EXISTS;
+    output.message = SUCCESS_PROJECT_DIR_OK;
     output.success = true;
     return output;
   } catch (e) {
@@ -87,14 +96,13 @@ export async function setupVirtualEnv(
   const verboseLogs = loggerMode === 'verbose';
   try {
     if (verboseLogs)
-      ConsoleLogger.printLog(`Changing directory to: ${projectPath}`);
+      ConsoleLogger.printLog(`${INFO_CHANGING_DIRECTORY_TO} ${projectPath}`);
 
     // 1. cd / navigate to project path
     process.chdir(projectPath);
 
     // 2. execute command to create environment
-    if (verboseLogs)
-      ConsoleLogger.printLog('Setting up virtual environment...');
+    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_SET_UP_VIRTUAL_ENV);
 
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;
@@ -161,7 +169,7 @@ export async function copyFlaskTemplateFiles(
     await copy(coreAppFilesPath, projectPath, { recursive: true });
 
     if (verboseLogs)
-      ConsoleLogger.printLog('Copied core app files to destination', 'success');
+      ConsoleLogger.printLog(SUCCESS_BE_COPY_CORE_FILES, 'success');
 
     // 3. copy base template files
     const baseTemplatePath = path.resolve(
@@ -169,15 +177,14 @@ export async function copyFlaskTemplateFiles(
       FTL_BASE_TEMPLATE_PATH
     );
 
-    const appTemplateDestPath = path.join(projectPath, 'templates');
+    const appTemplateDestPath = path.join(projectPath, FOLDER_NAME_TEMPLATES);
 
-    if (verboseLogs)
-      ConsoleLogger.printLog('Copying base template to destination...');
+    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_BASE_TEMPLATE);
 
     await copy(baseTemplatePath, appTemplateDestPath, { recursive: true });
 
     if (verboseLogs)
-      ConsoleLogger.printLog('Copied base template to destination', 'success');
+      ConsoleLogger.printLog(SUCCESS_BE_COPY_BASE_TEMPLATE, 'success');
 
     // 4. copy support files
     const supportFilesTemplatePath = path.resolve(
@@ -185,17 +192,16 @@ export async function copyFlaskTemplateFiles(
       FTL_VITE_TAGS_PATH
     );
 
-    const supportFilesDestPath = path.join(projectPath, 'support');
+    const supportFilesDestPath = path.join(projectPath, FOLDER_NAME_SUPPORT);
 
-    if (verboseLogs)
-      ConsoleLogger.printLog('Copying support files to destination...');
+    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_SUPPORT_FILES);
 
     await copy(supportFilesTemplatePath, supportFilesDestPath, {
       recursive: true,
     });
 
     if (verboseLogs)
-      ConsoleLogger.printLog('Copied support files to destination', 'success');
+      ConsoleLogger.printLog(SUCCESS_BE_COPY_SUPPORT_FILES, 'success');
 
     // hand off to scaffold core function
     output.success = true;
