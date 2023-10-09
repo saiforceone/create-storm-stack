@@ -29,9 +29,13 @@ import {
   FTL_APP_CORE_TEMPLATE_PATH,
   FTL_BASE_TEMPLATE_PATH,
   FTL_FLASK_CORE_DEPS_FILE,
+  FTL_FRONTEND_CORE_DEPS_FILE,
   FTL_VITE_TAGS_PATH,
 } from '../constants/pathConstants.js';
-import { CMD_PIPENV_INSTALL } from '../constants/commandConstants.js';
+import {
+  CMD_NPM_DEV_INSTALL,
+  CMD_PIPENV_INSTALL,
+} from '../constants/commandConstants.js';
 import {
   SUCCESS_BE_FINISHED_VIRTUAL_ENV,
   INFO_BE_SET_UP_VIRTUAL_ENV,
@@ -204,6 +208,58 @@ export async function copyFlaskTemplateFiles(
       ConsoleLogger.printLog(SUCCESS_BE_COPY_SUPPORT_FILES, 'success');
 
     // hand off to scaffold core function
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @param {string} projectPath
+ * @param {LoggerMode} loggerMode
+ * @description Sets up the base vite dependencies
+ * @return {Promise<ScaffoldOutput>}
+ */
+export async function setupBaseFrontend(
+  projectPath: string,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+  try {
+    if (verbose) ConsoleLogger.printLog('Installing base vite dependencies...');
+    // 1. check project directory
+    console.log('current dir: ', process.cwd());
+    console.log('projectPath: ', projectPath);
+    // 2. load and install dependencies
+    const currentUrl = import.meta.url;
+
+    const viteDepsFilePath = path.resolve(
+      path.normalize(new URL(currentUrl).pathname),
+      FTL_FRONTEND_CORE_DEPS_FILE
+    );
+
+    const viteDepsFile = await readFile(viteDepsFilePath, {
+      encoding: 'utf-8',
+    });
+
+    const depsData = JSON.parse(viteDepsFile) as FTLPackageFile;
+
+    const installString = Object.keys(depsData.packages)
+      .map((dep: string) => `${dep}@${depsData.packages[dep]}`)
+      .join(' ');
+
+    const cmd = `${CMD_NPM_DEV_INSTALL} ${installString}`;
+
+    // execute install
+    await execaCommand(cmd);
+
+    if (verbose)
+      ConsoleLogger.printLog('Installed base vite dependencies!', 'success');
+
     output.success = true;
     return output;
   } catch (e) {

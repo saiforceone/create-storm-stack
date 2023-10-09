@@ -38,4 +38,19 @@ declare namespace FTLStackCLI {
   export type FTLPackageFile = {
     packages: Record<string, string>;
   };
+
+  // Structure of config
+  export type FTLConfigFile = {
+    appId: string;
+    viteHost: string;
+    vitePort: string;
+    frontend: FrontendOpt;
+    frontendBasePath: string;
+    frontendEntryPoint: string;
+    frontendExtensions: string[];
+    database: {
+      dbms: string;
+      path: string;
+    };
+  };
 }

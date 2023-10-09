@@ -19,3 +19,7 @@ export async function destinationPathExists(path: string): Promise<boolean> {
     return false;
   }
 }
+
+export function isInProjectDir(path: string): boolean {
+  return process.cwd() === path;
+}

@@ -16,3 +16,6 @@ export const FTL_FLASK_CORE_DEPS_FILE =
 export const IGNORE_FILES_PATH = '../templates/ignoreFiles';
 
 export const CONFIGS_BASE_PATH = '../configs';
+
+export const FTL_FRONTEND_CORE_DEPS_FILE =
+  '../../../configs/viteBaseDependencies.json';

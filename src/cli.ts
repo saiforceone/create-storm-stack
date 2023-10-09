@@ -12,6 +12,7 @@ import { postScaffold } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
 import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
+import { scaffoldFrontend } from './scaffoldFuncs/scaffoldFrontend.js';
 
 /**
  * @async
@@ -31,6 +32,11 @@ export async function cli() {
   const coreSetupResult = await scaffoldCore(cliAnswers);
 
   console.log(coreSetupResult);
+
+  // 2. Scaffold frontend
+  const frontendSetupResult = await scaffoldFrontend(cliAnswers);
+
+  console.log(frontendSetupResult);
 
   postScaffold();
 }
