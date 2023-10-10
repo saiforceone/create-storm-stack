@@ -53,4 +53,10 @@ declare namespace FTLStackCLI {
       path: string;
     };
   };
+
+  // structure of the frontend dependencies file
+  export type FrontendDependenciesFile = {
+    common: Record<string, string>;
+    frontendDeps: Record<FrontendOpt, Record<string, string>>;
+  };
 }

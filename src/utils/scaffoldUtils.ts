@@ -48,6 +48,8 @@ import {
   INFO_CHANGING_DIRECTORY_TO,
   SUCCESS_PROJECT_DIR_OK,
 } from '../constants/stringConstants.js';
+import FrontendOpt = FTLStackCLI.FrontendOpt;
+import FrontendDependenciesFile = FTLStackCLI.FrontendDependenciesFile;
 
 /**
  * @function setupProjectDir
@@ -231,10 +233,8 @@ export async function setupBaseFrontend(
   const verbose = loggerMode === 'verbose';
   try {
     if (verbose) ConsoleLogger.printLog('Installing base vite dependencies...');
-    // 1. check project directory
-    console.log('current dir: ', process.cwd());
-    console.log('projectPath: ', projectPath);
-    // 2. load and install dependencies
+
+    // 1. load and install dependencies
     const currentUrl = import.meta.url;
 
     const viteDepsFilePath = path.resolve(
@@ -259,6 +259,70 @@ export async function setupBaseFrontend(
 
     if (verbose)
       ConsoleLogger.printLog('Installed base vite dependencies!', 'success');
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ *
+ * @param frontend
+ * @param loggerMode
+ * @returns {Promise<ScaffoldOutput>}
+ */
+export async function setupFrontend(
+  frontend: FrontendOpt,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+
+  try {
+    // load frontend dependencies file
+    const currentPath = import.meta.url;
+    const frontendDepsPath = path.resolve(
+      path.normalize(new URL(currentPath).pathname),
+      '../../configs/frontendDependencies.json'
+    );
+
+    // 2. determine which fronted to install
+    const frontendDepsFile = await readFile(frontendDepsPath, {
+      encoding: 'utf-8',
+    });
+
+    const frontendDeps = JSON.parse(
+      frontendDepsFile
+    ) as FrontendDependenciesFile;
+
+    const { common, frontendDeps: dependencies } = frontendDeps;
+    const feDeps = dependencies[frontend];
+
+    const commonInstallString = Object.keys(common)
+      .map((dep) => `${dep}@${common[dep]}`)
+      .join(' ');
+
+    const feInstallString = Object.keys(feDeps)
+      .map((dep) => `${dep}@${feDeps[dep]}`)
+      .join(' ');
+
+    const finalInstallString = `${CMD_NPM_DEV_INSTALL} ${commonInstallString} ${feInstallString}`;
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        `Installing dependencies for frontend: ${frontend}...`
+      );
+
+    await execaCommand(finalInstallString);
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        `Installed dependencies for frontend: ${frontend}`,
+        'success'
+      );
 
     output.success = true;
     return output;
