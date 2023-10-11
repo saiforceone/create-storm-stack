@@ -269,10 +269,11 @@ export async function setupBaseFrontend(
 }
 
 /**
- *
+ * @async
  * @param frontend
  * @param loggerMode
  * @returns {Promise<ScaffoldOutput>}
+ * @description Runs the process to set up the frontend specified by frontend
  */
 export async function setupFrontend(
   frontend: FrontendOpt,
@@ -286,7 +287,7 @@ export async function setupFrontend(
     const currentPath = import.meta.url;
     const frontendDepsPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      '../../configs/frontendDependencies.json'
+      '../../../configs/frontendDependencies.json'
     );
 
     // 2. determine which fronted to install
@@ -324,6 +325,53 @@ export async function setupFrontend(
         'success'
       );
 
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @param {string} projectPath
+ * @param {FrontendOpt} frontend
+ * @param {LoggerMode} loggerMode
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Copies specific frontend files to the project destination
+ */
+export async function copyFrontendTemplates(
+  projectPath: string,
+  frontend: FrontendOpt,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+  try {
+    // 1. find source directory to copy from
+    const currentPath = import.meta.url;
+
+    const frontendTemplatesPath = path.resolve(
+      path.normalize(new URL(currentPath).pathname),
+      '../../../templates/FTLFrontendTemplates',
+      frontend
+    );
+
+    const targetPath = path.join(projectPath, `ftl_fe_${frontend}`, 'src');
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        `Copying frontend template files for: ${frontend}`
+      );
+
+    // 2. copy files to destination
+    await copy(frontendTemplatesPath, targetPath, { recursive: true });
+
+    if (verbose)
+      ConsoleLogger.printLog(`Copied frontend template files`, 'success');
+
+    output.message = 'Frontend template files copied';
     output.success = true;
     return output;
   } catch (e) {

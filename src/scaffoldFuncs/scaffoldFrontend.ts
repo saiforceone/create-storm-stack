@@ -8,7 +8,11 @@
 import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
-import { setupBaseFrontend, setupFrontend } from '../utils/scaffoldUtils.js';
+import {
+  copyFrontendTemplates,
+  setupBaseFrontend,
+  setupFrontend,
+} from '../utils/scaffoldUtils.js';
 
 /**
  * @async
@@ -41,6 +45,18 @@ export async function scaffoldFrontend(
 
     if (!frontendResult.success) {
       output.message = frontendResult.message;
+      return output;
+    }
+
+    // 3. copy frontend template files to destination
+    const frontendCopyResult = await copyFrontendTemplates(
+      process.cwd(),
+      scaffoldOptions.frontend,
+      scaffoldOptions.loggerMode
+    );
+
+    if (!frontendCopyResult.success) {
+      output.message = frontendCopyResult.message;
       return output;
     }
 
