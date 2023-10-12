@@ -19,3 +19,9 @@ export const CONFIGS_BASE_PATH = '../configs';
 
 export const FTL_FRONTEND_CORE_DEPS_FILE =
   '../../../configs/viteBaseDependencies.json';
+
+export const FTL_FRONTEND_MAIN_DEPS_FILE =
+  '../../../configs/frontendDependencies.json';
+
+export const FTL_FRONTEND_TEMPLATES_PATH =
+  '../../../templates/FTLFrontendTemplates';

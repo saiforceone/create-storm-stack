@@ -20,7 +20,11 @@ import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import LoggerMode = FTLStackCLI.LoggerMode;
 import FTLPackageFile = FTLStackCLI.FTLPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
-import { destinationPathExists } from './fileUtils.js';
+import {
+  destinationPathExists,
+  getProjectConfig,
+  writeProjectConfigData,
+} from './fileUtils.js';
 import { ERR_PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
 import {
@@ -30,6 +34,8 @@ import {
   FTL_BASE_TEMPLATE_PATH,
   FTL_FLASK_CORE_DEPS_FILE,
   FTL_FRONTEND_CORE_DEPS_FILE,
+  FTL_FRONTEND_MAIN_DEPS_FILE,
+  FTL_FRONTEND_TEMPLATES_PATH,
   FTL_VITE_TAGS_PATH,
 } from '../constants/pathConstants.js';
 import {
@@ -50,6 +56,8 @@ import {
 } from '../constants/stringConstants.js';
 import FrontendOpt = FTLStackCLI.FrontendOpt;
 import FrontendDependenciesFile = FTLStackCLI.FrontendDependenciesFile;
+import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
+import FTLFrontendOptFile = FTLStackCLI.FTLFrontendOptFile;
 
 /**
  * @function setupProjectDir
@@ -287,7 +295,7 @@ export async function setupFrontend(
     const currentPath = import.meta.url;
     const frontendDepsPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      '../../../configs/frontendDependencies.json'
+      FTL_FRONTEND_MAIN_DEPS_FILE
     );
 
     // 2. determine which fronted to install
@@ -354,7 +362,7 @@ export async function copyFrontendTemplates(
 
     const frontendTemplatesPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      '../../../templates/FTLFrontendTemplates',
+      FTL_FRONTEND_TEMPLATES_PATH,
       frontend
     );
 
@@ -372,6 +380,75 @@ export async function copyFrontendTemplates(
       ConsoleLogger.printLog(`Copied frontend template files`, 'success');
 
     output.message = 'Frontend template files copied';
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @function updateProjectConfiguration
+ * @param {string} projectPath
+ * @param {ScaffoldOpts} scaffoldOptions
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Updates the project configuration file (ftl_config.json) based on
+ * options selected during the CLI prompting phase of the scaffold process.
+ */
+export async function updateProjectConfiguration(
+  projectPath: string,
+  scaffoldOptions: ScaffoldOpts
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = scaffoldOptions.loggerMode === 'verbose';
+  try {
+    if (verbose)
+      ConsoleLogger.printLog('Preparing to update project configuration...');
+
+    // 1. read config data
+    const configData = await getProjectConfig(projectPath);
+
+    if (!configData) {
+      output.message = 'Unable to load project configuration';
+      return output;
+    }
+
+    // read config file and then get the relevant config data
+    const currentUrl = import.meta.url;
+    const configPath = path.resolve(
+      path.normalize(new URL(currentUrl).pathname),
+      '../../../configs/frontendConfigOptions.json'
+    );
+
+    const data = await readFile(configPath, { encoding: 'utf-8' });
+    const feConfigData = JSON.parse(data) as FTLFrontendOptFile;
+
+    // 2. update configuration based scaffoldOpts
+    configData.appId = scaffoldOptions.projectName;
+    configData.frontend = scaffoldOptions.frontend;
+    configData.frontendEntryPoint =
+      feConfigData[scaffoldOptions.frontend].entryPoint;
+    configData.frontendExtensions =
+      feConfigData[scaffoldOptions.frontend].extensions;
+    configData.frontendBasePath =
+      feConfigData[scaffoldOptions.frontend].basePath;
+
+    const configWriteResult = await writeProjectConfigData(
+      path.join(projectPath, 'ftl_config'),
+      'ftl_config.json',
+      JSON.stringify(configData, null, 2)
+    );
+
+    if (!configWriteResult.success) {
+      output.message = configWriteResult.message;
+      return output;
+    }
+
+    if (verbose)
+      ConsoleLogger.printLog('Project configuration updated', 'success');
+
     output.success = true;
     return output;
   } catch (e) {

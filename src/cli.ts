@@ -13,6 +13,7 @@ import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
 import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
 import { scaffoldFrontend } from './scaffoldFuncs/scaffoldFrontend.js';
+import { scaffoldPost } from './scaffoldFuncs/scaffoldPost.js';
 
 /**
  * @async
@@ -23,7 +24,11 @@ async function cliPrompts(): Promise<Answers> {
   return inquirer.prompt(INQUIRER_PROMPTS);
 }
 
-export async function cli() {
+/**
+ * @description Performs the steps to scaffold the project step by step by calling
+ * the necessary helper / scaffolding functions.
+ */
+export async function cli(): Promise<void> {
   preScaffold();
 
   const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
@@ -37,6 +42,11 @@ export async function cli() {
   const frontendSetupResult = await scaffoldFrontend(cliAnswers);
 
   console.log(frontendSetupResult);
+
+  // 3. Post Scaffold
+  const postScaffoldResult = await scaffoldPost(cliAnswers);
+
+  console.log(postScaffoldResult);
 
   postScaffold();
 }

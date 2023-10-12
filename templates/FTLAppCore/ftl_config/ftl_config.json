@@ -1,0 +1,13 @@
+{
+  "appId": "",
+  "viteHost": "http://127.0.0.1",
+  "vitePort": 3003,
+  "frontend": "",
+  "frontendBasePath": "",
+  "frontendEntryPoint": "",
+  "frontendExtensions": [],
+  "database": {
+    "dbms": "",
+    "path": ""
+  }
+}

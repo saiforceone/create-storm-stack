@@ -59,4 +59,13 @@ declare namespace FTLStackCLI {
     common: Record<string, string>;
     frontendDeps: Record<FrontendOpt, Record<string, string>>;
   };
+
+  export type FrontendOptData = {
+    basePath: string;
+    entryPoint: string;
+    extensions: string[];
+  };
+
+  // frontend options file convenience type
+  export type FTLFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
 }
