@@ -39,6 +39,17 @@ declare namespace FTLStackCLI {
     packages: Record<string, string>;
   };
 
+  // structure of the package.json file
+  export type FTLProjectPkgFile = {
+    name: string;
+    description: string;
+    version: string;
+    dependencies: Record<string, string>;
+    devDependencies: Record<string, string>;
+    scripts: Record<string, string>;
+    author: string;
+  };
+
   // Structure of config
   export type FTLConfigFile = {
     appId: string;
