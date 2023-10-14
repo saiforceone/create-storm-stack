@@ -20,18 +20,36 @@ import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import LoggerMode = FTLStackCLI.LoggerMode;
 import FTLPackageFile = FTLStackCLI.FTLPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
-import { destinationPathExists } from './fileUtils.js';
-import { ERR_PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
+import {
+  destinationPathExists,
+  getProjectConfig,
+  getProjectPkg,
+  writeProjectConfigData,
+} from './fileUtils.js';
+import {
+  ERR_PKG_FILE_LOAD_FAIL,
+  ERR_PROJECT_DEST_EXISTS,
+} from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
 import {
   FOLDER_NAME_SUPPORT,
   FOLDER_NAME_TEMPLATES,
   FTL_APP_CORE_TEMPLATE_PATH,
   FTL_BASE_TEMPLATE_PATH,
+  FTL_CONFIG_FILE,
+  FTL_CONFIG_PATH,
   FTL_FLASK_CORE_DEPS_FILE,
+  FTL_FRONTEND_CONFIGS_FILE,
+  FTL_FRONTEND_CORE_DEPS_FILE,
+  FTL_FRONTEND_MAIN_DEPS_FILE,
+  FTL_FRONTEND_TEMPLATES_PATH,
+  FTL_PACKAGE_FILE,
   FTL_VITE_TAGS_PATH,
 } from '../constants/pathConstants.js';
-import { CMD_PIPENV_INSTALL } from '../constants/commandConstants.js';
+import {
+  CMD_NPM_DEV_INSTALL,
+  CMD_PIPENV_INSTALL,
+} from '../constants/commandConstants.js';
 import {
   SUCCESS_BE_FINISHED_VIRTUAL_ENV,
   INFO_BE_SET_UP_VIRTUAL_ENV,
@@ -43,7 +61,14 @@ import {
   SUCCESS_BE_COPY_SUPPORT_FILES,
   INFO_CHANGING_DIRECTORY_TO,
   SUCCESS_PROJECT_DIR_OK,
+  INFO_UPDATE_PROJECT_PKG_FILE,
+  SUCCESS_UPDATE_PROJECT_PKG_FILE,
+  SUCCESS_UPDATE_PROJECT_CONFIG,
 } from '../constants/stringConstants.js';
+import FrontendOpt = FTLStackCLI.FrontendOpt;
+import FrontendDependenciesFile = FTLStackCLI.FrontendDependenciesFile;
+import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
+import FTLFrontendOptFile = FTLStackCLI.FTLFrontendOptFile;
 
 /**
  * @function setupProjectDir
@@ -204,6 +229,289 @@ export async function copyFlaskTemplateFiles(
       ConsoleLogger.printLog(SUCCESS_BE_COPY_SUPPORT_FILES, 'success');
 
     // hand off to scaffold core function
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @param {string} projectPath
+ * @param {LoggerMode} loggerMode
+ * @description Sets up the base vite dependencies
+ * @return {Promise<ScaffoldOutput>}
+ */
+export async function setupBaseFrontend(
+  projectPath: string,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+  try {
+    if (verbose) ConsoleLogger.printLog('Installing base vite dependencies...');
+
+    // 1. load and install dependencies
+    const currentUrl = import.meta.url;
+
+    const viteDepsFilePath = path.resolve(
+      path.normalize(new URL(currentUrl).pathname),
+      FTL_FRONTEND_CORE_DEPS_FILE
+    );
+
+    const viteDepsFile = await readFile(viteDepsFilePath, {
+      encoding: 'utf-8',
+    });
+
+    const depsData = JSON.parse(viteDepsFile) as FTLPackageFile;
+
+    const installString = Object.keys(depsData.packages)
+      .map((dep: string) => `${dep}@${depsData.packages[dep]}`)
+      .join(' ');
+
+    const cmd = `${CMD_NPM_DEV_INSTALL} ${installString}`;
+
+    // execute install
+    await execaCommand(cmd);
+
+    if (verbose)
+      ConsoleLogger.printLog('Installed base vite dependencies!', 'success');
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @param frontend
+ * @param loggerMode
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Runs the process to set up the frontend specified by frontend
+ */
+export async function setupFrontend(
+  frontend: FrontendOpt,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+
+  try {
+    // load frontend dependencies file
+    const currentPath = import.meta.url;
+    const frontendDepsPath = path.resolve(
+      path.normalize(new URL(currentPath).pathname),
+      FTL_FRONTEND_MAIN_DEPS_FILE
+    );
+
+    // 2. determine which fronted to install
+    const frontendDepsFile = await readFile(frontendDepsPath, {
+      encoding: 'utf-8',
+    });
+
+    const frontendDeps = JSON.parse(
+      frontendDepsFile
+    ) as FrontendDependenciesFile;
+
+    const { common, frontendDeps: dependencies } = frontendDeps;
+    const feDeps = dependencies[frontend];
+
+    const commonInstallString = Object.keys(common)
+      .map((dep) => `${dep}@${common[dep]}`)
+      .join(' ');
+
+    const feInstallString = Object.keys(feDeps)
+      .map((dep) => `${dep}@${feDeps[dep]}`)
+      .join(' ');
+
+    const finalInstallString = `${CMD_NPM_DEV_INSTALL} ${commonInstallString} ${feInstallString}`;
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        `Installing dependencies for frontend: ${frontend}...`
+      );
+
+    await execaCommand(finalInstallString);
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        `Installed dependencies for frontend: ${frontend}`,
+        'success'
+      );
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @param {string} projectPath
+ * @param {FrontendOpt} frontend
+ * @param {LoggerMode} loggerMode
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Copies specific frontend files to the project destination
+ */
+export async function copyFrontendTemplates(
+  projectPath: string,
+  frontend: FrontendOpt,
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+  try {
+    // 1. find source directory to copy from
+    const currentPath = import.meta.url;
+
+    const frontendTemplatesPath = path.resolve(
+      path.normalize(new URL(currentPath).pathname),
+      FTL_FRONTEND_TEMPLATES_PATH,
+      frontend
+    );
+
+    const targetPath = path.join(projectPath, `ftl_fe_${frontend}`, 'src');
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        `Copying frontend template files for: ${frontend}`
+      );
+
+    // 2. copy files to destination
+    await copy(frontendTemplatesPath, targetPath, { recursive: true });
+
+    if (verbose)
+      ConsoleLogger.printLog(`Copied frontend template files`, 'success');
+
+    output.message = 'Frontend template files copied';
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @function updateProjectConfiguration
+ * @param {string} projectPath
+ * @param {ScaffoldOpts} scaffoldOptions
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Updates the project configuration file (ftl_config.json) based on
+ * options selected during the CLI prompting phase of the scaffold process.
+ */
+export async function updateProjectConfiguration(
+  projectPath: string,
+  scaffoldOptions: ScaffoldOpts
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = scaffoldOptions.loggerMode === 'verbose';
+  try {
+    if (verbose)
+      ConsoleLogger.printLog('Preparing to update project configuration...');
+
+    // 1. read config data
+    const configData = await getProjectConfig(projectPath);
+
+    if (!configData) {
+      output.message = 'Unable to load project configuration';
+      return output;
+    }
+
+    // read config file and then get the relevant config data
+    const currentUrl = import.meta.url;
+    const configPath = path.resolve(
+      path.normalize(new URL(currentUrl).pathname),
+      FTL_FRONTEND_CONFIGS_FILE
+    );
+
+    const data = await readFile(configPath, { encoding: 'utf-8' });
+    const feConfigData = JSON.parse(data) as FTLFrontendOptFile;
+
+    // 2. update configuration based scaffoldOpts
+    configData.appId = scaffoldOptions.projectName;
+    configData.frontend = scaffoldOptions.frontend;
+    configData.frontendEntryPoint =
+      feConfigData[scaffoldOptions.frontend].entryPoint;
+    configData.frontendExtensions =
+      feConfigData[scaffoldOptions.frontend].extensions;
+    configData.frontendBasePath =
+      feConfigData[scaffoldOptions.frontend].basePath;
+
+    const configWriteResult = await writeProjectConfigData(
+      path.join(projectPath, FTL_CONFIG_PATH),
+      FTL_CONFIG_FILE,
+      JSON.stringify(configData, null, 2)
+    );
+
+    if (!configWriteResult.success) {
+      output.message = configWriteResult.message;
+      return output;
+    }
+
+    if (verbose)
+      ConsoleLogger.printLog(SUCCESS_UPDATE_PROJECT_CONFIG, 'success');
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @function
+ * @param {string} projectPath
+ * @param {ScaffoldOpts} scaffoldOptions
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Update the project pkg file based on the scaffold options.
+ */
+export async function updateProjectPkgFile(
+  projectPath: string,
+  scaffoldOptions: ScaffoldOpts
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = scaffoldOptions.loggerMode === 'verbose';
+  try {
+    if (verbose) ConsoleLogger.printLog(INFO_UPDATE_PROJECT_PKG_FILE);
+
+    // pkg file path
+    const pkgFileData = await getProjectPkg(projectPath);
+
+    if (!pkgFileData) {
+      output.message = ERR_PKG_FILE_LOAD_FAIL;
+      return output;
+    }
+
+    // update the contents of the pkg file
+    pkgFileData.name = scaffoldOptions.projectName;
+
+    // write pkg file data
+    const dataToWrite = JSON.stringify(pkgFileData, null, 2);
+    const pkgWriteResult = await writeProjectConfigData(
+      projectPath,
+      FTL_PACKAGE_FILE,
+      dataToWrite
+    );
+
+    if (!pkgWriteResult.success) {
+      output.message = pkgWriteResult.message;
+      return output;
+    }
+
+    if (verbose)
+      ConsoleLogger.printLog(SUCCESS_UPDATE_PROJECT_PKG_FILE, 'success');
+
     output.success = true;
     return output;
   } catch (e) {

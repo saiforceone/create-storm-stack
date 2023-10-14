@@ -20,7 +20,7 @@ def create_app():
     try:
         print(f"Loading app with debug mode: {app.config['DEBUG']}")
         # Read config file
-        flak_config_path = os.path.join(basedir, 'flak_config.json')
+        flak_config_path = os.path.join(basedir, 'ftl_config', 'ftl_config.json')
         flak_config_data = open(flak_config_path)
         flak_config = dict(json.load(flak_config_data))
         flak_config_data.close()

@@ -28,3 +28,12 @@ export const SUCCESS_BE_COPY_SUPPORT_FILES =
 export const INFO_CHANGING_DIRECTORY_TO = 'Changing directory to:';
 
 export const SUCCESS_PROJECT_DIR_OK = 'Project directory can be used';
+
+export const INFO_UPDATE_PROJECT_PKG_FILE = 'Updating project package.json...';
+
+export const SUCCESS_UPDATE_PROJECT_PKG_FILE = 'Updated project package.json';
+
+export const SUCCESS_UPDATE_PROJECT_CONFIG = 'Project configuration updated';
+
+export const SUCCESS_INSTALL_FE_DEPS =
+  'Frontend dependencies successfully installed for';

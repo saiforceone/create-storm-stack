@@ -47,7 +47,7 @@ export class ConsoleLogger {
    * @param {string} message
    * @param {LogLevel} logLevel
    */
-  static printLog(message: string, logLevel: LogLevel = 'info') {
+  static printLog(message: string, logLevel: LogLevel = 'info'): void {
     const logConfig = getMessageConfiguration(logLevel);
     const colorName = logConfig.color as ForegroundColorName;
     console.log(`${chalk[colorName].bold(`[${logConfig.label}]: ${message}`)}`);

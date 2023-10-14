@@ -16,3 +16,20 @@ export const FTL_FLASK_CORE_DEPS_FILE =
 export const IGNORE_FILES_PATH = '../templates/ignoreFiles';
 
 export const CONFIGS_BASE_PATH = '../configs';
+
+export const FTL_FRONTEND_CORE_DEPS_FILE =
+  '../../../configs/viteBaseDependencies.json';
+
+export const FTL_FRONTEND_MAIN_DEPS_FILE =
+  '../../../configs/frontendDependencies.json';
+
+export const FTL_FRONTEND_TEMPLATES_PATH =
+  '../../../templates/FTLFrontendTemplates';
+
+export const FTL_CONFIG_PATH = 'ftl_config';
+export const FTL_CONFIG_FILE = 'ftl_config.json';
+
+export const FTL_PACKAGE_FILE = 'package.json';
+
+export const FTL_FRONTEND_CONFIGS_FILE =
+  '../../../configs/frontendConfigOptions.json';
