@@ -25,3 +25,11 @@ export const FTL_FRONTEND_MAIN_DEPS_FILE =
 
 export const FTL_FRONTEND_TEMPLATES_PATH =
   '../../../templates/FTLFrontendTemplates';
+
+export const FTL_CONFIG_PATH = 'ftl_config';
+export const FTL_CONFIG_FILE = 'ftl_config.json';
+
+export const FTL_PACKAGE_FILE = 'package.json';
+
+export const FTL_FRONTEND_CONFIGS_FILE =
+  '../../../configs/frontendConfigOptions.json';

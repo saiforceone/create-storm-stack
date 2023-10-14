@@ -7,7 +7,10 @@
 import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
-import { updateProjectConfiguration } from '../utils/scaffoldUtils.js';
+import {
+  updateProjectConfiguration,
+  updateProjectPkgFile,
+} from '../utils/scaffoldUtils.js';
 
 /**
  * @function scaffoldPost
@@ -21,7 +24,6 @@ export async function scaffoldPost(
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
-    // 1. Overwrite the project config file
     const overwriteConfigResult = await updateProjectConfiguration(
       process.cwd(),
       scaffoldOptions
@@ -29,6 +31,16 @@ export async function scaffoldPost(
 
     if (!overwriteConfigResult.success) {
       output.message = overwriteConfigResult.message;
+      return output;
+    }
+
+    const overwritePkgResult = await updateProjectPkgFile(
+      process.cwd(),
+      scaffoldOptions
+    );
+
+    if (!overwritePkgResult.success) {
+      output.message = overwritePkgResult.message;
       return output;
     }
 

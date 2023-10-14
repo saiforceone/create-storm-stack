@@ -13,6 +13,7 @@ import {
   setupBaseFrontend,
   setupFrontend,
 } from '../utils/scaffoldUtils.js';
+import { SUCCESS_INSTALL_FE_DEPS } from '../constants/stringConstants.js';
 
 /**
  * @async
@@ -60,8 +61,7 @@ export async function scaffoldFrontend(
       return output;
     }
 
-    // return output
-    output.message = `Frontend dependencies successfully installed for ${scaffoldOptions.frontend}`;
+    output.message = `${SUCCESS_INSTALL_FE_DEPS} ${scaffoldOptions.frontend}`;
     output.success = true;
     return output;
   } catch (e) {

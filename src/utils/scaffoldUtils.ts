@@ -23,19 +23,27 @@ import { buildScaffoldOutput } from './generalUtils.js';
 import {
   destinationPathExists,
   getProjectConfig,
+  getProjectPkg,
   writeProjectConfigData,
 } from './fileUtils.js';
-import { ERR_PROJECT_DEST_EXISTS } from '../constants/errorConstants.js';
+import {
+  ERR_PKG_FILE_LOAD_FAIL,
+  ERR_PROJECT_DEST_EXISTS,
+} from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
 import {
   FOLDER_NAME_SUPPORT,
   FOLDER_NAME_TEMPLATES,
   FTL_APP_CORE_TEMPLATE_PATH,
   FTL_BASE_TEMPLATE_PATH,
+  FTL_CONFIG_FILE,
+  FTL_CONFIG_PATH,
   FTL_FLASK_CORE_DEPS_FILE,
+  FTL_FRONTEND_CONFIGS_FILE,
   FTL_FRONTEND_CORE_DEPS_FILE,
   FTL_FRONTEND_MAIN_DEPS_FILE,
   FTL_FRONTEND_TEMPLATES_PATH,
+  FTL_PACKAGE_FILE,
   FTL_VITE_TAGS_PATH,
 } from '../constants/pathConstants.js';
 import {
@@ -53,6 +61,9 @@ import {
   SUCCESS_BE_COPY_SUPPORT_FILES,
   INFO_CHANGING_DIRECTORY_TO,
   SUCCESS_PROJECT_DIR_OK,
+  INFO_UPDATE_PROJECT_PKG_FILE,
+  SUCCESS_UPDATE_PROJECT_PKG_FILE,
+  SUCCESS_UPDATE_PROJECT_CONFIG,
 } from '../constants/stringConstants.js';
 import FrontendOpt = FTLStackCLI.FrontendOpt;
 import FrontendDependenciesFile = FTLStackCLI.FrontendDependenciesFile;
@@ -419,7 +430,7 @@ export async function updateProjectConfiguration(
     const currentUrl = import.meta.url;
     const configPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      '../../../configs/frontendConfigOptions.json'
+      FTL_FRONTEND_CONFIGS_FILE
     );
 
     const data = await readFile(configPath, { encoding: 'utf-8' });
@@ -436,8 +447,8 @@ export async function updateProjectConfiguration(
       feConfigData[scaffoldOptions.frontend].basePath;
 
     const configWriteResult = await writeProjectConfigData(
-      path.join(projectPath, 'ftl_config'),
-      'ftl_config.json',
+      path.join(projectPath, FTL_CONFIG_PATH),
+      FTL_CONFIG_FILE,
       JSON.stringify(configData, null, 2)
     );
 
@@ -447,7 +458,59 @@ export async function updateProjectConfiguration(
     }
 
     if (verbose)
-      ConsoleLogger.printLog('Project configuration updated', 'success');
+      ConsoleLogger.printLog(SUCCESS_UPDATE_PROJECT_CONFIG, 'success');
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @function
+ * @param {string} projectPath
+ * @param {ScaffoldOpts} scaffoldOptions
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Update the project pkg file based on the scaffold options.
+ */
+export async function updateProjectPkgFile(
+  projectPath: string,
+  scaffoldOptions: ScaffoldOpts
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = scaffoldOptions.loggerMode === 'verbose';
+  try {
+    if (verbose) ConsoleLogger.printLog(INFO_UPDATE_PROJECT_PKG_FILE);
+
+    // pkg file path
+    const pkgFileData = await getProjectPkg(projectPath);
+
+    if (!pkgFileData) {
+      output.message = ERR_PKG_FILE_LOAD_FAIL;
+      return output;
+    }
+
+    // update the contents of the pkg file
+    pkgFileData.name = scaffoldOptions.projectName;
+
+    // write pkg file data
+    const dataToWrite = JSON.stringify(pkgFileData, null, 2);
+    const pkgWriteResult = await writeProjectConfigData(
+      projectPath,
+      FTL_PACKAGE_FILE,
+      dataToWrite
+    );
+
+    if (!pkgWriteResult.success) {
+      output.message = pkgWriteResult.message;
+      return output;
+    }
+
+    if (verbose)
+      ConsoleLogger.printLog(SUCCESS_UPDATE_PROJECT_PKG_FILE, 'success');
 
     output.success = true;
     return output;

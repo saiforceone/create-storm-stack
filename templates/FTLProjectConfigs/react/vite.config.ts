@@ -8,7 +8,7 @@ import * as path from 'path';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import flakConfig from './flak_config/flak_config.json';
+import ftlConfig from './ftl_config/ftl_config.json';
 
 export default defineConfig({
   plugins: [
@@ -16,11 +16,11 @@ export default defineConfig({
       include: '**/*.disabled',
     }),
   ],
-  root: resolve(`./${flakConfig.flakFrontendBasePath}`),
+  root: resolve(`./${ftlConfig.ftlFrontendBasePath}`),
   base: '/static/',
   server: {
     host: 'localhost',
-    port: flakConfig ? flakConfig.flakVitePort : 3003,
+    port: ftlConfig ? ftlConfig.ftlVitePort : 3003,
     open: false,
     watch: {
       usePolling: true,
@@ -29,12 +29,12 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, `./${flakConfig.flakFrontendBasePath}/src`),
+      '~': path.resolve(__dirname, `./${ftlConfig.ftlFrontendBasePath}/src`),
     },
-    extensions: flakConfig.flakFrontendExtensions,
+    extensions: ftlConfig.ftlFrontendExtensions,
   },
   build: {
-    outDir: resolve(`./${flakConfig.flakFrontendBasePath}/dist`),
+    outDir: resolve(`./${ftlConfig.ftlFrontendBasePath}/dist`),
     assetsDir: '',
     manifest: true,
     emptyOutDir: true,
@@ -42,7 +42,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(
-          `./${flakConfig.flakFrontendBasePath}/src/${flakConfig.flakFrontendEntryPoint}`
+          `./${ftlConfig.ftlFrontendBasePath}/src/${ftlConfig.ftlFrontendEntryPoint}`
         ),
       },
       output: {

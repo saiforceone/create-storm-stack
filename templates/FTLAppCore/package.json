@@ -7,6 +7,9 @@
   "devDependencies": {
   },
   "scripts": {
+    "dev": "vite",
+    "tw-dev": "tailwindcss -i ./static/src/main.css -o ./static/dist/css/main.css --watch",
+    "fe-dev": "concurrently \"npm run tw-dev\" \"npm run dev\""
   },
   "author": ""
 }

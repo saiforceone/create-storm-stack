@@ -10,6 +10,7 @@ import { ConsoleLogger } from './consoleLogger.js';
 import FTLConfigFile = FTLStackCLI.FTLConfigFile;
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
+import FTLProjectPkgFile = FTLStackCLI.FTLProjectPkgFile;
 
 /**
  * @async
@@ -60,6 +61,28 @@ export async function getProjectConfig(
   } catch (e) {
     ConsoleLogger.printLog(
       `Failed to read project with error: ${(e as Error).message}`
+    );
+  }
+}
+
+/**
+ * @async
+ * @function getProjectPkg
+ * @param {string} projectPath the directory of the project (destination directory)
+ * @returns {Promise<FTLProjectPkgFile|undefined>}
+ * @description Helper function that reads the project's package.json file and returns
+ * it as "typed" object or undefined if it fails
+ */
+export async function getProjectPkg(
+  projectPath: string
+): Promise<FTLProjectPkgFile | undefined> {
+  try {
+    const pkgFilePath = path.resolve(projectPath, 'package.json');
+    const pkgFileData = await readFile(pkgFilePath, { encoding: 'utf-8' });
+    return JSON.parse(pkgFileData) as FTLProjectPkgFile;
+  } catch (e) {
+    ConsoleLogger.printLog(
+      `Failed to read project pkg file with error: ${(e as Error).message}`
     );
   }
 }
