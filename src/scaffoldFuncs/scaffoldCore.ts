@@ -1,7 +1,7 @@
 /**
  * @author SaiForceOne
  * @description Core scaffold function implementation. Set's up everything to do
- * with the Flask side of the project and copies relevant template files
+ * with the Starlette side of the project and copies relevant template files
  */
 import path from 'node:path';
 
@@ -9,7 +9,7 @@ import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
 import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
-  copyFlaskTemplateFiles,
+  copyWebTemplateFiles,
   setupProjectDir,
   setupVirtualEnv,
 } from '../utils/scaffoldUtils.js';
@@ -35,7 +35,7 @@ export async function scaffoldCore(
       return output;
     }
 
-    // 2. Environment initialization and flask installation
+    // 2. Environment initialization and Starlette installation
     const projectPath = path.join(process.cwd(), scaffoldOptions.projectName);
 
     const envInitResult = await setupVirtualEnv(
@@ -49,12 +49,12 @@ export async function scaffoldCore(
     }
 
     // 3. Copy template files
-    const copyFlaskTemplatesResult = await copyFlaskTemplateFiles(
+    const copyStarletteTemplatesResult = await copyWebTemplateFiles(
       projectPath,
       scaffoldOptions.loggerMode
     );
 
-    console.log('copy template result: ', copyFlaskTemplatesResult);
+    console.log('copy template result: ', copyStarletteTemplatesResult);
 
     output.success = true;
     return output;

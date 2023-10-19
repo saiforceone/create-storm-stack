@@ -7,29 +7,26 @@
 export const FOLDER_NAME_TEMPLATES = 'templates';
 export const FOLDER_NAME_CONFIGS = 'configs';
 export const FOLDER_NAME_SUPPORT = 'support';
-export const FTL_APP_CORE_TEMPLATE_PATH = `../../../${FOLDER_NAME_TEMPLATES}/FTLAppCore`;
-export const FTL_BASE_TEMPLATE_PATH = '../../../templates/FTLBaseTemplates';
-export const FTL_VITE_TAGS_PATH = '../../../templates/FTLViteTags';
+export const PATH_WEB_APP_CORE_TEMPLATE = `../../../${FOLDER_NAME_TEMPLATES}/STRMAppCore`;
+export const PATH_WEB_BASE_TEMPLATE = '../../../templates/STRMBaseTemplates';
+export const PATH_VITE_HMR_TAGS = '../../../templates/STRMViteTags';
 
-export const FTL_FLASK_CORE_DEPS_FILE =
+export const FILE_WEB_APP_CORE_DEPS =
   '../../../configs/flaskCoreDependencies.json';
-export const IGNORE_FILES_PATH = '../templates/ignoreFiles';
 
-export const CONFIGS_BASE_PATH = '../configs';
-
-export const FTL_FRONTEND_CORE_DEPS_FILE =
+export const FILE_FRONTEND_CORE_DEPS =
   '../../../configs/viteBaseDependencies.json';
 
-export const FTL_FRONTEND_MAIN_DEPS_FILE =
+export const FILE_FRONTEND_MAIN_DEPS =
   '../../../configs/frontendDependencies.json';
 
-export const FTL_FRONTEND_TEMPLATES_PATH =
-  '../../../templates/FTLFrontendTemplates';
+export const PATH_FRONTEND_TEMPLATES =
+  '../../../templates/STRMFrontendTemplates';
 
-export const FTL_CONFIG_PATH = 'ftl_config';
-export const FTL_CONFIG_FILE = 'ftl_config.json';
+export const DIR_NAME_FE_CONFIG = 'strm_config';
+export const FILE_FE_APP_CONFIG = 'strm_config.json';
 
-export const FTL_PACKAGE_FILE = 'package.json';
+export const FILE_PACKAGE_JSON = 'package.json';
 
-export const FTL_FRONTEND_CONFIGS_FILE =
+export const FILE_FRONTEND_CONFIGS =
   '../../../configs/frontendConfigOptions.json';

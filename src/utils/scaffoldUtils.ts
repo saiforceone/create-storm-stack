@@ -34,17 +34,17 @@ import { ConsoleLogger } from './consoleLogger.js';
 import {
   FOLDER_NAME_SUPPORT,
   FOLDER_NAME_TEMPLATES,
-  FTL_APP_CORE_TEMPLATE_PATH,
-  FTL_BASE_TEMPLATE_PATH,
-  FTL_CONFIG_FILE,
-  FTL_CONFIG_PATH,
-  FTL_FLASK_CORE_DEPS_FILE,
-  FTL_FRONTEND_CONFIGS_FILE,
-  FTL_FRONTEND_CORE_DEPS_FILE,
-  FTL_FRONTEND_MAIN_DEPS_FILE,
-  FTL_FRONTEND_TEMPLATES_PATH,
-  FTL_PACKAGE_FILE,
-  FTL_VITE_TAGS_PATH,
+  PATH_WEB_APP_CORE_TEMPLATE,
+  PATH_WEB_BASE_TEMPLATE,
+  FILE_FE_APP_CONFIG,
+  DIR_NAME_FE_CONFIG,
+  FILE_WEB_APP_CORE_DEPS,
+  FILE_FRONTEND_CONFIGS,
+  FILE_FRONTEND_CORE_DEPS,
+  FILE_FRONTEND_MAIN_DEPS,
+  PATH_FRONTEND_TEMPLATES,
+  FILE_PACKAGE_JSON,
+  PATH_VITE_HMR_TAGS,
 } from '../constants/pathConstants.js';
 import {
   CMD_NPM_DEV_INSTALL,
@@ -134,7 +134,7 @@ export async function setupVirtualEnv(
 
     const flaskCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      FTL_FLASK_CORE_DEPS_FILE
+      FILE_WEB_APP_CORE_DEPS
     );
 
     // read the file contents
@@ -167,12 +167,12 @@ export async function setupVirtualEnv(
 }
 
 /**
- * @function copyFlaskTemplateFiles
+ * @function copyWebTemplateFiles
  * @param projectPath
  * @param loggerMode
- * @description copies required flask template files to the project directory
+ * @description copies required web core template files to the project directory
  */
-export async function copyFlaskTemplateFiles(
+export async function copyWebTemplateFiles(
   projectPath: string,
   loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
@@ -186,7 +186,7 @@ export async function copyFlaskTemplateFiles(
     // 2. copy core files
     const coreAppFilesPath = path.resolve(
       normalizedPath,
-      FTL_APP_CORE_TEMPLATE_PATH
+      PATH_WEB_APP_CORE_TEMPLATE
     );
 
     if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_CORE_FILES);
@@ -199,7 +199,7 @@ export async function copyFlaskTemplateFiles(
     // 3. copy base template files
     const baseTemplatePath = path.resolve(
       normalizedPath,
-      FTL_BASE_TEMPLATE_PATH
+      PATH_WEB_BASE_TEMPLATE
     );
 
     const appTemplateDestPath = path.join(projectPath, FOLDER_NAME_TEMPLATES);
@@ -214,7 +214,7 @@ export async function copyFlaskTemplateFiles(
     // 4. copy support files
     const supportFilesTemplatePath = path.resolve(
       normalizedPath,
-      FTL_VITE_TAGS_PATH
+      PATH_VITE_HMR_TAGS
     );
 
     const supportFilesDestPath = path.join(projectPath, FOLDER_NAME_SUPPORT);
@@ -258,7 +258,7 @@ export async function setupBaseFrontend(
 
     const viteDepsFilePath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      FTL_FRONTEND_CORE_DEPS_FILE
+      FILE_FRONTEND_CORE_DEPS
     );
 
     const viteDepsFile = await readFile(viteDepsFilePath, {
@@ -306,7 +306,7 @@ export async function setupFrontend(
     const currentPath = import.meta.url;
     const frontendDepsPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      FTL_FRONTEND_MAIN_DEPS_FILE
+      FILE_FRONTEND_MAIN_DEPS
     );
 
     // 2. determine which fronted to install
@@ -373,7 +373,7 @@ export async function copyFrontendTemplates(
 
     const frontendTemplatesPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      FTL_FRONTEND_TEMPLATES_PATH,
+      PATH_FRONTEND_TEMPLATES,
       frontend
     );
 
@@ -430,7 +430,7 @@ export async function updateProjectConfiguration(
     const currentUrl = import.meta.url;
     const configPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      FTL_FRONTEND_CONFIGS_FILE
+      FILE_FRONTEND_CONFIGS
     );
 
     const data = await readFile(configPath, { encoding: 'utf-8' });
@@ -447,8 +447,8 @@ export async function updateProjectConfiguration(
       feConfigData[scaffoldOptions.frontend].basePath;
 
     const configWriteResult = await writeProjectConfigData(
-      path.join(projectPath, FTL_CONFIG_PATH),
-      FTL_CONFIG_FILE,
+      path.join(projectPath, DIR_NAME_FE_CONFIG),
+      FILE_FE_APP_CONFIG,
       JSON.stringify(configData, null, 2)
     );
 
@@ -500,7 +500,7 @@ export async function updateProjectPkgFile(
     const dataToWrite = JSON.stringify(pkgFileData, null, 2);
     const pkgWriteResult = await writeProjectConfigData(
       projectPath,
-      FTL_PACKAGE_FILE,
+      FILE_PACKAGE_JSON,
       dataToWrite
     );
 

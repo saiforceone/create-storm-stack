@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": [
-        "./ftl_fe_react/src/*"
+        "./strm_fe_react/src/*"
       ]
     },
     "target": "ESNext",
@@ -30,6 +30,6 @@
     ]
   },
   "include": [
-    "ftl_fe_react/src"
+    "strm_fe_react/src"
   ]
 }

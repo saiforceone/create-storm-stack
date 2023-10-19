@@ -1,0 +1,9 @@
+{
+  "packages": {
+    "starlette": "*",
+    "jinja2": "*",
+    "jinja2-simple-tags": "*",
+    "mongoengine": "*",
+    "uvicorn": "*"
+  }
+}
