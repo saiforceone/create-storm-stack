@@ -29,7 +29,7 @@ async function getWelcomeData(): Promise<STRMApp.BaseAPIResponse> {
  * You are expected to replace or edit this to better fit your project
  * @return React.ReactElement
  */
-export function WelcomeIndex(): React.ReactElement {
+function WelcomeIndex(): React.ReactElement {
   const [apiData, setApiData] = useState<STRMApp.BaseAPIResponse | undefined>();
   const [stackComponents, setStackComponents] = useState<Array<String>>([]);
 
@@ -67,3 +67,5 @@ export function WelcomeIndex(): React.ReactElement {
     </div>
   );
 }
+
+export default WelcomeIndex;

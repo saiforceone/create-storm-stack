@@ -26,10 +26,10 @@
     "paths": {
       // just because we can emoji (but you should probably use the @strm alias instead)
       "\uD83C\uDF00/*": [
-        "./smrt_fe_react/src/*"
+        "./strm_fe_react/src/*"
       ],
       "@strm/*": [
-        "./smrt_fe_react/src/*"
+        "./strm_fe_react/src/*"
       ]
     }
   },

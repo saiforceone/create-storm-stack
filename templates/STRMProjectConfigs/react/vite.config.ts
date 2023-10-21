@@ -6,7 +6,7 @@ import * as path from 'path';
 import { defineConfig } from 'vite';
 import viteReact from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import smrtConfig from './smrt_config/smrt_config.json';
+import strmConfig from './strm_config/strm_config.json';
 
 export default defineConfig({
   plugins: [
@@ -15,11 +15,11 @@ export default defineConfig({
       include: '**/*.disabled',
     }),
   ],
-  root: path.resolve(`${smrtConfig.smrtFrontendBasePath}`),
+  root: path.resolve(`${strmConfig.frontendBasePath}`),
   base: '/static/',
   server: {
     host: 'localhost',
-    port: smrtConfig ? smrtConfig.smrtVitePort : 3003,
+    port: strmConfig ? strmConfig.vitePort : 3003,
     open: false,
     watch: {
       usePolling: true,
@@ -29,14 +29,14 @@ export default defineConfig({
   resolve: {
     alias: {
       // just because we can emoji (but you should probably use the @strm alias instead)
-      '🌀': path.resolve(__dirname, `./${smrtConfig.smrtFrontendBasePath}/src`),
+      '🌀': path.resolve(__dirname, `./${strmConfig.frontendBasePath}/src`),
       // you should probably use this instead
       '@strm': path.resolve(
         __dirname,
-        `./${smrtConfig.smrtFrontendBasePath}/src`
+        `./${strmConfig.frontendBasePath}/src`
       ),
     },
-    extensions: smrtConfig.smrtFrontendExtensions,
+    extensions: strmConfig.frontendExtensions,
   },
   build: {
     outDir: path.resolve(`./static/dist/js`),
@@ -47,7 +47,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(
-          `./${smrtConfig.smrtFrontendBasePath}/src/${smrtConfig.smrtFrontendEntryPoint}`
+          `./${strmConfig.frontendBasePath}/src/${strmConfig.frontendEntryPoint}`
         ),
       },
       output: {

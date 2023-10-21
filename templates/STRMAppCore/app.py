@@ -11,11 +11,11 @@ from starlette.templating import Jinja2Templates
 from mongoengine import connect
 
 # STORM stack imports
-from support.smrt_hmr import SmrtHmrExtension
+from support.strm_hmr import StrmHmrExtension
 # your application routes should be added to the routes module below
-from smrt_routes import routes
+from strm_routes import routes
 
-# load configuration. non-database and secret key settings will be auto-synced from smrt_config/smrt_config.json
+# load configuration. non-database and secret key settings will be auto-synced from strm_config/strm_config.json
 # You will be required to manage all other .env settings
 config = Config('.env')
 
@@ -35,7 +35,7 @@ print(f"Frontend extensions enabled: {FRONTEND_EXTENSIONS}")
 # template setup
 templates = Jinja2Templates(directory='templates')
 # HMR Extension
-templates.env.add_extension(SmrtHmrExtension)
+templates.env.add_extension(StrmHmrExtension)
 # -- Add other extensions below this line --
 
 
