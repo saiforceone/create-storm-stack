@@ -4,8 +4,8 @@
  * Typically, this would be functions to update config files as well as printing
  * project running instructions to the user, etc
  */
-import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
   updateProjectConfiguration,

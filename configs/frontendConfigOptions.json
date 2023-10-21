@@ -1,6 +1,6 @@
 {
   "react": {
-    "basePath": "ftl_fe_react",
+    "basePath": "strm_fe_react",
     "entryPoint": "main.tsx",
     "extensions": [".js", ".jsx", ".json", ".ts", ".tsx"]
   },

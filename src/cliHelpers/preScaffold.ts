@@ -8,6 +8,6 @@
  */
 export function preScaffold() {
   console.log(`
-F.T.L Stack: Build Fullstack apps faster than light!
+S.T.R.M (Storm) Stack: Build Fullstack apps faster than light!
 `);
 }

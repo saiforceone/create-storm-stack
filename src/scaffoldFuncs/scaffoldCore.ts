@@ -5,8 +5,8 @@
  */
 import path from 'node:path';
 
-import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
   copyWebTemplateFiles,

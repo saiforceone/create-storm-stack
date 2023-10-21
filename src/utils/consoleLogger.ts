@@ -6,10 +6,10 @@
 // Core & third-party imports
 import chalk, { ForegroundColorName } from 'chalk';
 
-// FTL Imports
-import LogLevel = FTLStackCLI.LogLevel;
-import LogMessageConfiguration = FTLStackCLI.LogMessageConfiguration;
-import LogMessageConfigOpt = FTLStackCLI.LogMessageConfigOpt;
+// STRM Imports
+import LogLevel = STRMStackCLI.LogLevel;
+import LogMessageConfiguration = STRMStackCLI.LogMessageConfiguration;
+import LogMessageConfigOpt = STRMStackCLI.LogMessageConfigOpt;
 
 const LOG_CONFIGURATION: LogMessageConfiguration = {
   error: {

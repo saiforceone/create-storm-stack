@@ -5,9 +5,5 @@
   "frontend": "",
   "frontendBasePath": "",
   "frontendEntryPoint": "",
-  "frontendExtensions": [],
-  "database": {
-    "dbms": "",
-    "path": ""
-  }
+  "frontendExtensions": []
 }

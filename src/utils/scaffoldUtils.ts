@@ -15,10 +15,10 @@ import {
 } from 'node:fs/promises';
 import { execaCommand } from 'execa';
 
-// FTL Imports
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
-import LoggerMode = FTLStackCLI.LoggerMode;
-import FTLPackageFile = FTLStackCLI.FTLPackageFile;
+// STRM STACK Imports
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+import LoggerMode = STRMStackCLI.LoggerMode;
+import STRMPackageFile = STRMStackCLI.STRMPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
 import {
   destinationPathExists,
@@ -26,49 +26,15 @@ import {
   getProjectPkg,
   writeProjectConfigData,
 } from './fileUtils.js';
-import {
-  ERR_PKG_FILE_LOAD_FAIL,
-  ERR_PROJECT_DEST_EXISTS,
-} from '../constants/errorConstants.js';
+import { ERROR_CONSTANTS } from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
-import {
-  FOLDER_NAME_SUPPORT,
-  FOLDER_NAME_TEMPLATES,
-  PATH_WEB_APP_CORE_TEMPLATE,
-  PATH_WEB_BASE_TEMPLATE,
-  FILE_FE_APP_CONFIG,
-  DIR_NAME_FE_CONFIG,
-  FILE_WEB_APP_CORE_DEPS,
-  FILE_FRONTEND_CONFIGS,
-  FILE_FRONTEND_CORE_DEPS,
-  FILE_FRONTEND_MAIN_DEPS,
-  PATH_FRONTEND_TEMPLATES,
-  FILE_PACKAGE_JSON,
-  PATH_VITE_HMR_TAGS,
-} from '../constants/pathConstants.js';
-import {
-  CMD_NPM_DEV_INSTALL,
-  CMD_PIPENV_INSTALL,
-} from '../constants/commandConstants.js';
-import {
-  SUCCESS_BE_FINISHED_VIRTUAL_ENV,
-  INFO_BE_SET_UP_VIRTUAL_ENV,
-  INFO_BE_COPY_CORE_FILES,
-  SUCCESS_BE_COPY_CORE_FILES,
-  INFO_BE_COPY_BASE_TEMPLATE,
-  SUCCESS_BE_COPY_BASE_TEMPLATE,
-  INFO_BE_COPY_SUPPORT_FILES,
-  SUCCESS_BE_COPY_SUPPORT_FILES,
-  INFO_CHANGING_DIRECTORY_TO,
-  SUCCESS_PROJECT_DIR_OK,
-  INFO_UPDATE_PROJECT_PKG_FILE,
-  SUCCESS_UPDATE_PROJECT_PKG_FILE,
-  SUCCESS_UPDATE_PROJECT_CONFIG,
-} from '../constants/stringConstants.js';
-import FrontendOpt = FTLStackCLI.FrontendOpt;
-import FrontendDependenciesFile = FTLStackCLI.FrontendDependenciesFile;
-import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
-import FTLFrontendOptFile = FTLStackCLI.FTLFrontendOptFile;
+import { PATH_CONSTANTS } from '../constants/pathConstants.js';
+import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
+import { STRING_CONSTANTS } from '../constants/stringConstants.js';
+import FrontendOpt = STRMStackCLI.FrontendOpt;
+import FrontendDependenciesFile = STRMStackCLI.FrontendDependenciesFile;
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import STRMFrontendOptFile = STRMStackCLI.STRMFrontendOptFile;
 
 /**
  * @function setupProjectDir
@@ -85,7 +51,7 @@ export async function setupProjectDir(
 
     // 1. check the destination
     if (await destinationPathExists(targetPath)) {
-      output.message = ERR_PROJECT_DEST_EXISTS;
+      output.message = ERROR_CONSTANTS.ERR_PROJECT_DEST_EXISTS;
       // exit
       return output;
     }
@@ -96,7 +62,7 @@ export async function setupProjectDir(
     // 3. check destination access
     await access(targetPath, constants.W_OK);
 
-    output.message = SUCCESS_PROJECT_DIR_OK;
+    output.message = STRING_CONSTANTS.SUCCESS_PROJECT_DIR_OK;
     output.success = true;
     return output;
   } catch (e) {
@@ -121,25 +87,28 @@ export async function setupVirtualEnv(
   const verboseLogs = loggerMode === 'verbose';
   try {
     if (verboseLogs)
-      ConsoleLogger.printLog(`${INFO_CHANGING_DIRECTORY_TO} ${projectPath}`);
+      ConsoleLogger.printLog(
+        `${STRING_CONSTANTS.INFO_CHANGING_DIRECTORY_TO} ${projectPath}`
+      );
 
     // 1. cd / navigate to project path
     process.chdir(projectPath);
 
     // 2. execute command to create environment
-    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_SET_UP_VIRTUAL_ENV);
+    if (verboseLogs)
+      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_SET_UP_VIRTUAL_ENV);
 
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;
 
     const flaskCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      FILE_WEB_APP_CORE_DEPS
+      PATH_CONSTANTS.FILE_WEB_APP_CORE_DEPS
     );
 
     // read the file contents
     const pkgFile = await readFile(flaskCoreDepsPath, { encoding: 'utf-8' });
-    const pkgData = JSON.parse(pkgFile) as FTLPackageFile;
+    const pkgData = JSON.parse(pkgFile) as STRMPackageFile;
     const { packages } = pkgData;
 
     // construct install string for dependencies
@@ -147,15 +116,19 @@ export async function setupVirtualEnv(
       .map((pkg) => pkg)
       .join(' ');
 
-    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_SET_UP_VIRTUAL_ENV);
+    if (verboseLogs)
+      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_SET_UP_VIRTUAL_ENV);
 
-    const installDepsCommandStr = `${CMD_PIPENV_INSTALL} ${installString}`;
+    const installDepsCommandStr = `${COMMAND_CONSTANTS.CMD_PIPENV_INSTALL} ${installString}`;
 
     // execute install command
     await execaCommand(installDepsCommandStr);
 
     if (verboseLogs)
-      ConsoleLogger.printLog(SUCCESS_BE_FINISHED_VIRTUAL_ENV, 'success');
+      ConsoleLogger.printLog(
+        STRING_CONSTANTS.SUCCESS_BE_FINISHED_VIRTUAL_ENV,
+        'success'
+      );
 
     // 4. hand off to scaffold core function
     output.success = true;
@@ -186,47 +159,65 @@ export async function copyWebTemplateFiles(
     // 2. copy core files
     const coreAppFilesPath = path.resolve(
       normalizedPath,
-      PATH_WEB_APP_CORE_TEMPLATE
+      PATH_CONSTANTS.PATH_WEB_APP_CORE_TEMPLATE
     );
 
-    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_CORE_FILES);
+    if (verboseLogs)
+      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_COPY_CORE_FILES);
 
     await copy(coreAppFilesPath, projectPath, { recursive: true });
 
     if (verboseLogs)
-      ConsoleLogger.printLog(SUCCESS_BE_COPY_CORE_FILES, 'success');
+      ConsoleLogger.printLog(
+        STRING_CONSTANTS.SUCCESS_BE_COPY_CORE_FILES,
+        'success'
+      );
 
     // 3. copy base template files
     const baseTemplatePath = path.resolve(
       normalizedPath,
-      PATH_WEB_BASE_TEMPLATE
+      PATH_CONSTANTS.PATH_WEB_BASE_TEMPLATE
     );
 
-    const appTemplateDestPath = path.join(projectPath, FOLDER_NAME_TEMPLATES);
+    const appTemplateDestPath = path.join(
+      projectPath,
+      PATH_CONSTANTS.DIR_NAME_TEMPLATES
+    );
 
-    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_BASE_TEMPLATE);
+    if (verboseLogs)
+      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_COPY_BASE_TEMPLATE);
 
     await copy(baseTemplatePath, appTemplateDestPath, { recursive: true });
 
     if (verboseLogs)
-      ConsoleLogger.printLog(SUCCESS_BE_COPY_BASE_TEMPLATE, 'success');
+      ConsoleLogger.printLog(
+        STRING_CONSTANTS.SUCCESS_BE_COPY_BASE_TEMPLATE,
+        'success'
+      );
 
     // 4. copy support files
     const supportFilesTemplatePath = path.resolve(
       normalizedPath,
-      PATH_VITE_HMR_TAGS
+      PATH_CONSTANTS.PATH_VITE_HMR_TAGS
     );
 
-    const supportFilesDestPath = path.join(projectPath, FOLDER_NAME_SUPPORT);
+    const supportFilesDestPath = path.join(
+      projectPath,
+      PATH_CONSTANTS.DIR_NAME_SUPPORT
+    );
 
-    if (verboseLogs) ConsoleLogger.printLog(INFO_BE_COPY_SUPPORT_FILES);
+    if (verboseLogs)
+      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_COPY_SUPPORT_FILES);
 
     await copy(supportFilesTemplatePath, supportFilesDestPath, {
       recursive: true,
     });
 
     if (verboseLogs)
-      ConsoleLogger.printLog(SUCCESS_BE_COPY_SUPPORT_FILES, 'success');
+      ConsoleLogger.printLog(
+        STRING_CONSTANTS.SUCCESS_BE_COPY_SUPPORT_FILES,
+        'success'
+      );
 
     // hand off to scaffold core function
     output.success = true;
@@ -258,20 +249,20 @@ export async function setupBaseFrontend(
 
     const viteDepsFilePath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      FILE_FRONTEND_CORE_DEPS
+      PATH_CONSTANTS.FILE_FRONTEND_CORE_DEPS
     );
 
     const viteDepsFile = await readFile(viteDepsFilePath, {
       encoding: 'utf-8',
     });
 
-    const depsData = JSON.parse(viteDepsFile) as FTLPackageFile;
+    const depsData = JSON.parse(viteDepsFile) as STRMPackageFile;
 
     const installString = Object.keys(depsData.packages)
       .map((dep: string) => `${dep}@${depsData.packages[dep]}`)
       .join(' ');
 
-    const cmd = `${CMD_NPM_DEV_INSTALL} ${installString}`;
+    const cmd = `${COMMAND_CONSTANTS.CMD_NPM_DEV_INSTALL} ${installString}`;
 
     // execute install
     await execaCommand(cmd);
@@ -306,7 +297,7 @@ export async function setupFrontend(
     const currentPath = import.meta.url;
     const frontendDepsPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      FILE_FRONTEND_MAIN_DEPS
+      PATH_CONSTANTS.FILE_FRONTEND_MAIN_DEPS
     );
 
     // 2. determine which fronted to install
@@ -329,7 +320,7 @@ export async function setupFrontend(
       .map((dep) => `${dep}@${feDeps[dep]}`)
       .join(' ');
 
-    const finalInstallString = `${CMD_NPM_DEV_INSTALL} ${commonInstallString} ${feInstallString}`;
+    const finalInstallString = `${COMMAND_CONSTANTS.CMD_NPM_DEV_INSTALL} ${commonInstallString} ${feInstallString}`;
 
     if (verbose)
       ConsoleLogger.printLog(
@@ -373,11 +364,11 @@ export async function copyFrontendTemplates(
 
     const frontendTemplatesPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
-      PATH_FRONTEND_TEMPLATES,
+      PATH_CONSTANTS.PATH_FRONTEND_TEMPLATES,
       frontend
     );
 
-    const targetPath = path.join(projectPath, `ftl_fe_${frontend}`, 'src');
+    const targetPath = path.join(projectPath, `strm_fe_${frontend}`, 'src');
 
     if (verbose)
       ConsoleLogger.printLog(
@@ -405,7 +396,7 @@ export async function copyFrontendTemplates(
  * @param {string} projectPath
  * @param {ScaffoldOpts} scaffoldOptions
  * @returns {Promise<ScaffoldOutput>}
- * @description Updates the project configuration file (ftl_config.json) based on
+ * @description Updates the project configuration file (strm_config.json) based on
  * options selected during the CLI prompting phase of the scaffold process.
  */
 export async function updateProjectConfiguration(
@@ -430,11 +421,11 @@ export async function updateProjectConfiguration(
     const currentUrl = import.meta.url;
     const configPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
-      FILE_FRONTEND_CONFIGS
+      PATH_CONSTANTS.FILE_FRONTEND_CONFIGS
     );
 
     const data = await readFile(configPath, { encoding: 'utf-8' });
-    const feConfigData = JSON.parse(data) as FTLFrontendOptFile;
+    const feConfigData = JSON.parse(data) as STRMFrontendOptFile;
 
     // 2. update configuration based scaffoldOpts
     configData.appId = scaffoldOptions.projectName;
@@ -447,8 +438,8 @@ export async function updateProjectConfiguration(
       feConfigData[scaffoldOptions.frontend].basePath;
 
     const configWriteResult = await writeProjectConfigData(
-      path.join(projectPath, DIR_NAME_FE_CONFIG),
-      FILE_FE_APP_CONFIG,
+      path.join(projectPath, PATH_CONSTANTS.DIR_NAME_FE_CONFIG),
+      PATH_CONSTANTS.FILE_FE_APP_CONFIG,
       JSON.stringify(configData, null, 2)
     );
 
@@ -458,7 +449,10 @@ export async function updateProjectConfiguration(
     }
 
     if (verbose)
-      ConsoleLogger.printLog(SUCCESS_UPDATE_PROJECT_CONFIG, 'success');
+      ConsoleLogger.printLog(
+        STRING_CONSTANTS.SUCCESS_UPDATE_PROJECT_CONFIG,
+        'success'
+      );
 
     output.success = true;
     return output;
@@ -483,13 +477,14 @@ export async function updateProjectPkgFile(
   const output = buildScaffoldOutput();
   const verbose = scaffoldOptions.loggerMode === 'verbose';
   try {
-    if (verbose) ConsoleLogger.printLog(INFO_UPDATE_PROJECT_PKG_FILE);
+    if (verbose)
+      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_UPDATE_PROJECT_PKG_FILE);
 
     // pkg file path
     const pkgFileData = await getProjectPkg(projectPath);
 
     if (!pkgFileData) {
-      output.message = ERR_PKG_FILE_LOAD_FAIL;
+      output.message = ERROR_CONSTANTS.ERR_PKG_FILE_LOAD_FAIL;
       return output;
     }
 
@@ -500,7 +495,7 @@ export async function updateProjectPkgFile(
     const dataToWrite = JSON.stringify(pkgFileData, null, 2);
     const pkgWriteResult = await writeProjectConfigData(
       projectPath,
-      FILE_PACKAGE_JSON,
+      PATH_CONSTANTS.FILE_PACKAGE_JSON,
       dataToWrite
     );
 
@@ -510,7 +505,10 @@ export async function updateProjectPkgFile(
     }
 
     if (verbose)
-      ConsoleLogger.printLog(SUCCESS_UPDATE_PROJECT_PKG_FILE, 'success');
+      ConsoleLogger.printLog(
+        STRING_CONSTANTS.SUCCESS_UPDATE_PROJECT_PKG_FILE,
+        'success'
+      );
 
     output.success = true;
     return output;

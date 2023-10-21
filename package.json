@@ -1,10 +1,10 @@
 {
-  "name": "ftl-cli",
+  "name": "strm-cli",
   "version": "0.0.1",
-  "description": "Official utility for the F.T.L Stack",
+  "description": "Official utility for the S.T.R.M (STORM) Stack",
   "bin": {
-    "@saiforceone/create-ftl-stack": "bin/create-ftl-stack.js",
-    "create-ftl-stack": "bin/create-ftl-stack.js"
+    "@saiforceone/create-strm-stack": "bin/create-strm-stack.js",
+    "create-strm-stack": "bin/create-strm-stack.js"
   },
   "main": "dist/cli.js",
   "scripts": {
@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saiforceone/ftl-cli"
+    "url": "git+https://github.com/saiforceone/strm-cli"
   },
   "type": "module",
   "author": "SaiForceOne / Sai",

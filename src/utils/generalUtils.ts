@@ -2,7 +2,7 @@
  * @author SaiForceOne
  * @description Collection of general-use utility functions
  */
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 
 // exclude starting with
 const VALID_DESTINATION_PATTERN = /^[a-z]\w+$/gim;

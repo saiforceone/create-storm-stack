@@ -4,16 +4,16 @@
  * do with the Frontend of the project and copies relevant files
  */
 
-// FTL Stack imports
-import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+// STRM Stack imports
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
   copyFrontendTemplates,
   setupBaseFrontend,
   setupFrontend,
 } from '../utils/scaffoldUtils.js';
-import { SUCCESS_INSTALL_FE_DEPS } from '../constants/stringConstants.js';
+import { STRING_CONSTANTS } from '../constants/stringConstants.js';
 
 /**
  * @async
@@ -61,7 +61,7 @@ export async function scaffoldFrontend(
       return output;
     }
 
-    output.message = `${SUCCESS_INSTALL_FE_DEPS} ${scaffoldOptions.frontend}`;
+    output.message = `${STRING_CONSTANTS.SUCCESS_INSTALL_FE_DEPS} ${scaffoldOptions.frontend}`;
     output.success = true;
     return output;
   } catch (e) {

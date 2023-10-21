@@ -6,11 +6,11 @@
 import inquirer from 'inquirer';
 import type { Answers } from 'inquirer';
 
-// FTL Stack Imports
+// STRM Stack Imports
 import { preScaffold } from './cliHelpers/preScaffold.js';
 import { postScaffold } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
-import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
 import { scaffoldFrontend } from './scaffoldFuncs/scaffoldFrontend.js';
 import { scaffoldPost } from './scaffoldFuncs/scaffoldPost.js';
