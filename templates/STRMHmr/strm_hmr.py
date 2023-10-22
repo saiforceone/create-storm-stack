@@ -12,7 +12,7 @@ config_path = os.path.abspath(os.path.join(BASE_DIR, '..', '.env'))
 config = Config(config_path)
 
 
-class strmHmrExtension(StandaloneTag):
+class StrmHmrExtension(StandaloneTag):
     """
     Creates the Vite tags extension
     """
