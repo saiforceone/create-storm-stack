@@ -10,7 +10,7 @@ export default {
     // base
     './templates/*.html',
     // react
-    './flak_fe_react/src/**/*.{js,jsx,ts,tsx}',
+    './strm_fe_react/src/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     extend: {

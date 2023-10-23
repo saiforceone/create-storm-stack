@@ -4,32 +4,21 @@
  * constants are just path constants for convenience.
  */
 
-export const FOLDER_NAME_TEMPLATES = 'templates';
-export const FOLDER_NAME_CONFIGS = 'configs';
-export const FOLDER_NAME_SUPPORT = 'support';
-export const FTL_APP_CORE_TEMPLATE_PATH = `../../../${FOLDER_NAME_TEMPLATES}/FTLAppCore`;
-export const FTL_BASE_TEMPLATE_PATH = '../../../templates/FTLBaseTemplates';
-export const FTL_VITE_TAGS_PATH = '../../../templates/FTLViteTags';
-
-export const FTL_FLASK_CORE_DEPS_FILE =
-  '../../../configs/flaskCoreDependencies.json';
-export const IGNORE_FILES_PATH = '../templates/ignoreFiles';
-
-export const CONFIGS_BASE_PATH = '../configs';
-
-export const FTL_FRONTEND_CORE_DEPS_FILE =
-  '../../../configs/viteBaseDependencies.json';
-
-export const FTL_FRONTEND_MAIN_DEPS_FILE =
-  '../../../configs/frontendDependencies.json';
-
-export const FTL_FRONTEND_TEMPLATES_PATH =
-  '../../../templates/FTLFrontendTemplates';
-
-export const FTL_CONFIG_PATH = 'ftl_config';
-export const FTL_CONFIG_FILE = 'ftl_config.json';
-
-export const FTL_PACKAGE_FILE = 'package.json';
-
-export const FTL_FRONTEND_CONFIGS_FILE =
-  '../../../configs/frontendConfigOptions.json';
+export const PATH_CONSTANTS = {
+  DIR_NAME_TEMPLATES: 'templates',
+  DIR_NAME_CONFIGS: 'configs',
+  DIR_NAME_SUPPORT: 'support',
+  PATH_WEB_APP_CORE_TEMPLATE: `../../../templates/STRMAppCore`,
+  PATH_WEB_BASE_TEMPLATE: '../../../templates/STRMBaseTemplates',
+  PATH_VITE_HMR_TAGS: '../../../templates/STRMHmr',
+  FILE_WEB_APP_CORE_DEPS: '../../../configs/webCoreDependencies.json',
+  FILE_FRONTEND_CORE_DEPS: '../../../configs/viteBaseDependencies.json',
+  FILE_FRONTEND_MAIN_DEPS: '../../../configs/frontendDependencies.json',
+  PATH_FRONTEND_TEMPLATES: '../../../templates/STRMFrontendTemplates',
+  DIR_NAME_FE_CONFIG: 'strm_config',
+  FILE_FE_APP_CONFIG: 'strm_config.json',
+  FILE_PACKAGE_JSON: 'package.json',
+  FILE_FRONTEND_CONFIGS: '../../../configs/frontendConfigOptions.json',
+  FILE_ENV_EXAMPLE: '.env.example',
+  FILE_ENV: '.env',
+} as const;

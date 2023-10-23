@@ -7,10 +7,10 @@ import path from 'node:path';
 import { readFile, stat, writeFile } from 'node:fs/promises';
 import { ConsoleLogger } from './consoleLogger.js';
 
-import FTLConfigFile = FTLStackCLI.FTLConfigFile;
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+import STRMConfigFile = STRMStackCLI.STRMConfigFile;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
-import FTLProjectPkgFile = FTLStackCLI.FTLProjectPkgFile;
+import STRMProjectPkgFile = STRMStackCLI.STRMProjectPkgFile;
 
 /**
  * @async
@@ -39,25 +39,25 @@ export function isInProjectDir(path: string): boolean {
  * @async
  * @function getProjectConfig
  * @param {string} projectRoot
- * @returns {Promise<FTLConfigFile|undefined>}
+ * @returns {Promise<STRMConfigFile|undefined>}
  * @description Helper function that reads the config file from disk and returns
  * a "typed" JSON object to make it easier to update the project config
  */
 export async function getProjectConfig(
   projectRoot: string
-): Promise<FTLConfigFile | undefined> {
+): Promise<STRMConfigFile | undefined> {
   try {
     // 1. try to load config file
     const configFilePath = path.resolve(
       projectRoot,
-      'ftl_config',
-      'ftl_config.json'
+      'strm_config',
+      'strm_config.json'
     );
 
     const configFileData = await readFile(configFilePath, {
       encoding: 'utf-8',
     });
-    return JSON.parse(configFileData) as FTLConfigFile;
+    return JSON.parse(configFileData) as STRMConfigFile;
   } catch (e) {
     ConsoleLogger.printLog(
       `Failed to read project with error: ${(e as Error).message}`
@@ -69,17 +69,17 @@ export async function getProjectConfig(
  * @async
  * @function getProjectPkg
  * @param {string} projectPath the directory of the project (destination directory)
- * @returns {Promise<FTLProjectPkgFile|undefined>}
+ * @returns {Promise<STRMProjectPkgFile|undefined>}
  * @description Helper function that reads the project's package.json file and returns
  * it as "typed" object or undefined if it fails
  */
 export async function getProjectPkg(
   projectPath: string
-): Promise<FTLProjectPkgFile | undefined> {
+): Promise<STRMProjectPkgFile | undefined> {
   try {
     const pkgFilePath = path.resolve(projectPath, 'package.json');
     const pkgFileData = await readFile(pkgFilePath, { encoding: 'utf-8' });
-    return JSON.parse(pkgFileData) as FTLProjectPkgFile;
+    return JSON.parse(pkgFileData) as STRMProjectPkgFile;
   } catch (e) {
     ConsoleLogger.printLog(
       `Failed to read project pkg file with error: ${(e as Error).message}`

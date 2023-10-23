@@ -1,12 +1,20 @@
-# F.T.L Stack CLI (WIP)
+# S.T.🌀.R.M Stack CLI (Nowhere near ready yet)
 
-CLI to scaffold Flask-Based fullstack web applications
+Introducing the S.T.🌀.R.M Stack, the easiest way to create modern fullstack web application.
+We believe that using S.T.🌀.R.M will be a breeze 🙃
 
 ## Requirements
 
 * [Python 3.8+](https://www.python.org/)
 * [NodeJs 18.x](https://nodejs.org/en)
-* [Pipenv](https://pipenv.pypa.io/en/latest/)  (refer to changes to Python's handling of modules)
+* [Pipenv](https://pipenv.pypa.io/en/latest/)  (refer to changes to Python's handling of modules or just install it with Homebrew)
+
+## The Main Stack
+
+- Starlette (Web Framework)
+- Tailwind CSS (Styling)
+- Reactive UI (Vite)
+- MongoDB (Database)
 
 ## Things to keep in mind
 

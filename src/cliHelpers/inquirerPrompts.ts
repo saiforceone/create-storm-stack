@@ -6,7 +6,7 @@
 // Core & Third-party Imports
 import type { QuestionCollection } from 'inquirer';
 
-// FTL Stack Imports
+// STRM Stack Imports
 import { validateProjectName } from '../utils/generalUtils.js';
 
 export const INQUIRER_PROMPTS: QuestionCollection = [

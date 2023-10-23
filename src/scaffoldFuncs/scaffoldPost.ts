@@ -4,10 +4,12 @@
  * Typically, this would be functions to update config files as well as printing
  * project running instructions to the user, etc
  */
-import ScaffoldOpts = FTLStackCLI.ScaffoldOpts;
-import ScaffoldOutput = FTLStackCLI.ScaffoldOutput;
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
+  buildInitialEnvAtDest,
+  renameFilesAtDest,
   updateProjectConfiguration,
   updateProjectPkgFile,
 } from '../utils/scaffoldUtils.js';
@@ -43,6 +45,23 @@ export async function scaffoldPost(
       output.message = overwritePkgResult.message;
       return output;
     }
+
+    // write .env file to destination
+    const writeEnvResult = await buildInitialEnvAtDest(
+      process.cwd(),
+      scaffoldOptions
+    );
+
+    if (!writeEnvResult.success) {
+      output.message = writeEnvResult.message;
+      return output;
+    }
+
+    console.log('write env result: ', writeEnvResult);
+
+    const renameFilesResult = await renameFilesAtDest(process.cwd());
+
+    console.log('rename files result: ', renameFilesResult);
 
     output.success = true;
     return output;

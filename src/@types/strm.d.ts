@@ -1,16 +1,16 @@
 /**
  * @author SaiForceOne
- * @description FTL Stack type definitions
+ * @description STRM Stack type definitions
  */
 
-declare namespace FTLStackCLI {
+declare namespace STRMStackCLI {
   // Standardized Scaffold output
   export type ScaffoldOutput = {
     success: boolean;
     message?: string;
   };
 
-  // Frontend options for the FTL Stack CLI
+  // Frontend options for the STRM Stack CLI
   export type FrontendOpt = 'react' | 'vue' | 'lit';
 
   // ConsoleLogger mode
@@ -34,13 +34,13 @@ declare namespace FTLStackCLI {
     loggerMode: LoggerMode;
   };
 
-  // Structure for general FTL package files
-  export type FTLPackageFile = {
+  // Structure for general STRM package files
+  export type STRMPackageFile = {
     packages: Record<string, string>;
   };
 
   // structure of the package.json file
-  export type FTLProjectPkgFile = {
+  export type STRMProjectPkgFile = {
     name: string;
     description: string;
     version: string;
@@ -51,7 +51,7 @@ declare namespace FTLStackCLI {
   };
 
   // Structure of config
-  export type FTLConfigFile = {
+  export type STRMConfigFile = {
     appId: string;
     viteHost: string;
     vitePort: string;
@@ -78,5 +78,5 @@ declare namespace FTLStackCLI {
   };
 
   // frontend options file convenience type
-  export type FTLFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
+  export type STRMFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
 }

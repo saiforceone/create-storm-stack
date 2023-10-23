@@ -4,6 +4,7 @@ instance/
 *.db
 
 # Environments
+.env
 .venv
 env/
 venv/
