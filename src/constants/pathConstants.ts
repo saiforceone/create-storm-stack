@@ -19,4 +19,6 @@ export const PATH_CONSTANTS = {
   FILE_FE_APP_CONFIG: 'strm_config.json',
   FILE_PACKAGE_JSON: 'package.json',
   FILE_FRONTEND_CONFIGS: '../../../configs/frontendConfigOptions.json',
+  FILE_ENV_EXAMPLE: '.env.example',
+  FILE_ENV: '.env',
 } as const;

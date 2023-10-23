@@ -5,22 +5,24 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 
 // import routes
-import { WelcomeIndex } from './pages/Welcome/Index';
+import { buildRoutes } from './routes';
+import Loader from '🌀/components/shared/Loader';
 
+// application mount
 const container = document.getElementById('app')!;
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <WelcomeIndex />,
-  },
+const ROUTES = buildRoutes();
+
+const router = createHashRouter([
+  // Add other routes with higher priority here if they are ever needed
+  ...ROUTES,
 ]);
 
 createRoot(container).render(
-  <>
+  <React.Suspense fallback={<Loader />}>
     <RouterProvider router={router} />
-  </>
+  </React.Suspense>
 );

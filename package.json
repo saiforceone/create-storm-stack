@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
+    "dotenv": "^16.3.1",
     "execa": "^8.0.1",
     "inquirer": "^9.2.11",
     "node-pty": "^1.0.0",

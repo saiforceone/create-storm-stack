@@ -12,8 +12,11 @@ import {
   cp as copy,
   mkdir,
   readFile,
+  rename,
+  writeFile,
 } from 'node:fs/promises';
 import { execaCommand } from 'execa';
+import { parse } from 'dotenv';
 
 // STRM STACK Imports
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
@@ -28,6 +31,7 @@ import {
 } from './fileUtils.js';
 import { ERROR_CONSTANTS } from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
+import { FILE_UTIL_CONSTANTS } from '../constants/fileUtilConstants.js';
 import { PATH_CONSTANTS } from '../constants/pathConstants.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
 import { STRING_CONSTANTS } from '../constants/stringConstants.js';
@@ -391,6 +395,51 @@ export async function copyFrontendTemplates(
 }
 
 /**
+ * @param {string} projectPath
+ * @param {ScaffoldOpts} scaffoldOpts
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Copies frontend-specific resources to the destination
+ */
+export async function copyFrontendResources(
+  projectPath: string,
+  scaffoldOpts: ScaffoldOpts
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = scaffoldOpts.loggerMode === 'verbose';
+  try {
+    if (verbose)
+      ConsoleLogger.printLog(
+        'Copying project resource files to destination...'
+      );
+    // 1. get path to frontend resources
+    const currentURL = import.meta.url;
+
+    const feResourcesPath = path.resolve(
+      path.normalize(new URL(currentURL).pathname),
+      '../../../',
+      'templates/STRMProjectResources',
+      scaffoldOpts.frontend
+    );
+
+    // 2. copy all the files
+    await copy(feResourcesPath, projectPath, { recursive: true });
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        'Finished copying resource files to destination',
+        'success'
+      );
+
+    output.message = 'Resource files copied to destination';
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
  * @async
  * @function updateProjectConfiguration
  * @param {string} projectPath
@@ -514,6 +563,108 @@ export async function updateProjectPkgFile(
     return output;
   } catch (e) {
     output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @param {string} projectPath
+ * @param {ScaffoldOpts} scaffoldOpts
+ * @description Creates the initial .env file based on .env.example and writes
+ * the necessary data based on the config options
+ */
+export async function buildInitialEnvAtDest(
+  projectPath: string,
+  scaffoldOpts: ScaffoldOpts
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = scaffoldOpts.loggerMode === 'verbose';
+  try {
+    if (verbose)
+      ConsoleLogger.printLog(
+        'Writing app env values and making project runnable...'
+      );
+    const envExamplePath = path.resolve(
+      projectPath,
+      PATH_CONSTANTS.FILE_ENV_EXAMPLE
+    );
+
+    const projectConfig = await getProjectConfig(projectPath);
+
+    if (!projectConfig) {
+      output.message = ERROR_CONSTANTS.CONFIG_FILE_LOAD_FAIL;
+      return output;
+    }
+
+    const parsedEnv = parse(await readFile(envExamplePath));
+    // overwrite contents of parsedEnv from loaded project config
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_APP_ID] = projectConfig.appId;
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_FE] = projectConfig.frontend;
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_FE_BASE_PATH] =
+      projectConfig.frontendBasePath;
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_FE_ENTRYPOINT] =
+      projectConfig.frontendEntryPoint;
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_FE_EXT] =
+      projectConfig.frontendExtensions.join(',');
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_HOST] = projectConfig.viteHost;
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_PORT] = projectConfig.vitePort;
+
+    // Write default database uri by itself
+    parsedEnv[
+      FILE_UTIL_CONSTANTS.ENV_KEY_DB_URI
+    ] = `mongodb://127.0.0.1:27017/${scaffoldOpts.projectName}`;
+
+    // write contents to the parsed environment object
+    let envData = '';
+
+    Object.keys(parsedEnv).forEach((key) => {
+      envData += `${key}=${parsedEnv[key]}\n`;
+    });
+
+    const envDestination = path.join(projectPath, PATH_CONSTANTS.FILE_ENV);
+
+    // write to destination
+    await writeFile(envDestination, envData);
+
+    if (verbose)
+      ConsoleLogger.printLog(
+        'Project env file created and made runnable',
+        'success'
+      );
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @param {string} projectPath
+ * @returns {Promise<ScaffoldOutput>}
+ * @description Renames files as needed at the destination
+ */
+export async function renameFilesAtDest(
+  projectPath: string
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+
+  try {
+    // rename .gitignore.template to .gitignore
+    const ignoreTemplateFilePath = path.resolve(
+      projectPath,
+      '.gitignore.template'
+    );
+
+    const gitIgnorePath = path.join(projectPath, '.gitignore');
+
+    await rename(ignoreTemplateFilePath, gitIgnorePath);
+
+    output.message = 'File renamed';
+    output.success = true;
+    return output;
+  } catch (e) {
     return output;
   }
 }

@@ -1,1 +1,15 @@
-export const FILE_UTIL_CONSTANTS = {} as const;
+/**
+ * @author SaiForceOne
+ * @description a collection of file utility related constants
+ */
+export const FILE_UTIL_CONSTANTS = {
+  ENV_KEY_APP_ID: 'APP_ID',
+  ENV_KEY_DB_URI: 'DATABASE_URI',
+  ENV_KEY_DEBUG: 'DEBUG',
+  ENV_KEY_FE: 'FRONTEND',
+  ENV_KEY_FE_BASE_PATH: 'FRONTEND_BASE_PATH',
+  ENV_KEY_FE_ENTRYPOINT: 'FRONTEND_ENTRYPOINT',
+  ENV_KEY_FE_EXT: 'FRONTEND_EXTENSIONS',
+  ENV_KEY_VITE_HOST: 'VITE_HOST',
+  ENV_KEY_VITE_PORT: 'VITE_PORT',
+} as const;

@@ -1,0 +1,7 @@
+/*
+  Description: Base app css to get you up and running. Feel free to
+  edit as needed
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

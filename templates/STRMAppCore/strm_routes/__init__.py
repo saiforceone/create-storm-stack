@@ -4,7 +4,7 @@
 from starlette.routing import Route
 
 # ST🌀RM Stack Controller imports
-from smrt_controllers import *
+from strm_controllers import *
 
 routes = [
     Route('/api', WelcomeController),

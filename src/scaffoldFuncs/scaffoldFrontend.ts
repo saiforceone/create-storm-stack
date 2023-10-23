@@ -9,6 +9,7 @@ import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
+  copyFrontendResources,
   copyFrontendTemplates,
   setupBaseFrontend,
   setupFrontend,
@@ -58,6 +59,17 @@ export async function scaffoldFrontend(
 
     if (!frontendCopyResult.success) {
       output.message = frontendCopyResult.message;
+      return output;
+    }
+
+    // 4. copy frontend resources and configs
+    const feResourceCopyResult = await copyFrontendResources(
+      process.cwd(),
+      scaffoldOptions
+    );
+
+    if (!feResourceCopyResult.success) {
+      output.message = feResourceCopyResult.message;
       return output;
     }
 
