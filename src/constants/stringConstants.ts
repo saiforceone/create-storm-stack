@@ -6,7 +6,7 @@
 export const STRING_CONSTANTS = {
   STORM_BRANDED: 'ST🌀RM',
   INFO_BE_SET_UP_VIRTUAL_ENV: 'Setting up virtual environment...',
-  STORM_O_ASCII: '
+  STORM_ASCII: '
   ____ _____     ____  __  __ 
 / ___ |_   _🌀🌀 |  _ \|  \/  |
 \___ \ | ||🌀  🌀| |_) | |\/| |
