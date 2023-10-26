@@ -8,12 +8,13 @@ import type { Answers } from 'inquirer';
 
 // STRM Stack Imports
 import { preScaffold } from './cliHelpers/preScaffold.js';
-import { postScaffold } from './cliHelpers/postScaffold.js';
+import { printScaffoldSummary } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
 import { scaffoldFrontend } from './scaffoldFuncs/scaffoldFrontend.js';
 import { scaffoldPost } from './scaffoldFuncs/scaffoldPost.js';
+import { ConsoleLogger } from './utils/consoleLogger.js';
 
 /**
  * @async
@@ -36,17 +37,36 @@ export async function cli(): Promise<void> {
   // 1. Scaffold backend / core
   const coreSetupResult = await scaffoldCore(cliAnswers);
 
-  console.log(coreSetupResult);
+  if (!coreSetupResult.success) {
+    ConsoleLogger.printLog(
+      `Scaffold process failed with error: ${coreSetupResult.message}`,
+      'error'
+    );
+    return;
+  }
 
   // 2. Scaffold frontend
   const frontendSetupResult = await scaffoldFrontend(cliAnswers);
 
-  console.log(frontendSetupResult);
+  if (!frontendSetupResult.success) {
+    ConsoleLogger.printLog(
+      `Scaffold process failed with error: ${frontendSetupResult.message}`,
+      'error'
+    );
+    return;
+  }
 
   // 3. Post Scaffold
   const postScaffoldResult = await scaffoldPost(cliAnswers);
 
-  console.log(postScaffoldResult);
+  if (!postScaffoldResult.success) {
+    ConsoleLogger.printLog(
+      `Scaffold process failed with error: ${postScaffoldResult.message}`,
+      'error'
+    );
+    return;
+  }
 
-  postScaffold();
+  // Print post scaffold messaging
+  printScaffoldSummary(cliAnswers);
 }

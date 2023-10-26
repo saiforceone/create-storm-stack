@@ -54,7 +54,10 @@ export async function scaffoldCore(
       scaffoldOptions.loggerMode
     );
 
-    console.log('copy template result: ', copyStarletteTemplatesResult);
+    if (!copyStarletteTemplatesResult.success) {
+      output.message = copyStarletteTemplatesResult.message;
+      return output;
+    }
 
     output.success = true;
     return output;
