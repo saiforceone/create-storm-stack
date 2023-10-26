@@ -4,6 +4,7 @@
  */
 
 export const STRING_CONSTANTS = {
+  STORM_BRANDED: 'ST🌀RM',
   INFO_BE_SET_UP_VIRTUAL_ENV: 'Setting up virtual environment...',
 
   SUCCESS_BE_FINISHED_VIRTUAL_ENV:

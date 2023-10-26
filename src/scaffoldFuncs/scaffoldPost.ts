@@ -57,11 +57,12 @@ export async function scaffoldPost(
       return output;
     }
 
-    console.log('write env result: ', writeEnvResult);
-
     const renameFilesResult = await renameFilesAtDest(process.cwd());
 
-    console.log('rename files result: ', renameFilesResult);
+    if (!renameFilesResult.success) {
+      output.message = renameFilesResult.message;
+      return output;
+    }
 
     output.success = true;
     return output;
