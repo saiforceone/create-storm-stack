@@ -7,7 +7,7 @@ import inquirer from 'inquirer';
 import type { Answers } from 'inquirer';
 
 // STRM Stack Imports
-import { preScaffold } from './cliHelpers/preScaffold.js';
+import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { printScaffoldSummary } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
@@ -30,7 +30,7 @@ async function cliPrompts(): Promise<Answers> {
  * the necessary helper / scaffolding functions.
  */
 export async function cli(): Promise<void> {
-  preScaffold();
+  printPreScaffoldMessage();
 
   const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
 
