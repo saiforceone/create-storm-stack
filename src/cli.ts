@@ -11,10 +11,7 @@ import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js
 import { printScaffoldSummary } from './cliHelpers/postScaffold.js';
 import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
-import { scaffoldCore } from './scaffoldFuncs/scaffoldCore.js';
-import { scaffoldFrontend } from './scaffoldFuncs/scaffoldFrontend.js';
-import { scaffoldPost } from './scaffoldFuncs/scaffoldPost.js';
-import { ConsoleLogger } from './utils/consoleLogger.js';
+import { execCLIInstallation } from './cliHelpers/installationHelpers.js';
 
 /**
  * @async
@@ -34,38 +31,8 @@ export async function cli(): Promise<void> {
 
   const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
 
-  // 1. Scaffold backend / core
-  const coreSetupResult = await scaffoldCore(cliAnswers);
-
-  if (!coreSetupResult.success) {
-    ConsoleLogger.printLog(
-      `Scaffold process failed with error: ${coreSetupResult.message}`,
-      'error'
-    );
-    return;
-  }
-
-  // 2. Scaffold frontend
-  const frontendSetupResult = await scaffoldFrontend(cliAnswers);
-
-  if (!frontendSetupResult.success) {
-    ConsoleLogger.printLog(
-      `Scaffold process failed with error: ${frontendSetupResult.message}`,
-      'error'
-    );
-    return;
-  }
-
-  // 3. Post Scaffold
-  const postScaffoldResult = await scaffoldPost(cliAnswers);
-
-  if (!postScaffoldResult.success) {
-    ConsoleLogger.printLog(
-      `Scaffold process failed with error: ${postScaffoldResult.message}`,
-      'error'
-    );
-    return;
-  }
+  // Execute CLI installation with options
+  await execCLIInstallation(cliAnswers)();
 
   // Print post scaffold messaging
   printScaffoldSummary(cliAnswers);
