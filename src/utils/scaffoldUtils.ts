@@ -39,6 +39,7 @@ import FrontendOpt = STRMStackCLI.FrontendOpt;
 import FrontendDependenciesFile = STRMStackCLI.FrontendDependenciesFile;
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import STRMFrontendOptFile = STRMStackCLI.STRMFrontendOptFile;
+import STRMProjectScript = STRMStackCLI.STRMProjectScript;
 
 /**
  * @function setupProjectDir
@@ -665,6 +666,53 @@ export async function renameFilesAtDest(
     output.success = true;
     return output;
   } catch (e) {
+    return output;
+  }
+}
+
+/**
+ * @async
+ * @function writeScriptUpdates
+ * @param {string} projectPath path of the project being scaffolded
+ * @param {Array<STRMProjectScript>} pkgScripts commands that should be written to package.json at the destination
+ * @returns {Promise<ScaffoldOutput>}
+ * @description utility function that writes commands to the scripts section of the package.json file at the destination
+ * (scaffolded project)
+ */
+export async function writeScriptUpdates(
+  projectPath: string,
+  pkgScripts: Array<STRMProjectScript>
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  try {
+    const pkgAtDest = await getProjectPkg(projectPath);
+
+    if (!pkgAtDest) {
+      output.message = ERROR_CONSTANTS.ERR_PKG_FILE_LOAD_FAIL;
+      return output;
+    }
+
+    pkgScripts.forEach((pkgScript) => {
+      pkgAtDest.scripts[pkgScript.name] = pkgScript.command;
+    });
+
+    const { message: writeMessage, success: writeSuccess } =
+      await writeProjectConfigData(
+        projectPath,
+        PATH_CONSTANTS.FILE_PACKAGE_JSON,
+        JSON.stringify(pkgAtDest, null, 2)
+      );
+
+    output.message = writeMessage;
+
+    if (!writeSuccess) {
+      return output;
+    }
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
     return output;
   }
 }

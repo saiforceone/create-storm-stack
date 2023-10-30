@@ -50,6 +50,11 @@ declare namespace STRMStackCLI {
     author: string;
   };
 
+  export type STRMProjectScript = {
+    name: string;
+    command: string;
+  };
+
   // Structure of config
   export type STRMConfigFile = {
     appId: string;
