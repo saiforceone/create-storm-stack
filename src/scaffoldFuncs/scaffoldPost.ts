@@ -12,7 +12,9 @@ import {
   renameFilesAtDest,
   updateProjectConfiguration,
   updateProjectPkgFile,
+  writeScriptUpdates,
 } from '../utils/scaffoldUtils.js';
+import { PKG_SCRIPTS } from '../constants/commandConstants.js';
 
 /**
  * @function scaffoldPost
@@ -43,6 +45,17 @@ export async function scaffoldPost(
 
     if (!overwritePkgResult.success) {
       output.message = overwritePkgResult.message;
+      return output;
+    }
+
+    // write pkg script updates
+    const writePkgScriptsResult = await writeScriptUpdates(
+      process.cwd(),
+      PKG_SCRIPTS
+    );
+
+    if (!writePkgScriptsResult.success) {
+      output.message = writePkgScriptsResult.message;
       return output;
     }
 

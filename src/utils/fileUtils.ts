@@ -11,6 +11,7 @@ import STRMConfigFile = STRMStackCLI.STRMConfigFile;
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
 import STRMProjectPkgFile = STRMStackCLI.STRMProjectPkgFile;
+import { PATH_CONSTANTS } from '../constants/pathConstants.js';
 
 /**
  * @async
@@ -63,6 +64,16 @@ export async function getProjectConfig(
       `Failed to read project with error: ${(e as Error).message}`
     );
   }
+}
+
+/**
+ * @function getProjectPkgPath
+ * @param {string} projectPath
+ * @returns {string}
+ * @description Returns the project package file path at destination
+ */
+export function getProjectPkgPath(projectPath: string): string {
+  return path.resolve(projectPath, PATH_CONSTANTS.FILE_PACKAGE_JSON);
 }
 
 /**
