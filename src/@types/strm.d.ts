@@ -32,6 +32,7 @@ declare namespace STRMStackCLI {
     projectName: string;
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
+    installPrettier: boolean;
   };
 
   // Structure for general STRM package files
@@ -84,4 +85,13 @@ declare namespace STRMStackCLI {
 
   // frontend options file convenience type
   export type STRMFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
+
+  // STRM stack addon
+  export type STRMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest';
+
+  export type STRMAddOnsStructure = {
+    packages: Record<string, string>;
+  };
+
+  export type STRMAddOnsFile = Record<STRMAddOn, STRMAddOnsStructure>;
 }

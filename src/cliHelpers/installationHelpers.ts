@@ -14,6 +14,11 @@ import { scaffoldCore } from '../scaffoldFuncs/scaffoldCore.js';
 import { ConsoleLogger } from '../utils/consoleLogger.js';
 import { scaffoldFrontend } from '../scaffoldFuncs/scaffoldFrontend.js';
 import { scaffoldPost } from '../scaffoldFuncs/scaffoldPost.js';
+import {
+  buildAddOns,
+  installScaffoldAddOns,
+  scaffoldAddOns,
+} from '../scaffoldFuncs/scaffoldAddOns.js';
 
 /**
  * @function execCLIInstallation
@@ -53,6 +58,20 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       }
       feSetupSpinner.succeed();
 
+      if (cliAnswers.installPrettier) {
+        const prettierSpinner = ora(
+          `Installing ${STRING_CONSTANTS.STORM_BRANDED} addon: Prettier`
+        ).start();
+        const { message: prettierMsg, success: prettierSuccess } =
+          await scaffoldAddOns('prettier', cliAnswers.loggerMode)();
+        if (!prettierSuccess) {
+          prettierSpinner.fail(prettierMsg);
+          ConsoleLogger.printLog(`Error: ${prettierMsg}`, 'error');
+          process.exit(1);
+        }
+        prettierSpinner.succeed();
+      }
+
       const psSetupSpinner = ora(
         `Running post-scaffold operations and making your ${STRING_CONSTANTS.STORM_BRANDED} project runnable...`
       ).start();
@@ -89,6 +108,10 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         );
         process.exit(1);
       }
+
+      // 2. Scaffold Add-ons
+      const addOns = buildAddOns(cliAnswers);
+      await installScaffoldAddOns(addOns, cliAnswers.loggerMode);
 
       // 3. Post Scaffold
       const postScaffoldResult = await scaffoldPost(cliAnswers);

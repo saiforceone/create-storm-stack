@@ -26,6 +26,13 @@ export const INQUIRER_PROMPTS: QuestionCollection = [
     type: 'list',
     choices: ['react', 'lit', 'vue'],
   },
+  // STRM Add Ons
+  {
+    message: 'Install Prettier (optional add-on)',
+    name: 'installPrettier',
+    type: 'confirm',
+    default: false,
+  },
   // ConsoleLogger Type
   {
     message: 'What kind of logging should we use',

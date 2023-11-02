@@ -123,3 +123,14 @@ export async function writeProjectConfigData(
     return output;
   }
 }
+
+/**
+ * @description Helper function that gets the root of the STRM CLI to make it
+ * easier to construct paths when template and other files need to be copied to
+ * the destination project
+ * @returns {string}
+ */
+export function getSTRMCLIRoot(): string {
+  const currentUrl = import.meta.url;
+  return path.resolve(new URL(currentUrl).pathname, '../../../');
+}

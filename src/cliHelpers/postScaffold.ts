@@ -8,6 +8,7 @@ import chalk from 'chalk';
 // ST🌀RM Stack Imports
 import { STRING_CONSTANTS } from '../constants/stringConstants.js';
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import { buildAddOns } from '../scaffoldFuncs/scaffoldAddOns.js';
 
 /**
  * @function printScaffoldSummary
@@ -16,12 +17,28 @@ import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
  * the prompts
  */
 export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
+  const addOnsList = buildAddOns(scaffoldOpts);
+
+  const addOnsText = `
+ ${chalk.underline('Add-ons installed')}\n
+ ${
+   addOnsList.length
+     ? addOnsList.map(
+         (addOn, index) =>
+           `${chalk.bold.greenBright(index + 1 + '. ' + addOn)}\n`
+       )
+     : 'No add-ons were installed'
+ }
+`;
+
   console.log(`
  ${chalk.bold(`Your ${STRING_CONSTANTS.STORM_BRANDED} project is ready to go!`)}
   
  ${chalk.underline('Project Summary')}\n
  Project Name: ${chalk.greenBright.bold(scaffoldOpts.projectName)}
  Frontend: ${chalk.greenBright.bold(scaffoldOpts.frontend)}
+ 
+ ${addOnsText}
   
  ${chalk.bold(`Running your ${STRING_CONSTANTS.STORM_BRANDED} Stack project`)}\n
  1. Navigate to the directory: ${chalk.greenBright(
