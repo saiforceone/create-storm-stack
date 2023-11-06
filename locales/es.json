@@ -1,0 +1,42 @@
+{
+  "misc": {
+    "STORM_BRANDED": "ST🌀RM",
+    "CHANGING_DIRECTORY": "Cambiando de directorio a:",
+    "TAG_LINE": "The CLI that makes building fullstack python-based web apps a breeze \uD83D\uDE43 - ES"
+  },
+  "cli": {
+    "PROJECT_DIR_INVALID": "Project directory is not valid - ES",
+    "PROJECT_DIR_OK": "Se puede utilizar el directorio del proyecto.",
+    "PROMPT_PROJECT_NAME": "¿Cómo deberíamos llamar este proyecto?",
+    "PROMPT_FRONTEND_CHOICE": "¿Qué interfaz te gustaría usar?"
+  },
+  "frontend": {
+    "error": {},
+    "info": {
+      "COPY_TEMPLATES": "Copying template files for frontend... - ES",
+      "UPDATE_PROJECT_PKG_FILE": "Updating project package.json... - ES"
+    },
+    "warning": {},
+    "success": {
+      "INSTALL_FE_DEPS": "Frontend dependencies successfully installed for - ES",
+      "UPDATE_PROJECT_CONFIG": "Project configuration updated - ES",
+      "UPDATE_PROJECT_PKG_FILE": "Updated project package.json - ES"
+    }
+  },
+  "backend": {
+    "error": {},
+    "info": {
+      "COPY_BASE_TEMPLATE": "Copying base template to destination... - ES",
+      "COPY_CORE_FILES": "Copying core app files to destination... - ES",
+      "COPY_SUPPORT_FILES": "Copying support files to destination... - ES",
+      "SET_UP_VIRTUAL_ENV": "Setting up virtual environment... - ES"
+    },
+    "warning": {},
+    "success": {
+      "BE_COPY_BASE_TEMPLATE": "Copied base template to destination - ES",
+      "BE_COPY_CORE_FILES": "Copied core app files to destination - ES",
+      "BE_COPY_SUPPORT_FILES": "Copied support files to destination - ES",
+      "BE_FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing Flask dependencies - ES"
+    }
+  }
+}

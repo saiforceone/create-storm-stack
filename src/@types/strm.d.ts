@@ -94,4 +94,27 @@ declare namespace STRMStackCLI {
   };
 
   export type STRMAddOnsFile = Record<STRMAddOn, STRMAddOnsStructure>;
+
+  export type STRMBootOpts = {
+    locale: string;
+  };
+
+  export type STRMStringsCategory = 'info' | 'warning' | 'success' | 'error';
+  export type STRMLocaleData = {
+    misc: {
+      STORM_BRANDED: string;
+      CHANGING_DIRECTORY: string;
+      TAG_LINE: string;
+    };
+    cli: {
+      PROJECT_DIR_INVALID: string;
+      PROJECT_DIR_OK: string;
+      PROMPT_PROJECT_NAME: string;
+      PROMPT_FRONTEND_CHOICE: string;
+    };
+    info: {
+      BE_COPY_BASE_TEMPLATE: string;
+      BE_COPY_CORE_FILES: string;
+    };
+  };
 }

@@ -9,9 +9,10 @@ import type { Answers } from 'inquirer';
 // STRM Stack Imports
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { printScaffoldSummary } from './cliHelpers/postScaffold.js';
-import { INQUIRER_PROMPTS } from './cliHelpers/inquirerPrompts.js';
+import { getCLIPrompts } from './cliHelpers/inquirerPrompts.js';
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import { execCLIInstallation } from './cliHelpers/installationHelpers.js';
+import { scaffoldBoot } from './scaffoldFuncs/scaffoldBoot.js';
 
 /**
  * @async
@@ -19,7 +20,7 @@ import { execCLIInstallation } from './cliHelpers/installationHelpers.js';
  * @description returns the answers from CLI prompts
  */
 async function cliPrompts(): Promise<Answers> {
-  return inquirer.prompt(INQUIRER_PROMPTS);
+  return inquirer.prompt(getCLIPrompts());
 }
 
 /**
@@ -27,6 +28,8 @@ async function cliPrompts(): Promise<Answers> {
  * the necessary helper / scaffolding functions.
  */
 export async function cli(): Promise<void> {
+  await scaffoldBoot();
+
   printPreScaffoldMessage();
 
   const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
