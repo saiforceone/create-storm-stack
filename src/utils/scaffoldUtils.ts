@@ -41,6 +41,10 @@ import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import STRMFrontendOptFile = STRMStackCLI.STRMFrontendOptFile;
 import STRMProjectScript = STRMStackCLI.STRMProjectScript;
 
+// Import the Locale manager so that localized strings will be used
+import { LocaleManager } from '../cliHelpers/localeManager.js';
+const LocaleData = LocaleManager.getInstance().getLocaleData();
+
 /**
  * @function setupProjectDir
  * @param {string} projectName
@@ -56,7 +60,7 @@ export async function setupProjectDir(
 
     // 1. check the destination
     if (await destinationPathExists(targetPath)) {
-      output.message = ERROR_CONSTANTS.ERR_PROJECT_DEST_EXISTS;
+      output.message = LocaleData.backend.error.PROJECT_DEST;
       // exit
       return output;
     }
@@ -67,7 +71,7 @@ export async function setupProjectDir(
     // 3. check destination access
     await access(targetPath, constants.W_OK);
 
-    output.message = STRING_CONSTANTS.SUCCESS_PROJECT_DIR_OK;
+    output.message = LocaleData.backend.success.PROJECT_DEST;
     output.success = true;
     return output;
   } catch (e) {
@@ -93,7 +97,7 @@ export async function setupVirtualEnv(
   try {
     if (verboseLogs)
       ConsoleLogger.printLog(
-        `${STRING_CONSTANTS.INFO_CHANGING_DIRECTORY_TO} ${projectPath}`
+        `${LocaleData.cli.info.CHANGE_DIR}: ${projectPath}`
       );
 
     // 1. cd / navigate to project path
@@ -101,7 +105,7 @@ export async function setupVirtualEnv(
 
     // 2. execute command to create environment
     if (verboseLogs)
-      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_SET_UP_VIRTUAL_ENV);
+      ConsoleLogger.printLog(LocaleData.backend.info.SET_UP_VIRTUAL_ENV);
 
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;

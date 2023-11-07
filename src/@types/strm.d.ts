@@ -111,10 +111,20 @@ declare namespace STRMStackCLI {
       PROJECT_DIR_OK: string;
       PROMPT_PROJECT_NAME: string;
       PROMPT_FRONTEND_CHOICE: string;
+      error: {
+        INSTALL_ADDON: string;
+      };
+      info: {
+        CHANGE_DIR: string;
+        INSTALL_ADDON: string;
+      };
+      success: {
+        INSTALL_ADDON: string;
+      };
     };
     backend: {
       error: {
-        PROJECT_DEST_EXISTS: string;
+        PROJECT_DEST: string;
         PKG_FILE_LOAD_FAIL: string;
         CONFIG_FILE_LOAD_FAIL: string;
       };
@@ -125,6 +135,7 @@ declare namespace STRMStackCLI {
         SET_UP_VIRTUAL_ENV: string;
       };
       success: {
+        PROJECT_DEST: string;
         COPY_BASE_TEMPLATE: string;
         COPY_CORE_FILES: string;
         COPY_SUPPORT_FILES: string;

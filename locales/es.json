@@ -9,7 +9,18 @@
     "PROJECT_DIR_OK": "Se puede utilizar el directorio del proyecto.",
     "PROMPT_PROJECT_NAME": "¿Cómo deberíamos llamar este proyecto?",
     "PROMPT_FRONTEND_CHOICE": "¿Qué interfaz te gustaría usar?",
-    "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon"
+    "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon",
+    "error": {
+      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon - ES"
+    },
+    "info": {
+      "CHANGE_DIR": "Changing directory to - ES",
+      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon - ES"
+    },
+    "warning": {},
+    "success": {
+      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon - ES"
+    }
   },
   "frontend": {
     "error": {},

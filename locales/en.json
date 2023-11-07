@@ -9,7 +9,17 @@
     "PROJECT_DIR_OK": "Project directory can be used",
     "PROMPT_PROJECT_NAME": "What should we call this project",
     "PROMPT_FRONTEND_CHOICE": "Which frontend would you like to use",
-    "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon"
+    "error": {
+      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon"
+    },
+    "info": {
+      "CHANGE_DIR": "Changing directory to",
+      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon"
+    },
+    "warning": {},
+    "success": {
+      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon"
+    }
   },
   "frontend": {
     "error": {},
@@ -27,7 +37,7 @@
   },
   "backend": {
     "error": {
-      "PROJECT_DEST_EXISTS": "The project directory already exists",
+      "PROJECT_DEST": "The project directory already exists",
       "PKG_FILE_LOAD_FAIL": "Failed to load project package.json file",
       "CONFIG_FILE_LOAD_FAIL": "Failed to load the project configuration file"
     },
@@ -40,6 +50,7 @@
     },
     "warning": {},
     "success": {
+      "PROJECT_DEST": "The project directory can be used",
       "COPY_BASE_TEMPLATE": "Copied base template to destination",
       "COPY_CORE_FILES": "Copied core app files to destination",
       "COPY_SUPPORT_FILES": "Copied support files to destination",
