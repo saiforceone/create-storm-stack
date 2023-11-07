@@ -112,9 +112,27 @@ declare namespace STRMStackCLI {
       PROMPT_PROJECT_NAME: string;
       PROMPT_FRONTEND_CHOICE: string;
     };
-    info: {
-      BE_COPY_BASE_TEMPLATE: string;
-      BE_COPY_CORE_FILES: string;
+    backend: {
+      error: {
+        PROJECT_DEST_EXISTS: string;
+        PKG_FILE_LOAD_FAIL: string;
+        CONFIG_FILE_LOAD_FAIL: string;
+      };
+      info: {
+        COPY_BASE_TEMPLATE: string;
+        COPY_CORE_FILES: string;
+        COPY_SUPPORT_FILES: string;
+        SET_UP_VIRTUAL_ENV: string;
+      };
+      success: {
+        COPY_BASE_TEMPLATE: string;
+        COPY_CORE_FILES: string;
+        COPY_SUPPORT_FILES: string;
+        FINISHED_VIRTUAL_ENV: string;
+      };
+    };
+    postScaffold: {
+      RUN_POST_PROCESSES: string;
     };
   };
 }
