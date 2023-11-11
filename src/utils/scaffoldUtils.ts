@@ -43,7 +43,6 @@ import STRMProjectScript = STRMStackCLI.STRMProjectScript;
 
 // Import the Locale manager so that localized strings will be used
 import { LocaleManager } from '../cliHelpers/localeManager.js';
-const LocaleData = LocaleManager.getInstance().getLocaleData();
 
 /**
  * @function setupProjectDir
@@ -53,6 +52,7 @@ const LocaleData = LocaleManager.getInstance().getLocaleData();
 export async function setupProjectDir(
   projectName: string
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   try {
     // 0. check that the destination does not already exist
@@ -92,6 +92,7 @@ export async function setupVirtualEnv(
   projectPath: string,
   loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verboseLogs = loggerMode === 'verbose';
   try {
