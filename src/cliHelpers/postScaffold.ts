@@ -6,9 +6,9 @@
 import chalk from 'chalk';
 
 // ST🌀RM Stack Imports
-import { STRING_CONSTANTS } from '../constants/stringConstants.js';
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import { buildAddOns } from '../scaffoldFuncs/scaffoldAddOns.js';
+import { LocaleManager } from './localeManager.js';
 
 /**
  * @function printScaffoldSummary
@@ -17,10 +17,11 @@ import { buildAddOns } from '../scaffoldFuncs/scaffoldAddOns.js';
  * the prompts
  */
 export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const addOnsList = buildAddOns(scaffoldOpts);
 
   const addOnsText = `
- ${chalk.underline('Add-ons installed')}\n
+ ${chalk.underline(LocaleData.postScaffold.ADDONS_INSTALLED)}\n
  ${
    addOnsList.length
      ? addOnsList.map(
@@ -32,15 +33,15 @@ export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
 `;
 
   console.log(`
- ${chalk.bold(`Your ${STRING_CONSTANTS.STORM_BRANDED} project is ready to go!`)}
+ ${chalk.bold(LocaleData.postScaffold.PROJECT_READY)}
   
- ${chalk.underline('Project Summary')}\n
+ ${chalk.underline(LocaleData.postScaffold.PROJECT_SUMMARY)}\n
  Project Name: ${chalk.greenBright.bold(scaffoldOpts.projectName)}
  Frontend: ${chalk.greenBright.bold(scaffoldOpts.frontend)}
  
  ${addOnsText}
   
- ${chalk.bold(`Running your ${STRING_CONSTANTS.STORM_BRANDED} Stack project`)}\n
+ ${chalk.bold(`Running your ${LocaleData.misc.STORM_BRANDED} project`)}\n
  1. Navigate to the directory: ${chalk.greenBright(
    'cd ' + scaffoldOpts.projectName
  )}

@@ -2,17 +2,17 @@
  * @author SaiForceOne
  * @description Standard CLI
  */
+import type { Answers } from 'inquirer';
 // Core & Third-party import
 import inquirer from 'inquirer';
-import type { Answers } from 'inquirer';
 
 // STRM Stack Imports
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { printScaffoldSummary } from './cliHelpers/postScaffold.js';
 import { getCLIPrompts } from './cliHelpers/inquirerPrompts.js';
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import { execCLIInstallation } from './cliHelpers/installationHelpers.js';
 import { scaffoldBoot } from './scaffoldFuncs/scaffoldBoot.js';
+import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 
 /**
  * @async

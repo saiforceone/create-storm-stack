@@ -1,6 +1,6 @@
 {
   "misc": {
-    "STORM_BRANDED": "ST🌀RM",
+    "STORM_BRANDED": "ST🌀RM Stack",
     "CHANGING_DIRECTORY": "Changing directory to:",
     "TAG_LINE": "The CLI that makes building fullstack python-based web apps a breeze \uD83D\uDE43"
   },
@@ -10,27 +10,46 @@
     "PROMPT_PROJECT_NAME": "What should we call this project",
     "PROMPT_FRONTEND_CHOICE": "Which frontend would you like to use",
     "error": {
-      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon"
+      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon",
+      "WRITE_ENV_DATA": "Failed to write app env values"
     },
     "info": {
       "CHANGE_DIR": "Changing directory to",
-      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon"
+      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon",
+      "WRITE_ENV_DATA": "Writing app env values and making project runnable..."
     },
     "warning": {},
     "success": {
-      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon"
+      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon",
+      "WRITE_ENV_DATA": "Successfully wrote app env values"
     }
   },
   "frontend": {
-    "error": {},
+    "error": {
+      "COPY_FE_TEMPLATES": "Failed to copy template files for frontend",
+      "COPY_FE_RESOURCES": "Failed to copy project resource files to destination",
+      "INSTALL_BASE_VITE_DEPS": "Failed to install base vite dependencies",
+      "INSTALL_FE_DEPS": "Failed to installing ST\uD83C\uDF00RM Stack frontend",
+      "INSTALL_FE_ADDON": "Failed to install ST\uD83C\uDF00RM Stack frontend Addon",
+      "UPDATE_PROJECT_CONFIG":"Failed to update project configuration",
+      "UPDATE_PROJECT_PKG_FILE": "Failed to update project package.json"
+    },
     "info": {
-      "INSTALLING": "Installing ST\uD83C\uDF00RM Stack frontend",
-      "COPY_TEMPLATES": "Copying template files for frontend...",
-      "UPDATE_PROJECT_PKG_FILE": "Updating project package.json..."
+      "COPY_FE_TEMPLATES": "Copying template files for frontend",
+      "COPY_FE_RESOURCES": "Copying project resource files to destination",
+      "INSTALL_BASE_VITE_DEPS": "Installing bse vite dependencies",
+      "INSTALL_FE_DEPS": "Installing ST\uD83C\uDF00RM Stack frontend",
+      "INSTALL_FE_ADDON": "Installing ST\uD83C\uDF00RM Stack frontend Addon",
+      "UPDATE_PROJECT_CONFIG": "Updating project configuration",
+      "UPDATE_PROJECT_PKG_FILE": "Updating project package.json"
     },
     "warning": {},
     "success": {
-      "INSTALL_FE_DEPS": "Frontend dependencies successfully installed for",
+      "COPY_FE_TEMPLATES": "Finished copying template files for frontend",
+      "COPY_FE_RESOURCES": "Copied project resource files to destination",
+      "INSTALL_FE_DEPS": "successfully installed ST\uD83C\uDF00RM frontend dependencies",
+      "INSTALL_FE_ADDON": "Successfully installed ST\uD83C\uDF00RM Stack frontend Addon",
+      "INSTALL_BASE_VITE_DEPS": "Successfully installed vite base dependencies",
       "UPDATE_PROJECT_CONFIG": "Project configuration updated",
       "UPDATE_PROJECT_PKG_FILE": "Updated project package.json"
     }
@@ -42,7 +61,7 @@
       "CONFIG_FILE_LOAD_FAIL": "Failed to load the project configuration file"
     },
     "info": {
-      "INSTALLING": "Installing ST\uD83C\uDF00RM Stack core...",
+      "INSTALL_BASE_DEPS": "Installing ST\uD83C\uDF00RM Stack core...",
       "COPY_BASE_TEMPLATE": "Copying base template to destination...",
       "COPY_CORE_FILES": "Copying core app files to destination...",
       "COPY_SUPPORT_FILES": "Copying support files to destination...",
@@ -58,6 +77,9 @@
     }
   },
   "postScaffold": {
-    "RUN_POST_PROCESSES": "Running post-scaffold operations and making your ST\uD83C\uDF00RM project runnable..."
+    "ADDONS_INSTALLED": "Addons Installed",
+    "RUN_POST_PROCESSES": "Running post-scaffold operations and making your ST\uD83C\uDF00RM Stack project runnable...",
+    "PROJECT_READY": "Your ST\uD83C\uDF00RM Stack project is ready to go",
+    "PROJECT_SUMMARY": "Project Summary"
   }
 }

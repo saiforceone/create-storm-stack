@@ -100,6 +100,18 @@ declare namespace STRMStackCLI {
   };
 
   export type STRMStringsCategory = 'info' | 'warning' | 'success' | 'error';
+
+  type STRMStandardFEMsgs = {
+    COPY_FE_TEMPLATES: string;
+    COPY_FE_RESOURCES: string;
+    INSTALL_BASE_VITE_DEPS: string;
+    INSTALL_FE_ADDON: string;
+    INSTALL_FE_DEPS: string;
+    UPDATE_PROJECT_CONFIG: string;
+    UPDATE_PROJECT_PKG: string;
+    UPDATE_PKG_SCRIPTS: string;
+  };
+
   export type STRMLocaleData = {
     misc: {
       STORM_BRANDED: string;
@@ -113,25 +125,35 @@ declare namespace STRMStackCLI {
       PROMPT_FRONTEND_CHOICE: string;
       error: {
         INSTALL_ADDON: string;
+        WRITE_ENV_DATA: string;
       };
       info: {
         CHANGE_DIR: string;
         INSTALL_ADDON: string;
+        WRITE_ENV_DATA: string;
       };
       success: {
         INSTALL_ADDON: string;
+        WRITE_ENV_DATA: string;
       };
+    };
+    frontend: {
+      error: STRMStandardFEMsgs;
+      info: STRMStandardFEMsgs;
+      success: STRMStandardFEMsgs;
     };
     backend: {
       error: {
         PROJECT_DEST: string;
         PKG_FILE_LOAD_FAIL: string;
         CONFIG_FILE_LOAD_FAIL: string;
+        INSTALL_BASE_DEPS: string;
       };
       info: {
         COPY_BASE_TEMPLATE: string;
         COPY_CORE_FILES: string;
         COPY_SUPPORT_FILES: string;
+        INSTALL_BASE_DEPS: string;
         SET_UP_VIRTUAL_ENV: string;
       };
       success: {
@@ -139,11 +161,15 @@ declare namespace STRMStackCLI {
         COPY_BASE_TEMPLATE: string;
         COPY_CORE_FILES: string;
         COPY_SUPPORT_FILES: string;
+        INSTALL_BASE_DEPS: string;
         FINISHED_VIRTUAL_ENV: string;
       };
     };
     postScaffold: {
+      ADDONS_INSTALLED: string;
       RUN_POST_PROCESSES: string;
+      PROJECT_READY: string;
+      PROJECT_SUMMARY: string;
     };
   };
 }

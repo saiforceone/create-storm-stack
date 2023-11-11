@@ -34,7 +34,6 @@ import { ConsoleLogger } from './consoleLogger.js';
 import { FILE_UTIL_CONSTANTS } from '../constants/fileUtilConstants.js';
 import { PATH_CONSTANTS } from '../constants/pathConstants.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
-import { STRING_CONSTANTS } from '../constants/stringConstants.js';
 import FrontendOpt = STRMStackCLI.FrontendOpt;
 import FrontendDependenciesFile = STRMStackCLI.FrontendDependenciesFile;
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
@@ -127,7 +126,7 @@ export async function setupVirtualEnv(
       .join(' ');
 
     if (verboseLogs)
-      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_SET_UP_VIRTUAL_ENV);
+      ConsoleLogger.printLog(LocaleData.backend.info.SET_UP_VIRTUAL_ENV);
 
     const installDepsCommandStr = `${COMMAND_CONSTANTS.CMD_PIPENV_INSTALL} ${installString}`;
 
@@ -136,7 +135,7 @@ export async function setupVirtualEnv(
 
     if (verboseLogs)
       ConsoleLogger.printLog(
-        STRING_CONSTANTS.SUCCESS_BE_FINISHED_VIRTUAL_ENV,
+        LocaleData.backend.success.FINISHED_VIRTUAL_ENV,
         'success'
       );
 
@@ -159,6 +158,7 @@ export async function copyWebTemplateFiles(
   projectPath: string,
   loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verboseLogs = loggerMode === 'verbose';
   try {
@@ -173,13 +173,13 @@ export async function copyWebTemplateFiles(
     );
 
     if (verboseLogs)
-      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_COPY_CORE_FILES);
+      ConsoleLogger.printLog(LocaleData.backend.info.COPY_CORE_FILES);
 
     await copy(coreAppFilesPath, projectPath, { recursive: true });
 
     if (verboseLogs)
       ConsoleLogger.printLog(
-        STRING_CONSTANTS.SUCCESS_BE_COPY_CORE_FILES,
+        LocaleData.backend.success.COPY_CORE_FILES,
         'success'
       );
 
@@ -195,13 +195,13 @@ export async function copyWebTemplateFiles(
     );
 
     if (verboseLogs)
-      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_COPY_BASE_TEMPLATE);
+      ConsoleLogger.printLog(LocaleData.backend.info.COPY_BASE_TEMPLATE);
 
     await copy(baseTemplatePath, appTemplateDestPath, { recursive: true });
 
     if (verboseLogs)
       ConsoleLogger.printLog(
-        STRING_CONSTANTS.SUCCESS_BE_COPY_BASE_TEMPLATE,
+        LocaleData.backend.success.COPY_BASE_TEMPLATE,
         'success'
       );
 
@@ -217,7 +217,7 @@ export async function copyWebTemplateFiles(
     );
 
     if (verboseLogs)
-      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_BE_COPY_SUPPORT_FILES);
+      ConsoleLogger.printLog(LocaleData.backend.info.COPY_SUPPORT_FILES);
 
     await copy(supportFilesTemplatePath, supportFilesDestPath, {
       recursive: true,
@@ -225,7 +225,7 @@ export async function copyWebTemplateFiles(
 
     if (verboseLogs)
       ConsoleLogger.printLog(
-        STRING_CONSTANTS.SUCCESS_BE_COPY_SUPPORT_FILES,
+        LocaleData.backend.success.COPY_SUPPORT_FILES,
         'success'
       );
 
@@ -249,10 +249,12 @@ export async function setupBaseFrontend(
   projectPath: string,
   loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = loggerMode === 'verbose';
   try {
-    if (verbose) ConsoleLogger.printLog('Installing base vite dependencies...');
+    if (verbose)
+      ConsoleLogger.printLog(LocaleData.frontend.info.INSTALL_BASE_VITE_DEPS);
 
     // 1. load and install dependencies
     const currentUrl = import.meta.url;
@@ -278,7 +280,10 @@ export async function setupBaseFrontend(
     await execaCommand(cmd);
 
     if (verbose)
-      ConsoleLogger.printLog('Installed base vite dependencies!', 'success');
+      ConsoleLogger.printLog(
+        LocaleData.frontend.success.INSTALL_BASE_VITE_DEPS,
+        'success'
+      );
 
     output.success = true;
     return output;
@@ -299,6 +304,7 @@ export async function setupFrontend(
   frontend: FrontendOpt,
   loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = loggerMode === 'verbose';
 
@@ -334,14 +340,14 @@ export async function setupFrontend(
 
     if (verbose)
       ConsoleLogger.printLog(
-        `Installing dependencies for frontend: ${frontend}...`
+        `${LocaleData.frontend.info.INSTALL_FE_DEPS}: ${frontend}...`
       );
 
     await execaCommand(finalInstallString);
 
     if (verbose)
       ConsoleLogger.printLog(
-        `Installed dependencies for frontend: ${frontend}`,
+        `${LocaleData.frontend.success.INSTALL_FE_DEPS}: ${frontend}`,
         'success'
       );
 
@@ -366,6 +372,7 @@ export async function copyFrontendTemplates(
   frontend: FrontendOpt,
   loggerMode: LoggerMode
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = loggerMode === 'verbose';
   try {
@@ -382,16 +389,19 @@ export async function copyFrontendTemplates(
 
     if (verbose)
       ConsoleLogger.printLog(
-        `Copying frontend template files for: ${frontend}`
+        `${LocaleData.frontend.info.COPY_FE_TEMPLATES}: (${frontend})`
       );
 
     // 2. copy files to destination
     await copy(frontendTemplatesPath, targetPath, { recursive: true });
 
     if (verbose)
-      ConsoleLogger.printLog(`Copied frontend template files`, 'success');
+      ConsoleLogger.printLog(
+        `${LocaleData.frontend.success.COPY_FE_TEMPLATES}: (${frontend})`,
+        'success'
+      );
 
-    output.message = 'Frontend template files copied';
+    output.message = LocaleData.frontend.success.COPY_FE_TEMPLATES;
     output.success = true;
     return output;
   } catch (e) {
@@ -410,13 +420,12 @@ export async function copyFrontendResources(
   projectPath: string,
   scaffoldOpts: ScaffoldOpts
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = scaffoldOpts.loggerMode === 'verbose';
   try {
     if (verbose)
-      ConsoleLogger.printLog(
-        'Copying project resource files to destination...'
-      );
+      ConsoleLogger.printLog(LocaleData.frontend.info.COPY_FE_RESOURCES);
     // 1. get path to frontend resources
     const currentURL = import.meta.url;
 
@@ -432,11 +441,11 @@ export async function copyFrontendResources(
 
     if (verbose)
       ConsoleLogger.printLog(
-        'Finished copying resource files to destination',
+        LocaleData.frontend.success.COPY_FE_RESOURCES,
         'success'
       );
 
-    output.message = 'Resource files copied to destination';
+    output.message = LocaleData.frontend.success.COPY_FE_RESOURCES;
     output.success = true;
     return output;
   } catch (e) {
@@ -458,17 +467,18 @@ export async function updateProjectConfiguration(
   projectPath: string,
   scaffoldOptions: ScaffoldOpts
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = scaffoldOptions.loggerMode === 'verbose';
   try {
     if (verbose)
-      ConsoleLogger.printLog('Preparing to update project configuration...');
+      ConsoleLogger.printLog(LocaleData.frontend.info.UPDATE_PROJECT_CONFIG);
 
     // 1. read config data
     const configData = await getProjectConfig(projectPath);
 
     if (!configData) {
-      output.message = 'Unable to load project configuration';
+      output.message = LocaleData.frontend.error.UPDATE_PROJECT_CONFIG;
       return output;
     }
 
@@ -505,7 +515,7 @@ export async function updateProjectConfiguration(
 
     if (verbose)
       ConsoleLogger.printLog(
-        STRING_CONSTANTS.SUCCESS_UPDATE_PROJECT_CONFIG,
+        LocaleData.frontend.success.UPDATE_PROJECT_CONFIG,
         'success'
       );
 
@@ -529,17 +539,18 @@ export async function updateProjectPkgFile(
   projectPath: string,
   scaffoldOptions: ScaffoldOpts
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = scaffoldOptions.loggerMode === 'verbose';
   try {
     if (verbose)
-      ConsoleLogger.printLog(STRING_CONSTANTS.INFO_UPDATE_PROJECT_PKG_FILE);
+      ConsoleLogger.printLog(LocaleData.frontend.info.UPDATE_PROJECT_PKG);
 
     // pkg file path
     const pkgFileData = await getProjectPkg(projectPath);
 
     if (!pkgFileData) {
-      output.message = ERROR_CONSTANTS.ERR_PKG_FILE_LOAD_FAIL;
+      output.message = LocaleData.frontend.error.UPDATE_PROJECT_PKG;
       return output;
     }
 
@@ -561,7 +572,7 @@ export async function updateProjectPkgFile(
 
     if (verbose)
       ConsoleLogger.printLog(
-        STRING_CONSTANTS.SUCCESS_UPDATE_PROJECT_PKG_FILE,
+        LocaleData.frontend.success.UPDATE_PROJECT_PKG,
         'success'
       );
 
@@ -583,13 +594,11 @@ export async function buildInitialEnvAtDest(
   projectPath: string,
   scaffoldOpts: ScaffoldOpts
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   const verbose = scaffoldOpts.loggerMode === 'verbose';
   try {
-    if (verbose)
-      ConsoleLogger.printLog(
-        'Writing app env values and making project runnable...'
-      );
+    if (verbose) ConsoleLogger.printLog(LocaleData.cli.info.WRITE_ENV_DATA);
     const envExamplePath = path.resolve(
       projectPath,
       PATH_CONSTANTS.FILE_ENV_EXAMPLE
@@ -633,10 +642,7 @@ export async function buildInitialEnvAtDest(
     await writeFile(envDestination, envData);
 
     if (verbose)
-      ConsoleLogger.printLog(
-        'Project env file created and made runnable',
-        'success'
-      );
+      ConsoleLogger.printLog(LocaleData.cli.success.WRITE_ENV_DATA, 'success');
 
     output.success = true;
     return output;
@@ -688,12 +694,13 @@ export async function writeScriptUpdates(
   projectPath: string,
   pkgScripts: Array<STRMProjectScript>
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   try {
     const pkgAtDest = await getProjectPkg(projectPath);
 
     if (!pkgAtDest) {
-      output.message = ERROR_CONSTANTS.ERR_PKG_FILE_LOAD_FAIL;
+      output.message = LocaleData.frontend.error.UPDATE_PKG_SCRIPTS;
       return output;
     }
 
@@ -711,9 +718,11 @@ export async function writeScriptUpdates(
     output.message = writeMessage;
 
     if (!writeSuccess) {
+      output.message = LocaleData.frontend.error.UPDATE_PKG_SCRIPTS;
       return output;
     }
 
+    output.message = LocaleData.frontend.success.UPDATE_PKG_SCRIPTS;
     output.success = true;
     return output;
   } catch (e) {
