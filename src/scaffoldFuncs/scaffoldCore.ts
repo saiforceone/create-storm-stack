@@ -62,7 +62,6 @@ export async function scaffoldCore(
     output.success = true;
     return output;
   } catch (e) {
-    console.error('scaffold core', e);
     output.message = (e as Error).message;
     return output;
   }

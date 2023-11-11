@@ -125,15 +125,18 @@ declare namespace STRMStackCLI {
       PROMPT_FRONTEND_CHOICE: string;
       error: {
         INSTALL_ADDON: string;
+        LOAD_CONFIG_FILE: string;
         WRITE_ENV_DATA: string;
       };
       info: {
         CHANGE_DIR: string;
         INSTALL_ADDON: string;
+        LOAD_CONFIG_FILE: string;
         WRITE_ENV_DATA: string;
       };
       success: {
         INSTALL_ADDON: string;
+        LOAD_CONFIG_FILE: string;
         WRITE_ENV_DATA: string;
       };
     };
@@ -167,9 +170,25 @@ declare namespace STRMStackCLI {
     };
     postScaffold: {
       ADDONS_INSTALLED: string;
+      NO_ADDONS_INSTALLED: string;
       RUN_POST_PROCESSES: string;
       PROJECT_READY: string;
       PROJECT_SUMMARY: string;
+      headings: {
+        ADDONS_INSTALLED: string;
+        PROJECT_SUMMARY: string;
+        RUNNING_PROJECT: string;
+      };
+      instructions: {
+        ACTIVATE_VENV: string;
+        NAV_IN_BROWSER: string;
+        NAV_TO_DIR: string;
+        RUN_PROJECT: string;
+      };
+      labels: {
+        PROJECT_NAME: string;
+        FRONTEND: string;
+      };
     };
   };
 }

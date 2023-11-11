@@ -11,16 +11,19 @@
     "PROMPT_FRONTEND_CHOICE": "Which frontend would you like to use",
     "error": {
       "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon",
+      "LOAD_CONFIG_FILE": "Failed to load project config",
       "WRITE_ENV_DATA": "Failed to write app env values"
     },
     "info": {
       "CHANGE_DIR": "Changing directory to",
       "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon",
+      "LOAD_CONFIG_FILE": "Loading project configuration",
       "WRITE_ENV_DATA": "Writing app env values and making project runnable..."
     },
     "warning": {},
     "success": {
       "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon",
+      "LOAD_CONFIG_FILE": "Successfully loaded project configuration",
       "WRITE_ENV_DATA": "Successfully wrote app env values"
     }
   },
@@ -78,8 +81,24 @@
   },
   "postScaffold": {
     "ADDONS_INSTALLED": "Addons Installed",
+    "NO_ADDONS_INSTALLED": "No addons were installed",
     "RUN_POST_PROCESSES": "Running post-scaffold operations and making your ST\uD83C\uDF00RM Stack project runnable...",
     "PROJECT_READY": "Your ST\uD83C\uDF00RM Stack project is ready to go",
-    "PROJECT_SUMMARY": "Project Summary"
+    "PROJECT_SUMMARY": "Project Summary",
+    "headings": {
+      "ADDONS_INSTALLED": "Addons Installed",
+      "PROJECT_SUMMARY": "Project Summary",
+      "RUNNING_PROJECT": "Running your ST\uD83C\uDF00RM Stack project"
+    },
+    "instructions": {
+      "NAV_TO_DIR": "Navigate to directory",
+      "ACTIVATE_VENV": "Activate the virtual environment",
+      "RUN_PROJECT": "Run the project",
+      "NAV_IN_BROWSER": "In your browser, navigate to"
+    },
+    "labels": {
+      "PROJECT_NAME": "Project Name",
+      "FRONTEND": "Frontend"
+    }
   }
 }

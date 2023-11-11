@@ -29,7 +29,6 @@ import {
   getProjectPkg,
   writeProjectConfigData,
 } from './fileUtils.js';
-import { ERROR_CONSTANTS } from '../constants/errorConstants.js';
 import { ConsoleLogger } from './consoleLogger.js';
 import { FILE_UTIL_CONSTANTS } from '../constants/fileUtilConstants.js';
 import { PATH_CONSTANTS } from '../constants/pathConstants.js';
@@ -607,7 +606,7 @@ export async function buildInitialEnvAtDest(
     const projectConfig = await getProjectConfig(projectPath);
 
     if (!projectConfig) {
-      output.message = ERROR_CONSTANTS.CONFIG_FILE_LOAD_FAIL;
+      output.message = LocaleData.cli.error.LOAD_CONFIG_FILE;
       return output;
     }
 

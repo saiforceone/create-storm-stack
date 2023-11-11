@@ -28,7 +28,7 @@ export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
          (addOn, index) =>
            `${chalk.bold.greenBright(index + 1 + '. ' + addOn)}\n`
        )
-     : 'No add-ons were installed'
+     : chalk.dim(LocaleData.postScaffold.NO_ADDONS_INSTALLED)
  }
 `;
 
@@ -36,18 +36,28 @@ export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
  ${chalk.bold(LocaleData.postScaffold.PROJECT_READY)}
   
  ${chalk.underline(LocaleData.postScaffold.PROJECT_SUMMARY)}\n
- Project Name: ${chalk.greenBright.bold(scaffoldOpts.projectName)}
- Frontend: ${chalk.greenBright.bold(scaffoldOpts.frontend)}
+ ${LocaleData.postScaffold.labels.PROJECT_NAME}: ${chalk.greenBright.bold(
+   scaffoldOpts.projectName
+ )}
+ ${LocaleData.postScaffold.labels.FRONTEND}: ${chalk.greenBright.bold(
+   scaffoldOpts.frontend
+ )}
  
  ${addOnsText}
   
- ${chalk.bold(`Running your ${LocaleData.misc.STORM_BRANDED} project`)}\n
- 1. Navigate to the directory: ${chalk.greenBright(
+ ${chalk.bold(LocaleData.postScaffold.headings.RUNNING_PROJECT)}\n
+ 1. ${LocaleData.postScaffold.instructions.NAV_TO_DIR}: ${chalk.greenBright(
    'cd ' + scaffoldOpts.projectName
  )}
- 2. Activate the virtual environment: ${chalk.greenBright('pipenv shell')}
- 3. Run the project: ${chalk.greenBright('npm run strm-dev')}
- 4. In your browser, navigate to: ${chalk.greenBright('http://127.0.0.1:5000')}
+ 2. ${LocaleData.postScaffold.instructions.ACTIVATE_VENV}: ${chalk.greenBright(
+   'pipenv shell'
+ )}
+ 3. ${LocaleData.postScaffold.instructions.RUN_PROJECT}: ${chalk.greenBright(
+   'npm run strm-dev'
+ )}
+ 4. ${LocaleData.postScaffold.instructions.NAV_IN_BROWSER}: ${chalk.greenBright(
+   'http://127.0.0.1:5000'
+ )}
  
  Happy C🌀ding!
 `);
