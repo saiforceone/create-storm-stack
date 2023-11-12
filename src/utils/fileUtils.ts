@@ -12,6 +12,7 @@ import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
 import STRMProjectPkgFile = STRMStackCLI.STRMProjectPkgFile;
 import { PATH_CONSTANTS } from '../constants/pathConstants.js';
+import { LocaleManager } from '../cliHelpers/localeManager.js';
 
 /**
  * @async
@@ -115,7 +116,8 @@ export async function writeProjectConfigData(
     const targetPath = path.resolve(destinationRoot, targetFile);
 
     await writeFile(targetPath, data);
-
+    output.message =
+      LocaleManager.getInstance().getLocaleData().frontend.success.UPDATE_PROJECT_CONFIG;
     output.success = true;
     return output;
   } catch (e) {

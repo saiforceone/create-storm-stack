@@ -109,13 +109,15 @@ export async function setupVirtualEnv(
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;
 
-    const flaskCoreDepsPath = path.resolve(
+    const strmStackCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       PATH_CONSTANTS.FILE_WEB_APP_CORE_DEPS
     );
 
     // read the file contents
-    const pkgFile = await readFile(flaskCoreDepsPath, { encoding: 'utf-8' });
+    const pkgFile = await readFile(strmStackCoreDepsPath, {
+      encoding: 'utf-8',
+    });
     const pkgData = JSON.parse(pkgFile) as STRMPackageFile;
     const { packages } = pkgData;
 
@@ -123,9 +125,6 @@ export async function setupVirtualEnv(
     const installString = Object.keys(packages)
       .map((pkg) => pkg)
       .join(' ');
-
-    if (verboseLogs)
-      ConsoleLogger.printLog(LocaleData.backend.info.SET_UP_VIRTUAL_ENV);
 
     const installDepsCommandStr = `${COMMAND_CONSTANTS.CMD_PIPENV_INSTALL} ${installString}`;
 
@@ -543,13 +542,13 @@ export async function updateProjectPkgFile(
   const verbose = scaffoldOptions.loggerMode === 'verbose';
   try {
     if (verbose)
-      ConsoleLogger.printLog(LocaleData.frontend.info.UPDATE_PROJECT_PKG);
+      ConsoleLogger.printLog(LocaleData.frontend.info.UPDATE_PROJECT_PKG_FILE);
 
     // pkg file path
     const pkgFileData = await getProjectPkg(projectPath);
 
     if (!pkgFileData) {
-      output.message = LocaleData.frontend.error.UPDATE_PROJECT_PKG;
+      output.message = LocaleData.frontend.error.UPDATE_PROJECT_PKG_FILE;
       return output;
     }
 
@@ -571,7 +570,7 @@ export async function updateProjectPkgFile(
 
     if (verbose)
       ConsoleLogger.printLog(
-        LocaleData.frontend.success.UPDATE_PROJECT_PKG,
+        LocaleData.frontend.success.UPDATE_PROJECT_PKG_FILE,
         'success'
       );
 

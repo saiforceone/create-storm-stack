@@ -108,7 +108,7 @@ declare namespace STRMStackCLI {
     INSTALL_FE_ADDON: string;
     INSTALL_FE_DEPS: string;
     UPDATE_PROJECT_CONFIG: string;
-    UPDATE_PROJECT_PKG: string;
+    UPDATE_PROJECT_PKG_FILE: string;
     UPDATE_PKG_SCRIPTS: string;
   };
 
@@ -121,8 +121,12 @@ declare namespace STRMStackCLI {
     cli: {
       PROJECT_DIR_INVALID: string;
       PROJECT_DIR_OK: string;
-      PROMPT_PROJECT_NAME: string;
-      PROMPT_FRONTEND_CHOICE: string;
+      prompts: {
+        PROJECT_NAME: string;
+        FRONTEND_CHOICE: string;
+        LOGGING_MODE: string;
+        INSTALL_ADDON: string;
+      };
       error: {
         INSTALL_ADDON: string;
         LOAD_CONFIG_FILE: string;

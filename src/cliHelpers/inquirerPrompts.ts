@@ -20,7 +20,7 @@ export function getCLIPrompts(): QuestionCollection {
   return [
     // project name prompt
     {
-      message: localeData.cli.PROMPT_PROJECT_NAME,
+      message: localeData.cli.prompts.PROJECT_NAME,
       name: 'projectName',
       type: 'input',
       validate: function (input: string) {
@@ -31,21 +31,21 @@ export function getCLIPrompts(): QuestionCollection {
     },
     // Frontend option prompt
     {
-      message: localeData.cli.PROMPT_FRONTEND_CHOICE,
+      message: localeData.cli.prompts.FRONTEND_CHOICE,
       name: 'frontend',
       type: 'list',
       choices: ['react', 'lit', 'vue'],
     },
     // STRM Add Ons
     {
-      message: 'Install Prettier (optional add-on)',
+      message: `${localeData.cli.prompts.INSTALL_ADDON}: Prettier`,
       name: 'installPrettier',
       type: 'confirm',
       default: false,
     },
     // ConsoleLogger Type
     {
-      message: 'What kind of logging should we use',
+      message: localeData.cli.prompts.LOGGING_MODE,
       name: 'loggerMode',
       type: 'list',
       choices: ['quiet', 'verbose'],

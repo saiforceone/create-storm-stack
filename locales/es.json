@@ -7,43 +7,68 @@
   "cli": {
     "PROJECT_DIR_INVALID": "Project directory is not valid - ES",
     "PROJECT_DIR_OK": "Se puede utilizar el directorio del proyecto.",
-    "PROMPT_PROJECT_NAME": "¿Cómo deberíamos llamar este proyecto?",
-    "PROMPT_FRONTEND_CHOICE": "¿Qué interfaz te gustaría usar?",
-    "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon",
+    "prompts": {
+      "PROJECT_NAME": "¿Cómo deberíamos llamar este proyecto?",
+      "FRONTEND_CHOICE": "¿Qué interfaz te gustaría usar?",
+      "LOGGING_MODE": "What kind of logging should we use - ES",
+      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional) - ES"
+    },
     "error": {
-      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon - ES"
+      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon - ES",
+      "LOAD_CONFIG_FILE": "Failed to load project config - ES",
+      "WRITE_ENV_DATA": "Failed to write app env values - ES"
     },
     "info": {
-      "CHANGE_DIR": "Changing directory to - ES",
-      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon - ES"
+      "CHANGE_DIR": "Changing directory to",
+      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon - ES",
+      "LOAD_CONFIG_FILE": "Loading project configuration - ES",
+      "WRITE_ENV_DATA": "Writing app env values and making project runnable... - ES"
     },
     "warning": {},
     "success": {
-      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon - ES"
+      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon - ES",
+      "LOAD_CONFIG_FILE": "Successfully loaded project configuration - ES",
+      "WRITE_ENV_DATA": "Successfully wrote app env values and made project runnable - ES"
     }
   },
   "frontend": {
-    "error": {},
+    "error": {
+      "COPY_FE_TEMPLATES": "Failed to copy template files for frontend - ES",
+      "COPY_FE_RESOURCES": "Failed to copy project resource files to destination - ES",
+      "INSTALL_BASE_VITE_DEPS": "Failed to install base vite dependencies - ES",
+      "INSTALL_FE_DEPS": "Failed to installing ST\uD83C\uDF00RM Stack frontend - ES",
+      "INSTALL_FE_ADDON": "Failed to install ST\uD83C\uDF00RM Stack frontend Addon - ES",
+      "UPDATE_PROJECT_CONFIG":"Failed to update project configuration - ES",
+      "UPDATE_PROJECT_PKG_FILE": "Failed to update project package.json - ES"
+    },
     "info": {
-      "INSTALLING": "Installing ST\uD83C\uDF00RM Stack frontend - ES",
-      "COPY_TEMPLATES": "Copying template files for frontend... - ES",
-      "UPDATE_PROJECT_PKG_FILE": "Updating project package.json... - ES"
+      "COPY_FE_TEMPLATES": "Copying template files for frontend - ES",
+      "COPY_FE_RESOURCES": "Copying project resource files to destination - ES",
+      "INSTALL_BASE_VITE_DEPS": "Installing bse vite dependencies - ES",
+      "INSTALL_FE_DEPS": "Installing ST\uD83C\uDF00RM Stack frontend - ES",
+      "INSTALL_FE_ADDON": "Installing ST\uD83C\uDF00RM Stack frontend Addon - ES",
+      "UPDATE_PROJECT_CONFIG": "Updating project configuration - ES",
+      "UPDATE_PROJECT_PKG_FILE": "Updating project package.json - ES"
     },
     "warning": {},
     "success": {
-      "INSTALL_FE_DEPS": "Frontend dependencies successfully installed for - ES",
+      "COPY_FE_TEMPLATES": "Finished copying template files for frontend - ES",
+      "COPY_FE_RESOURCES": "Copied project resource files to destination - ES",
+      "INSTALL_FE_DEPS": "Successfully installed ST\uD83C\uDF00RM Stack frontend dependencies - ES",
+      "INSTALL_FE_ADDON": "Successfully installed ST\uD83C\uDF00RM Stack frontend Addon - ES",
+      "INSTALL_BASE_VITE_DEPS": "Successfully installed vite base dependencies - ES",
       "UPDATE_PROJECT_CONFIG": "Project configuration updated - ES",
       "UPDATE_PROJECT_PKG_FILE": "Updated project package.json - ES"
     }
   },
   "backend": {
     "error": {
-      "PROJECT_DEST_EXISTS": "The project directory already exists - ES",
+      "PROJECT_DEST": "The project directory already exists - ES",
       "PKG_FILE_LOAD_FAIL": "Failed to load project package.json file - ES",
       "CONFIG_FILE_LOAD_FAIL": "Failed to load the project configuration file - ES"
     },
     "info": {
-      "INSTALLING": "Installing ST\uD83C\uDF00RM Stack core... - ES",
+      "INSTALL_BASE_DEPS": "Installing ST\uD83C\uDF00RM Stack core... - ES",
       "COPY_BASE_TEMPLATE": "Copying base template to destination... - ES",
       "COPY_CORE_FILES": "Copying core app files to destination... - ES",
       "COPY_SUPPORT_FILES": "Copying support files to destination... - ES",
@@ -51,13 +76,33 @@
     },
     "warning": {},
     "success": {
+      "PROJECT_DEST": "The project directory can be used - ES",
       "COPY_BASE_TEMPLATE": "Copied base template to destination - ES",
       "COPY_CORE_FILES": "Copied core app files to destination - ES",
       "COPY_SUPPORT_FILES": "Copied support files to destination - ES",
-      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing Flask dependencies - ES"
+      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing ST\uD83C\uDF00RM Stack dependencies - ES"
     }
   },
   "postScaffold": {
-    "RUN_POST_PROCESSES": "Running post-scaffold operations and making your ST\uD83C\uDF00RM project runnable... - ES"
+    "ADDONS_INSTALLED": "Addons Installed - ES",
+    "NO_ADDONS_INSTALLED": "No addons were installed - ES",
+    "RUN_POST_PROCESSES": "Running post-scaffold operations and making your ST\uD83C\uDF00RM Stack project runnable... - ES",
+    "PROJECT_READY": "Your ST\uD83C\uDF00RM Stack project is ready to go - ES",
+    "PROJECT_SUMMARY": "Project Summary - ES",
+    "headings": {
+      "ADDONS_INSTALLED": "Addons Installed - ES",
+      "PROJECT_SUMMARY": "Project Summary - ES",
+      "RUNNING_PROJECT": "Running your ST\uD83C\uDF00RM Stack project - ES"
+    },
+    "instructions": {
+      "NAV_TO_DIR": "Navigate to directory - ES",
+      "ACTIVATE_VENV": "Activate the virtual environment - ES",
+      "RUN_PROJECT": "Run the project - ES",
+      "NAV_IN_BROWSER": "In your browser, navigate to - ES"
+    },
+    "labels": {
+      "PROJECT_NAME": "Project Name - ES",
+      "FRONTEND": "Frontend - ES"
+    }
   }
 }

@@ -32,7 +32,6 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
     // handles quiet-mode installation
     quiet: async function (): Promise<void> {
       // set up ora spinners
-      console.log('\n');
       const coreSetupSpinner = ora(
         LocaleData.backend.info.INSTALL_BASE_DEPS
       ).start();
@@ -40,7 +39,6 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         await scaffoldCore(cliAnswers);
       if (!coreSuccess) {
         coreSetupSpinner.fail(coreMessage);
-        ConsoleLogger.printLog(`${coreMessage}`, 'error');
         process.exit(1);
       }
       coreSetupSpinner.succeed();
@@ -54,7 +52,6 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         await scaffoldFrontend(cliAnswers);
       if (!feSuccess) {
         feSetupSpinner.fail(feMessage);
-        ConsoleLogger.printLog(`${feMessage}`, 'error');
         process.exit(1);
       }
       feSetupSpinner.succeed();
@@ -67,7 +64,6 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
           await scaffoldAddOns('prettier', cliAnswers.loggerMode)();
         if (!prettierSuccess) {
           prettierSpinner.fail(prettierMsg);
-          ConsoleLogger.printLog(`Error: ${prettierMsg}`, 'error');
           process.exit(1);
         }
         prettierSpinner.succeed();
@@ -80,7 +76,6 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         await scaffoldPost(cliAnswers);
       if (!psSuccess) {
         psSetupSpinner.fail(psMessage);
-        ConsoleLogger.printLog(`Error: ${psMessage}`, 'error');
         process.exit(1);
       }
       psSetupSpinner.succeed();
@@ -92,10 +87,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       const coreSetupResult = await scaffoldCore(cliAnswers);
 
       if (!coreSetupResult.success) {
-        ConsoleLogger.printLog(
-          `Scaffold process failed with error: ${coreSetupResult.message}`,
-          'error'
-        );
+        ConsoleLogger.printLog(`${coreSetupResult.message}`, 'error');
         process.exit(1);
       }
 
@@ -103,10 +95,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       const frontendSetupResult = await scaffoldFrontend(cliAnswers);
 
       if (!frontendSetupResult.success) {
-        ConsoleLogger.printLog(
-          `Scaffold process failed with error: ${frontendSetupResult.message}`,
-          'error'
-        );
+        ConsoleLogger.printLog(`${frontendSetupResult.message}`, 'error');
         process.exit(1);
       }
 
@@ -118,10 +107,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       const postScaffoldResult = await scaffoldPost(cliAnswers);
 
       if (!postScaffoldResult.success) {
-        ConsoleLogger.printLog(
-          `Scaffold process failed with error: ${postScaffoldResult.message}`,
-          'error'
-        );
+        ConsoleLogger.printLog(`${postScaffoldResult.message}`, 'error');
         process.exit(1);
       }
     },

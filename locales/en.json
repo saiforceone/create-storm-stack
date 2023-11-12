@@ -7,10 +7,14 @@
   "cli": {
     "PROJECT_DIR_INVALID": "Project directory is not valid",
     "PROJECT_DIR_OK": "Project directory can be used",
-    "PROMPT_PROJECT_NAME": "What should we call this project",
-    "PROMPT_FRONTEND_CHOICE": "Which frontend would you like to use",
+    "prompts": {
+      "PROJECT_NAME": "What should we call this project",
+      "FRONTEND_CHOICE": "Which frontend would you like to use",
+      "LOGGING_MODE": "What kind of logging should we use",
+      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional)"
+    },
     "error": {
-      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon",
+      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM Stack addon",
       "LOAD_CONFIG_FILE": "Failed to load project config",
       "WRITE_ENV_DATA": "Failed to write app env values"
     },
@@ -24,7 +28,7 @@
     "success": {
       "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon",
       "LOAD_CONFIG_FILE": "Successfully loaded project configuration",
-      "WRITE_ENV_DATA": "Successfully wrote app env values"
+      "WRITE_ENV_DATA": "Successfully wrote app env values and made project runnable"
     }
   },
   "frontend": {
@@ -50,7 +54,7 @@
     "success": {
       "COPY_FE_TEMPLATES": "Finished copying template files for frontend",
       "COPY_FE_RESOURCES": "Copied project resource files to destination",
-      "INSTALL_FE_DEPS": "successfully installed ST\uD83C\uDF00RM frontend dependencies",
+      "INSTALL_FE_DEPS": "successfully installed ST\uD83C\uDF00RM Stack frontend dependencies",
       "INSTALL_FE_ADDON": "Successfully installed ST\uD83C\uDF00RM Stack frontend Addon",
       "INSTALL_BASE_VITE_DEPS": "Successfully installed vite base dependencies",
       "UPDATE_PROJECT_CONFIG": "Project configuration updated",
@@ -76,7 +80,7 @@
       "COPY_BASE_TEMPLATE": "Copied base template to destination",
       "COPY_CORE_FILES": "Copied core app files to destination",
       "COPY_SUPPORT_FILES": "Copied support files to destination",
-      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing Flask dependencies"
+      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing ST\uD83C\uDF00RM Stack dependencies"
     }
   },
   "postScaffold": {
