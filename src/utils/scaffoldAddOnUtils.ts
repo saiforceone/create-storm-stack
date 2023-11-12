@@ -16,6 +16,7 @@ import { buildScaffoldOutput } from './generalUtils.js';
 import { ConsoleLogger } from './consoleLogger.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
 import { getSTRMCLIRoot } from './fileUtils.js';
+import { LocaleManager } from '../cliHelpers/localeManager.js';
 
 /**
  * @returns {Promise<STRMAddOnsFile|undefined>}
@@ -42,23 +43,20 @@ async function getAddOnsFile(): Promise<STRMAddOnsFile | undefined> {
 /**
  *
  * @param {string} projectPath
- * @param {LoggerMode} loggerMode
  * @returns {Promise<ScaffoldOutput>}
  * @description
  */
 export async function installPrettier(
-  projectPath: string,
-  loggerMode: LoggerMode
+  projectPath: string
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
-  const verbose = loggerMode === 'verbose';
   try {
-    if (verbose) ConsoleLogger.printLog('Installing addon: Prettier...');
     // load dependencies file
     const addOnsData = await getAddOnsFile();
 
     if (!addOnsData) {
-      output.message = 'Failed to load addons file';
+      output.message = LocaleData.frontend.error.INSTALL_FE_ADDON;
       return output;
     }
 
@@ -83,7 +81,7 @@ export async function installPrettier(
     // copy template file
     await copyFile(templatesPath, projectPath, { recursive: true });
 
-    if (verbose) ConsoleLogger.printLog('Installed addon: Prettier', 'success');
+    output.message = LocaleData.frontend.success.INSTALL_FE_ADDON;
     output.success = true;
     return output;
   } catch (e) {

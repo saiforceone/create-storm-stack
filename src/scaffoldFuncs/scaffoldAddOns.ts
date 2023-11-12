@@ -21,12 +21,11 @@ function buildDummyOutput() {
 /**
  * @description "object literal" to handle getting functions to install add ons
  * @param {STRMAddOn} strmAddOn
- * @param {LoggerMode} loggerMode
  */
-export function scaffoldAddOns(strmAddOn: STRMAddOn, loggerMode: LoggerMode) {
+export function scaffoldAddOns(strmAddOn: STRMAddOn) {
   const addOnInstallOpts: Record<STRMAddOn, () => Promise<ScaffoldOutput>> = {
     prettier: async function () {
-      return await installPrettier(process.cwd(), loggerMode);
+      return await installPrettier(process.cwd());
     },
     eslint: async function () {
       return buildDummyOutput();
@@ -42,6 +41,12 @@ export function scaffoldAddOns(strmAddOn: STRMAddOn, loggerMode: LoggerMode) {
   return addOnInstallOpts[strmAddOn];
 }
 
+/**
+ * @function buildAddOns
+ * @param scaffoldOpts
+ * @description Helper function that returns a list of STRM Stack addons based on
+ * project options (scaffoldOpts)
+ */
 export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STRMAddOn> {
   const addOnsList: Array<STRMAddOn> = [];
 
@@ -67,7 +72,7 @@ export async function installScaffoldAddOns(
       ConsoleLogger.printLog(
         `${LocaleData.frontend.info.INSTALL_FE_ADDON}: ${addOn}`
       );
-    const addOnFuncResult = await scaffoldAddOns(addOn, loggerMode)();
+    const addOnFuncResult = await scaffoldAddOns(addOn)();
     if (!addOnFuncResult.success) {
       ConsoleLogger.printLog(
         `${LocaleData.frontend.error.INSTALL_FE_ADDON}: ${addOn} -> ${addOnFuncResult.message}`,

@@ -19,7 +19,7 @@
       "WRITE_ENV_DATA": "Failed to write app env values - ES"
     },
     "info": {
-      "CHANGE_DIR": "Changing directory to",
+      "CHANGE_DIR": "Cambiando de directorio a",
       "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon - ES",
       "LOAD_CONFIG_FILE": "Loading project configuration - ES",
       "WRITE_ENV_DATA": "Writing app env values and making project runnable... - ES"
