@@ -9,17 +9,18 @@ import figlet from 'figlet';
 import gradient from 'gradient-string';
 
 // STORM Stack imports
-import { STRING_CONSTANTS as SC } from '../constants/stringConstants.js';
+import { LocaleManager } from './localeManager.js';
 
 /**
  * @function printPreScaffoldMessage
  * @description Prints the CLI welcome message displaying branding
  */
 export function printPreScaffoldMessage(): void {
+  const localeData = LocaleManager.getInstance().getLocaleData();
   console.log(`
  ${gradient.mind(figlet.textSync('STORM', { font: 'Chunky' }))}
- ${chalk.bold(SC.STORM_BRANDED + ' Stack: ')} ${chalk.italic(
-   'The CLI that makes building fullstack python-based web apps a breeze 🙃'
+ ${chalk.bold(localeData.misc.STORM_BRANDED)} ${chalk.italic(
+   localeData.misc.TAG_LINE
  )}
 `);
 }

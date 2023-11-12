@@ -94,4 +94,105 @@ declare namespace STRMStackCLI {
   };
 
   export type STRMAddOnsFile = Record<STRMAddOn, STRMAddOnsStructure>;
+
+  export type STRMBootOpts = {
+    locale: string;
+  };
+
+  export type STRMStringsCategory = 'info' | 'warning' | 'success' | 'error';
+
+  type STRMStandardFEMsgs = {
+    COPY_FE_TEMPLATES: string;
+    COPY_FE_RESOURCES: string;
+    INSTALL_BASE_VITE_DEPS: string;
+    INSTALL_FE_ADDON: string;
+    INSTALL_FE_DEPS: string;
+    UPDATE_PROJECT_CONFIG: string;
+    UPDATE_PROJECT_PKG_FILE: string;
+    UPDATE_PKG_SCRIPTS: string;
+  };
+
+  export type STRMLocaleData = {
+    misc: {
+      STORM_BRANDED: string;
+      CHANGING_DIRECTORY: string;
+      TAG_LINE: string;
+    };
+    cli: {
+      PROJECT_DIR_INVALID: string;
+      PROJECT_DIR_OK: string;
+      prompts: {
+        PROJECT_NAME: string;
+        FRONTEND_CHOICE: string;
+        LOGGING_MODE: string;
+        INSTALL_ADDON: string;
+      };
+      error: {
+        INSTALL_ADDON: string;
+        LOAD_CONFIG_FILE: string;
+        WRITE_ENV_DATA: string;
+      };
+      info: {
+        CHANGE_DIR: string;
+        INSTALL_ADDON: string;
+        LOAD_CONFIG_FILE: string;
+        WRITE_ENV_DATA: string;
+      };
+      success: {
+        INSTALL_ADDON: string;
+        LOAD_CONFIG_FILE: string;
+        WRITE_ENV_DATA: string;
+      };
+    };
+    frontend: {
+      error: STRMStandardFEMsgs;
+      info: STRMStandardFEMsgs;
+      success: STRMStandardFEMsgs;
+    };
+    backend: {
+      error: {
+        PROJECT_DEST: string;
+        PKG_FILE_LOAD_FAIL: string;
+        CONFIG_FILE_LOAD_FAIL: string;
+        INSTALL_BASE_DEPS: string;
+      };
+      info: {
+        COPY_BASE_TEMPLATE: string;
+        COPY_CORE_FILES: string;
+        COPY_SUPPORT_FILES: string;
+        INSTALL_BASE_DEPS: string;
+        SET_UP_VIRTUAL_ENV: string;
+      };
+      success: {
+        PROJECT_DEST: string;
+        COPY_BASE_TEMPLATE: string;
+        COPY_CORE_FILES: string;
+        COPY_SUPPORT_FILES: string;
+        INSTALL_BASE_DEPS: string;
+        FINISHED_VIRTUAL_ENV: string;
+      };
+    };
+    postScaffold: {
+      ADDONS_INSTALLED: string;
+      NO_ADDONS_INSTALLED: string;
+      RUN_POST_PROCESSES: string;
+      PROJECT_READY: string;
+      PROJECT_SUMMARY: string;
+      headings: {
+        ADDONS_INSTALLED: string;
+        PROJECT_SUMMARY: string;
+        RUNNING_PROJECT: string;
+      };
+      instructions: {
+        ACTIVATE_VENV: string;
+        NAV_IN_BROWSER: string;
+        NAV_TO_DIR: string;
+        RUN_PROJECT: string;
+      };
+      labels: {
+        PROJECT_NAME: string;
+        FRONTEND: string;
+      };
+    };
+  };
 }

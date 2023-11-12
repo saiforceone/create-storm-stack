@@ -9,7 +9,6 @@ import ora from 'ora';
 
 // STORM Stack Imports
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
-import { STRING_CONSTANTS } from '../constants/stringConstants.js';
 import { scaffoldCore } from '../scaffoldFuncs/scaffoldCore.js';
 import { ConsoleLogger } from '../utils/consoleLogger.js';
 import { scaffoldFrontend } from '../scaffoldFuncs/scaffoldFrontend.js';
@@ -19,6 +18,7 @@ import {
   installScaffoldAddOns,
   scaffoldAddOns,
 } from '../scaffoldFuncs/scaffoldAddOns.js';
+import { LocaleManager } from './localeManager.js';
 
 /**
  * @function execCLIInstallation
@@ -27,59 +27,55 @@ import {
  * CLI logger mode selected
  */
 export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const cliInstallOpts: Record<STRMStackCLI.LoggerMode, () => Promise<void>> = {
     // handles quiet-mode installation
     quiet: async function (): Promise<void> {
       // set up ora spinners
-      console.log('\n');
       const coreSetupSpinner = ora(
-        `Installing ${STRING_CONSTANTS.STORM_BRANDED} stack core...`
+        LocaleData.backend.info.INSTALL_BASE_DEPS
       ).start();
       const { message: coreMessage, success: coreSuccess } =
         await scaffoldCore(cliAnswers);
       if (!coreSuccess) {
         coreSetupSpinner.fail(coreMessage);
-        ConsoleLogger.printLog(`Error: ${coreMessage}`, 'error');
         process.exit(1);
       }
       coreSetupSpinner.succeed();
 
       const feSetupSpinner = ora(
-        `Installing ${
-          STRING_CONSTANTS.STORM_BRANDED
-        } stack frontend (${chalk.bold(cliAnswers.frontend)})...`
+        `${LocaleData.frontend.info.INSTALL_FE_DEPS} (${chalk.bold(
+          cliAnswers.frontend
+        )})...`
       ).start();
       const { message: feMessage, success: feSuccess } =
         await scaffoldFrontend(cliAnswers);
       if (!feSuccess) {
         feSetupSpinner.fail(feMessage);
-        ConsoleLogger.printLog(`Error:" ${feMessage}`, 'error');
         process.exit(1);
       }
       feSetupSpinner.succeed();
 
       if (cliAnswers.installPrettier) {
         const prettierSpinner = ora(
-          `Installing ${STRING_CONSTANTS.STORM_BRANDED} addon: Prettier`
+          `${LocaleData.frontend.info.INSTALL_FE_ADDON}: Prettier`
         ).start();
         const { message: prettierMsg, success: prettierSuccess } =
           await scaffoldAddOns('prettier', cliAnswers.loggerMode)();
         if (!prettierSuccess) {
           prettierSpinner.fail(prettierMsg);
-          ConsoleLogger.printLog(`Error: ${prettierMsg}`, 'error');
           process.exit(1);
         }
         prettierSpinner.succeed();
       }
 
       const psSetupSpinner = ora(
-        `Running post-scaffold operations and making your ${STRING_CONSTANTS.STORM_BRANDED} project runnable...`
+        LocaleData.postScaffold.RUN_POST_PROCESSES
       ).start();
       const { message: psMessage, success: psSuccess } =
         await scaffoldPost(cliAnswers);
       if (!psSuccess) {
         psSetupSpinner.fail(psMessage);
-        ConsoleLogger.printLog(`Error: ${psMessage}`, 'error');
         process.exit(1);
       }
       psSetupSpinner.succeed();
@@ -91,10 +87,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       const coreSetupResult = await scaffoldCore(cliAnswers);
 
       if (!coreSetupResult.success) {
-        ConsoleLogger.printLog(
-          `Scaffold process failed with error: ${coreSetupResult.message}`,
-          'error'
-        );
+        ConsoleLogger.printLog(`${coreSetupResult.message}`, 'error');
         process.exit(1);
       }
 
@@ -102,10 +95,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       const frontendSetupResult = await scaffoldFrontend(cliAnswers);
 
       if (!frontendSetupResult.success) {
-        ConsoleLogger.printLog(
-          `Scaffold process failed with error: ${frontendSetupResult.message}`,
-          'error'
-        );
+        ConsoleLogger.printLog(`${frontendSetupResult.message}`, 'error');
         process.exit(1);
       }
 
@@ -117,10 +107,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       const postScaffoldResult = await scaffoldPost(cliAnswers);
 
       if (!postScaffoldResult.success) {
-        ConsoleLogger.printLog(
-          `Scaffold process failed with error: ${postScaffoldResult.message}`,
-          'error'
-        );
+        ConsoleLogger.printLog(`${postScaffoldResult.message}`, 'error');
         process.exit(1);
       }
     },

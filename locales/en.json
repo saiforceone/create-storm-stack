@@ -1,0 +1,108 @@
+{
+  "misc": {
+    "STORM_BRANDED": "ST🌀RM Stack",
+    "CHANGING_DIRECTORY": "Changing directory to:",
+    "TAG_LINE": "The CLI that makes building fullstack python-based web apps a breeze \uD83D\uDE43"
+  },
+  "cli": {
+    "PROJECT_DIR_INVALID": "Project directory is not valid",
+    "PROJECT_DIR_OK": "Project directory can be used",
+    "prompts": {
+      "PROJECT_NAME": "What should we call this project",
+      "FRONTEND_CHOICE": "Which frontend would you like to use",
+      "LOGGING_MODE": "What kind of logging should we use",
+      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional)"
+    },
+    "error": {
+      "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM Stack addon",
+      "LOAD_CONFIG_FILE": "Failed to load project config",
+      "WRITE_ENV_DATA": "Failed to write app env values"
+    },
+    "info": {
+      "CHANGE_DIR": "Changing directory to",
+      "INSTALL_ADDON": "Installing ST\uD83C\uDF00RM addon",
+      "LOAD_CONFIG_FILE": "Loading project configuration",
+      "WRITE_ENV_DATA": "Writing app env values and making project runnable..."
+    },
+    "warning": {},
+    "success": {
+      "INSTALL_ADDON": "Successfully installed ST\uD83C\uDF00RM addon",
+      "LOAD_CONFIG_FILE": "Successfully loaded project configuration",
+      "WRITE_ENV_DATA": "Successfully wrote app env values and made project runnable"
+    }
+  },
+  "frontend": {
+    "error": {
+      "COPY_FE_TEMPLATES": "Failed to copy template files for frontend",
+      "COPY_FE_RESOURCES": "Failed to copy project resource files to destination",
+      "INSTALL_BASE_VITE_DEPS": "Failed to install base vite dependencies",
+      "INSTALL_FE_DEPS": "Failed to installing ST\uD83C\uDF00RM Stack frontend",
+      "INSTALL_FE_ADDON": "Failed to install ST\uD83C\uDF00RM Stack frontend Addon",
+      "UPDATE_PROJECT_CONFIG":"Failed to update project configuration",
+      "UPDATE_PROJECT_PKG_FILE": "Failed to update project package.json"
+    },
+    "info": {
+      "COPY_FE_TEMPLATES": "Copying template files for frontend",
+      "COPY_FE_RESOURCES": "Copying project resource files to destination",
+      "INSTALL_BASE_VITE_DEPS": "Installing bse vite dependencies",
+      "INSTALL_FE_DEPS": "Installing ST\uD83C\uDF00RM Stack frontend",
+      "INSTALL_FE_ADDON": "Installing ST\uD83C\uDF00RM Stack frontend Addon",
+      "UPDATE_PROJECT_CONFIG": "Updating project configuration",
+      "UPDATE_PROJECT_PKG_FILE": "Updating project package.json"
+    },
+    "warning": {},
+    "success": {
+      "COPY_FE_TEMPLATES": "Finished copying template files for frontend",
+      "COPY_FE_RESOURCES": "Copied project resource files to destination",
+      "INSTALL_FE_DEPS": "successfully installed ST\uD83C\uDF00RM Stack frontend dependencies",
+      "INSTALL_FE_ADDON": "Successfully installed ST\uD83C\uDF00RM Stack frontend Addon",
+      "INSTALL_BASE_VITE_DEPS": "Successfully installed vite base dependencies",
+      "UPDATE_PROJECT_CONFIG": "Project configuration updated",
+      "UPDATE_PROJECT_PKG_FILE": "Updated project package.json"
+    }
+  },
+  "backend": {
+    "error": {
+      "PROJECT_DEST": "The project directory already exists",
+      "PKG_FILE_LOAD_FAIL": "Failed to load project package.json file",
+      "CONFIG_FILE_LOAD_FAIL": "Failed to load the project configuration file"
+    },
+    "info": {
+      "INSTALL_BASE_DEPS": "Installing ST\uD83C\uDF00RM Stack core...",
+      "COPY_BASE_TEMPLATE": "Copying base template to destination...",
+      "COPY_CORE_FILES": "Copying core app files to destination...",
+      "COPY_SUPPORT_FILES": "Copying support files to destination...",
+      "SET_UP_VIRTUAL_ENV": "Setting up virtual environment..."
+    },
+    "warning": {},
+    "success": {
+      "PROJECT_DEST": "The project directory can be used",
+      "COPY_BASE_TEMPLATE": "Copied base template to destination",
+      "COPY_CORE_FILES": "Copied core app files to destination",
+      "COPY_SUPPORT_FILES": "Copied support files to destination",
+      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing ST\uD83C\uDF00RM Stack dependencies"
+    }
+  },
+  "postScaffold": {
+    "ADDONS_INSTALLED": "Addons Installed",
+    "NO_ADDONS_INSTALLED": "No addons were installed",
+    "RUN_POST_PROCESSES": "Running post-scaffold operations and making your ST\uD83C\uDF00RM Stack project runnable...",
+    "PROJECT_READY": "Your ST\uD83C\uDF00RM Stack project is ready to go",
+    "PROJECT_SUMMARY": "Project Summary",
+    "headings": {
+      "ADDONS_INSTALLED": "Addons Installed",
+      "PROJECT_SUMMARY": "Project Summary",
+      "RUNNING_PROJECT": "Running your ST\uD83C\uDF00RM Stack project"
+    },
+    "instructions": {
+      "NAV_TO_DIR": "Navigate to directory",
+      "ACTIVATE_VENV": "Activate the virtual environment",
+      "RUN_PROJECT": "Run the project",
+      "NAV_IN_BROWSER": "In your browser, navigate to"
+    },
+    "labels": {
+      "PROJECT_NAME": "Project Name",
+      "FRONTEND": "Frontend"
+    }
+  }
+}

@@ -10,7 +10,7 @@ import STRMAddOn = STRMStackCLI.STRMAddOn;
 import LoggerMode = STRMStackCLI.LoggerMode;
 import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
 import { ConsoleLogger } from '../utils/consoleLogger.js';
-import { STRING_CONSTANTS } from '../constants/stringConstants.js';
+import { LocaleManager } from '../cliHelpers/localeManager.js';
 
 function buildDummyOutput() {
   const output = buildScaffoldOutput();
@@ -21,12 +21,11 @@ function buildDummyOutput() {
 /**
  * @description "object literal" to handle getting functions to install add ons
  * @param {STRMAddOn} strmAddOn
- * @param {LoggerMode} loggerMode
  */
-export function scaffoldAddOns(strmAddOn: STRMAddOn, loggerMode: LoggerMode) {
+export function scaffoldAddOns(strmAddOn: STRMAddOn) {
   const addOnInstallOpts: Record<STRMAddOn, () => Promise<ScaffoldOutput>> = {
     prettier: async function () {
-      return await installPrettier(process.cwd(), loggerMode);
+      return await installPrettier(process.cwd());
     },
     eslint: async function () {
       return buildDummyOutput();
@@ -42,6 +41,12 @@ export function scaffoldAddOns(strmAddOn: STRMAddOn, loggerMode: LoggerMode) {
   return addOnInstallOpts[strmAddOn];
 }
 
+/**
+ * @function buildAddOns
+ * @param scaffoldOpts
+ * @description Helper function that returns a list of STRM Stack addons based on
+ * project options (scaffoldOpts)
+ */
 export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STRMAddOn> {
   const addOnsList: Array<STRMAddOn> = [];
 
@@ -60,21 +65,25 @@ export async function installScaffoldAddOns(
   addOnOpts: Array<STRMAddOn>,
   loggerMode: LoggerMode
 ): Promise<void> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const verbose = loggerMode === 'verbose';
   for (const addOn of addOnOpts) {
     if (verbose)
       ConsoleLogger.printLog(
-        `Install ${STRING_CONSTANTS.STORM_BRANDED} Add-on: ${addOn}`
+        `${LocaleData.frontend.info.INSTALL_FE_ADDON}: ${addOn}`
       );
-    const addOnFuncResult = await scaffoldAddOns(addOn, loggerMode)();
+    const addOnFuncResult = await scaffoldAddOns(addOn)();
     if (!addOnFuncResult.success) {
       ConsoleLogger.printLog(
-        `Failed to install add-on: ${addOn} with error ${addOnFuncResult.message}`,
+        `${LocaleData.frontend.error.INSTALL_FE_ADDON}: ${addOn} -> ${addOnFuncResult.message}`,
         'error'
       );
       process.exit(1);
     }
     if (verbose)
-      ConsoleLogger.printLog(`Installed add-on: ${addOn}`, 'success');
+      ConsoleLogger.printLog(
+        `${LocaleData.frontend.success.INSTALL_FE_ADDON}: ${addOn}`,
+        'success'
+      );
   }
 }

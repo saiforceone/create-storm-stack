@@ -14,7 +14,7 @@ import {
   setupBaseFrontend,
   setupFrontend,
 } from '../utils/scaffoldUtils.js';
-import { STRING_CONSTANTS } from '../constants/stringConstants.js';
+import { LocaleManager } from '../cliHelpers/localeManager.js';
 
 /**
  * @async
@@ -26,6 +26,7 @@ import { STRING_CONSTANTS } from '../constants/stringConstants.js';
 export async function scaffoldFrontend(
   scaffoldOptions: ScaffoldOpts
 ): Promise<ScaffoldOutput> {
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   try {
     // 1. install base vite dependencies
@@ -73,7 +74,7 @@ export async function scaffoldFrontend(
       return output;
     }
 
-    output.message = `${STRING_CONSTANTS.SUCCESS_INSTALL_FE_DEPS} ${scaffoldOptions.frontend}`;
+    output.message = `${LocaleData.frontend.success.INSTALL_FE_DEPS} (${scaffoldOptions.frontend})`;
     output.success = true;
     return output;
   } catch (e) {
