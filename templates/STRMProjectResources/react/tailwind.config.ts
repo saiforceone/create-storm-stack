@@ -14,8 +14,12 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        'strm-bg-dark': '#050a15',
+        'strm-bg-lighter': '#4C74B6',
+      },
       fontFamily: {
-        heading: ['Rowdies', 'cursive'],
+        heading: ['Jura', 'sans-serif'],
       },
     },
   },
