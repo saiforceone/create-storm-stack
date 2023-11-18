@@ -61,7 +61,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
           `${LocaleData.frontend.info.INSTALL_FE_ADDON}: Prettier`
         ).start();
         const { message: prettierMsg, success: prettierSuccess } =
-          await scaffoldAddOns('prettier', cliAnswers.loggerMode)();
+          await scaffoldAddOns('prettier')();
         if (!prettierSuccess) {
           prettierSpinner.fail(prettierMsg);
           process.exit(1);
