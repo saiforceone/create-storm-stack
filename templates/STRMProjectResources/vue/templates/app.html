@@ -1,0 +1,23 @@
+{#
+  Base React template for the ST🌀RM stack which serves as the entry point for your
+  application. You may update this as you see fit
+#}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Welcome to the ST🌀RM Stack!</title>
+      <!-- custom fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Jura&display=swap" rel="stylesheet">
+      <!-- css -->
+      <link rel="stylesheet" href="{{ url_for('static', path='dist/css/main.css') }}" />
+      <!-- scripts -->
+      {% strm_hmr %}
+  </head>
+  <body>
+      <div id="app"></div>
+  </body>
+</html>
