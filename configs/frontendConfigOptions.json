@@ -8,5 +8,10 @@
     "basePath": "",
     "entryPoint": "",
     "extensions": []
+  },
+  "vue": {
+    "basePath": "strm_fe_vue",
+    "entryPoint": "main.ts",
+    "extensions": [".js", ".ts", ".vue", ".json"]
   }
 }
