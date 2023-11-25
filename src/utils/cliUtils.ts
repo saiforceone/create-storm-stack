@@ -3,8 +3,9 @@
  * @description A collection of helper functions specific to the CLI
  */
 // Core & third-party imports
+import * as Constants from 'constants';
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { readFile, access } from 'node:fs/promises';
 
 // STRM Stack imports
 import { ConsoleLogger } from './consoleLogger.js';
@@ -12,6 +13,9 @@ import STRMProjectPkgFile = STRMStackCLI.STRMProjectPkgFile;
 import { getSTRMCLIRoot } from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
 import STRMLocaleData = STRMStackCLI.STRMLocaleData;
+import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+import STRMConfigFile = STRMStackCLI.STRMConfigFile;
+import { buildScaffoldOutput } from './generalUtils.js';
 
 /**
  * @async
@@ -58,5 +62,49 @@ export async function loadLocaleFile(locale: string) {
   } catch (e) {
     ConsoleLogger.printLog(`Failed to load locale file error: ${e.toString()}`);
     process.exit(1);
+  }
+}
+
+/**
+ * @async
+ * @function checkSTRMProject
+ * @param {string} projectDir the directory to be checked
+ * @description Checks that the target directory contains a STRM Stack Project
+ * @returns {Promise<ScaffoldOutput>}
+ */
+export async function checkSTRMProject(
+  projectDir: string
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+
+  try {
+    // read the JSON config file
+    const configPath = path.resolve(
+      projectDir,
+      'strm_config',
+      'strm_config.json'
+    );
+
+    const configData = await readFile(configPath, { encoding: 'utf-8' });
+    const parsedConfig = JSON.parse(configData) as STRMConfigFile;
+
+    // check if project has the appropriate files and folders
+    const frontendDir = `strm_fe_${parsedConfig.frontend}`;
+    const PATHS = [
+      frontendDir,
+      'strm_controllers',
+      'strm_models',
+      'strm_routes',
+    ];
+    // loop over paths and check for read access
+    for (const dir of PATHS) {
+      await access(path.resolve(projectDir, dir), Constants.R_OK);
+    }
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = e.message;
+    return output;
   }
 }

@@ -65,10 +65,6 @@ declare namespace STRMStackCLI {
     frontendBasePath: string;
     frontendEntryPoint: string;
     frontendExtensions: string[];
-    database: {
-      dbms: string;
-      path: string;
-    };
   };
 
   // structure of the frontend dependencies file
