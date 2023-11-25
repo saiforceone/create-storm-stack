@@ -4,6 +4,18 @@
     "CHANGING_DIRECTORY": "Cambiando de directorio a:",
     "TAG_LINE": "The CLI that makes building fullstack python-based web apps a breeze \uD83D\uDE43 - ES"
   },
+    "advCli": {
+    "headings": {
+      "ADV_CLI": "ST\uD83C\uDF00RM Stack Advanced CLI command executor - es"
+    },
+    "labels": {
+      "VERSION": "version - es"
+    },
+    "descriptions": {
+      "PROGRAM": "ST\uD83C\uDF00RM Stack Advanced CLI command executor - es",
+      "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI - es"
+    }
+  },
   "cli": {
     "PROJECT_DIR_INVALID": "Project directory is not valid - ES",
     "PROJECT_DIR_OK": "Se puede utilizar el directorio del proyecto.",

@@ -118,6 +118,18 @@ declare namespace STRMStackCLI {
       CHANGING_DIRECTORY: string;
       TAG_LINE: string;
     };
+    advCli: {
+      headings: {
+        ADV_CLI: string;
+      };
+      labels: {
+        VERSION: string;
+      };
+      descriptions: {
+        PROGRAM: string;
+        INFO_CMD: string;
+      };
+    };
     cli: {
       PROJECT_DIR_INVALID: string;
       PROJECT_DIR_OK: string;
