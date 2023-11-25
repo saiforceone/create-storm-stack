@@ -4,6 +4,18 @@
     "CHANGING_DIRECTORY": "Changing directory to:",
     "TAG_LINE": "The CLI that makes building fullstack python-based web apps a breeze \uD83D\uDE43"
   },
+  "advCli": {
+    "headings": {
+      "ADV_CLI": "ST\uD83C\uDF00RM Stack Advanced CLI command executor"
+    },
+    "labels": {
+      "VERSION": "version"
+    },
+    "descriptions": {
+      "PROGRAM": "ST\uD83C\uDF00RM Stack Advanced CLI command executor",
+      "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI"
+    }
+  },
   "cli": {
     "PROJECT_DIR_INVALID": "Project directory is not valid",
     "PROJECT_DIR_OK": "Project directory can be used",
@@ -38,7 +50,7 @@
       "INSTALL_BASE_VITE_DEPS": "Failed to install base vite dependencies",
       "INSTALL_FE_DEPS": "Failed to installing ST\uD83C\uDF00RM Stack frontend",
       "INSTALL_FE_ADDON": "Failed to install ST\uD83C\uDF00RM Stack frontend Addon",
-      "UPDATE_PROJECT_CONFIG":"Failed to update project configuration",
+      "UPDATE_PROJECT_CONFIG": "Failed to update project configuration",
       "UPDATE_PROJECT_PKG_FILE": "Failed to update project package.json"
     },
     "info": {

@@ -4,16 +4,11 @@
  * prompting
  */
 // Core & third-party imports
-import path from 'node:path';
 import inquirer, { Answers, QuestionCollection } from 'inquirer';
-import { readFile } from 'node:fs/promises';
 
 // STRM-Stack Imports
-import { getSTRMCLIRoot } from '../utils/fileUtils.js';
-import { LocaleManager } from '../cliHelpers/localeManager.js';
-import STRMLocaleData = STRMStackCLI.STRMLocaleData;
 import STRMBootOpts = STRMStackCLI.STRMBootOpts;
-import { ConsoleLogger } from '../utils/consoleLogger.js';
+import { loadLocaleFile } from '../utils/cliUtils.js';
 
 /**
  * @function setupScaffoldBootPrompts
@@ -43,28 +38,6 @@ function setupScaffoldBootPrompts(defaultLocale: string): QuestionCollection {
  */
 async function scaffoldBootPrompts(defaultLocale: string): Promise<Answers> {
   return inquirer.prompt(setupScaffoldBootPrompts(defaultLocale));
-}
-
-/**
- * @function loadLocaleFile
- * @param {string} locale
- * @description Given a locale, attempts to read the corresponding locale file
- * and load the contents into the LocaleManager (singleton)
- */
-async function loadLocaleFile(locale: string) {
-  try {
-    const cliRoot = getSTRMCLIRoot();
-    const localeFilePath = path.resolve(cliRoot, `locales/${locale}.json`);
-    const localeFileData = await readFile(localeFilePath, {
-      encoding: 'utf-8',
-    });
-    const localeData = JSON.parse(localeFileData) as STRMLocaleData;
-    LocaleManager.getInstance().setLocaleData(localeData);
-    LocaleManager.getInstance().setLocale(locale);
-  } catch (e) {
-    ConsoleLogger.printLog(`Failed to load locale file error: ${e.toString()}`);
-    process.exit(1);
-  }
 }
 
 /**
