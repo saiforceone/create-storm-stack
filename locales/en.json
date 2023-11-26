@@ -14,6 +14,10 @@
     "descriptions": {
       "PROGRAM": "ST\uD83C\uDF00RM Stack Advanced CLI command executor",
       "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI"
+    },
+    "responses": {
+      "PROJECT_APPEARS_VALID": "✅ Appears to be a valid ST\uD83C\uDF00RM Stack Project",
+      "PROJECT_APPEARS_INVALID": "❌ Appears to be an invalid ST\uD83C\uDF00RM Stack Project"
     }
   },
   "cli": {

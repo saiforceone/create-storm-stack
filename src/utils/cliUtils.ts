@@ -15,6 +15,7 @@ import { LocaleManager } from '../cliHelpers/localeManager.js';
 import STRMLocaleData = STRMStackCLI.STRMLocaleData;
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import STRMConfigFile = STRMStackCLI.STRMConfigFile;
+import FrontendOpt = STRMStackCLI.FrontendOpt;
 import { buildScaffoldOutput } from './generalUtils.js';
 
 /**
@@ -66,14 +67,27 @@ export async function loadLocaleFile(locale: string) {
 }
 
 /**
+ * @description helper function that validates the STRM config file to make sure correct information is present
+ * @param strmConfig
+ * @returns {Boolean}
+ */
+function validateSTRMConfig(strmConfig: STRMConfigFile): boolean {
+  const errors = [];
+  if (strmConfig.frontend) return false;
+  return false;
+}
+
+/**
  * @async
  * @function checkSTRMProject
  * @param {string} projectDir the directory to be checked
+ * @param {boolean} showOutput determines if the output should be shown
  * @description Checks that the target directory contains a STRM Stack Project
  * @returns {Promise<ScaffoldOutput>}
  */
 export async function checkSTRMProject(
-  projectDir: string
+  projectDir: string,
+  showOutput: boolean = false
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
 
@@ -92,13 +106,21 @@ export async function checkSTRMProject(
     const frontendDir = `strm_fe_${parsedConfig.frontend}`;
     const PATHS = [
       frontendDir,
+      `${frontendDir}/src/${parsedConfig.frontendEntryPoint}`,
+      `${frontendDir}/src/pages`,
       'strm_controllers',
       'strm_models',
       'strm_routes',
+      'support/strm_hmr.py',
+      'templates/app.html',
+      'app.py',
+      'vite.config.ts',
+      'tailwind.config.ts',
     ];
     // loop over paths and check for read access
     for (const dir of PATHS) {
       await access(path.resolve(projectDir, dir), Constants.R_OK);
+      if (showOutput) console.log('✔️ ', dir);
     }
 
     output.success = true;

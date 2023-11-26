@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+// Core imports
 import process from 'node:process';
 
 /**
@@ -13,6 +14,7 @@ async function execCli(args) {
     const { advCLI } = await import('../dist/advCli.js');
     const program = await advCLI();
     if (!program) {
+      const console = await import('node:console');
       return console.error('uh oh :(');
     }
     program.parse();
