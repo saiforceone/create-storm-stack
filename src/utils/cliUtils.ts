@@ -15,7 +15,6 @@ import { LocaleManager } from '../cliHelpers/localeManager.js';
 import STRMLocaleData = STRMStackCLI.STRMLocaleData;
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import STRMConfigFile = STRMStackCLI.STRMConfigFile;
-import FrontendOpt = STRMStackCLI.FrontendOpt;
 import { buildScaffoldOutput } from './generalUtils.js';
 
 /**
@@ -64,17 +63,6 @@ export async function loadLocaleFile(locale: string) {
     ConsoleLogger.printLog(`Failed to load locale file error: ${e.toString()}`);
     process.exit(1);
   }
-}
-
-/**
- * @description helper function that validates the STRM config file to make sure correct information is present
- * @param strmConfig
- * @returns {Boolean}
- */
-function validateSTRMConfig(strmConfig: STRMConfigFile): boolean {
-  const errors = [];
-  if (strmConfig.frontend) return false;
-  return false;
 }
 
 /**
