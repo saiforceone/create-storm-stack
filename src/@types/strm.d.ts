@@ -13,6 +13,9 @@ declare namespace STRMStackCLI {
   // Frontend options for the STRM Stack CLI
   export type FrontendOpt = 'react' | 'vue' | 'lit';
 
+  // Frontend Entrypoint Option for the STRM Stack CLI
+  export type FrontendEntryPointOpt = 'main.ts' | 'main.tsx';
+
   // ConsoleLogger mode
   export type LoggerMode = 'quiet' | 'verbose';
 
@@ -60,15 +63,11 @@ declare namespace STRMStackCLI {
   export type STRMConfigFile = {
     appId: string;
     viteHost: string;
-    vitePort: string;
+    vitePort: number;
     frontend: FrontendOpt;
     frontendBasePath: string;
-    frontendEntryPoint: string;
+    frontendEntryPoint: FrontendEntryPointOpt;
     frontendExtensions: string[];
-    database: {
-      dbms: string;
-      path: string;
-    };
   };
 
   // structure of the frontend dependencies file
@@ -128,6 +127,10 @@ declare namespace STRMStackCLI {
       descriptions: {
         PROGRAM: string;
         INFO_CMD: string;
+      };
+      responses: {
+        PROJECT_APPEARS_VALID: string;
+        PROJECT_APPEARS_INVALID: string;
       };
     };
     cli: {

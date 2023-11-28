@@ -8,7 +8,11 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 
 // STRM Stack imports
-import { getCLIVersion, loadLocaleFile } from './utils/cliUtils.js';
+import {
+  checkSTRMProject,
+  getCLIVersion,
+  loadLocaleFile,
+} from './utils/cliUtils.js';
 import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 
@@ -51,6 +55,32 @@ export async function advCLI(): Promise<Command | undefined> {
             `${localeData.misc.STORM_BRANDED}: ${chalk.bold.blueBright(
               version
             )}`
+          )
+        );
+      });
+
+    // check-project command
+    program
+      .command('check-project')
+      .description(
+        'checks that the current directory contains a valid project.'
+      )
+      .action(async () => {
+        const validProjectResponse = await checkSTRMProject(
+          process.cwd(),
+          true
+        );
+        console.log(
+          chalk.dim(
+            `${
+              validProjectResponse.success
+                ? chalk.greenBright.bold(
+                    localeData.advCli.responses.PROJECT_APPEARS_VALID
+                  )
+                : chalk.redBright.bold(
+                    localeData.advCli.responses.PROJECT_APPEARS_INVALID
+                  )
+            }`
           )
         );
       });
