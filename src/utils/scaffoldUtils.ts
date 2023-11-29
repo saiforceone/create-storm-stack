@@ -620,7 +620,9 @@ export async function buildInitialEnvAtDest(
     parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_FE_EXT] =
       projectConfig.frontendExtensions.join(',');
     parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_HOST] = projectConfig.viteHost;
-    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_PORT] = projectConfig.vitePort;
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_PORT] = String(
+      projectConfig.vitePort
+    );
 
     // Write default database uri by itself
     parsedEnv[

@@ -78,7 +78,7 @@ declare namespace STRMStackCLI {
 
   export type FrontendOptData = {
     basePath: string;
-    entryPoint: string;
+    entryPoint: FrontendEntryPointOpt;
     extensions: string[];
   };
 
