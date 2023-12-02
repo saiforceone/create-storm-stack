@@ -210,4 +210,27 @@ declare namespace STRMStackCLI {
       };
     };
   };
+
+  // STRM Frontend Route - Framework agnostic route representation
+  export type STRMFERoute = {
+    readonly path: string;
+    readonly componentName: string;
+    readonly componentPath: string;
+  };
+
+  // STRM Module - Collection of a controller, model and frontend pages
+  export type STRMModule = {
+    controller?: {
+      controllerName: string;
+      endpointBase: string;
+      modelName: string;
+    };
+    pageOnly: boolean;
+    pages: Array<STRMFERoute>;
+  };
+
+  export type STRMModuleArgs = {
+    name: string;
+    indexOnly?: boolean;
+  };
 }

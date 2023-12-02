@@ -85,6 +85,38 @@ export async function advCLI(): Promise<Command | undefined> {
         );
       });
 
+    // add module command - adds a controller and frontend pages
+    // todo: add localized strings
+    program
+      .command('make-module')
+      .description(
+        'Generates a module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend'
+      )
+      .option('-n --name <name>', 'the name of the module to be added')
+      .option(
+        '-indexOnly --indexOnly',
+        'specifies that the module will only have an index'
+      )
+      .action(async (args) => {
+        const { success: isProjectValid } = await checkSTRMProject(
+          process.cwd()
+        );
+        if (!isProjectValid) {
+          console.log(
+            chalk.redBright.bold(
+              localeData.advCli.responses.PROJECT_APPEARS_INVALID
+            )
+          );
+          process.exit(1);
+        }
+        console.log('make-module with args: ', args);
+        console.log(
+          chalk.greenBright.bold(
+            `✅ Project is valid. Creating module: ${args['name']}`
+          )
+        );
+      });
+
     return program;
   } catch (e) {
     chalk.redBright(e.message);
