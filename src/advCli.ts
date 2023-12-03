@@ -16,6 +16,7 @@ import {
 import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { validateProjectOrModuleName } from './utils/generalUtils.js';
+import STRMModuleArgs = STRMStackCLI.STRMModuleArgs;
 
 /**
  * @async
@@ -88,6 +89,10 @@ export async function advCLI(): Promise<Command | undefined> {
 
     // add module command - adds a controller and frontend pages
     // todo: add localized strings
+    /**
+     * @example npx @saiforceone/strm-cli --make-module <module_name> [-options]
+     * The make-module command will have structure as defined above.
+     */
     program
       .command('make-module')
       .description(
@@ -97,6 +102,10 @@ export async function advCLI(): Promise<Command | undefined> {
       .option(
         '-indexOnly --indexOnly',
         'specifies that the module will only have an index'
+      )
+      .option(
+        '-controllerOnly --controllerOnly',
+        'Specifies that the module will only have controller (no frontend)'
       )
       .action(async (args) => {
         const { success: isProjectValid } = await checkSTRMProject(
@@ -111,8 +120,10 @@ export async function advCLI(): Promise<Command | undefined> {
           process.exit(1);
         }
 
+        const moduleArgs = args as STRMModuleArgs;
+
         // validate the module name
-        const isValidProjectName = validateProjectOrModuleName(args['name']);
+        const isValidProjectName = validateProjectOrModuleName(moduleArgs.name);
         if (!isValidProjectName) {
           console.log(chalk.redBright.bold('Invalid module name'));
           process.exit(1);

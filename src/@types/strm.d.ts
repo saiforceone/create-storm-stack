@@ -218,14 +218,16 @@ declare namespace STRMStackCLI {
     readonly componentPath: string;
   };
 
+  export type STRMController = {
+    controllerName: string;
+    endpointBase: string;
+    modelName: string;
+  };
+
   // STRM Module - Collection of a controller, model and frontend pages
   export type STRMModule = {
-    controller?: {
-      controllerName: string;
-      endpointBase: string;
-      modelName: string;
-    };
-    pageOnly: boolean;
+    controller: STRMController;
+    controllerOnly: boolean;
     pages: Array<STRMFERoute>;
   };
 
@@ -237,8 +239,11 @@ declare namespace STRMStackCLI {
     modules: Record<string, STRMModule>;
   };
 
+  // STRM Module Arguments - Command line arguments helper for creating modules
   export type STRMModuleArgs = {
+    /* The name of the module */
     name: string;
-    indexOnly?: boolean;
+    /* Should the module have backend components only (no page components) */
+    controllerOnly?: boolean;
   };
 }
