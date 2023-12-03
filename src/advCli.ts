@@ -15,6 +15,7 @@ import {
 } from './utils/cliUtils.js';
 import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
+import { validateProjectOrModuleName } from './utils/generalUtils.js';
 
 /**
  * @async
@@ -92,7 +93,7 @@ export async function advCLI(): Promise<Command | undefined> {
       .description(
         'Generates a module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend'
       )
-      .option('-n --name <name>', 'the name of the module to be added')
+      .requiredOption('-n --name <name>', 'the name of the module to be added')
       .option(
         '-indexOnly --indexOnly',
         'specifies that the module will only have an index'
@@ -109,10 +110,18 @@ export async function advCLI(): Promise<Command | undefined> {
           );
           process.exit(1);
         }
+
+        // validate the module name
+        const isValidProjectName = validateProjectOrModuleName(args['name']);
+        if (!isValidProjectName) {
+          console.log(chalk.redBright.bold('Invalid module name'));
+          process.exit(1);
+        }
+
         console.log('make-module with args: ', args);
         console.log(
           chalk.greenBright.bold(
-            `✅ Project is valid. Creating module: ${args['name']}`
+            `✅ Project is valid. Creating module: ${args['name']}. This shouldn't take too long...`
           )
         );
       });

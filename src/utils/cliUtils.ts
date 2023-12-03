@@ -16,6 +16,8 @@ import STRMLocaleData = STRMStackCLI.STRMLocaleData;
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import STRMConfigFile = STRMStackCLI.STRMConfigFile;
 import { buildScaffoldOutput } from './generalUtils.js';
+import STRMModuleArgs = STRMStackCLI.STRMModuleArgs;
+import STRMModulesFile = STRMStackCLI.STRMModulesFile;
 
 /**
  * @async
@@ -110,6 +112,51 @@ export async function checkSTRMProject(
       await access(path.resolve(projectDir, dir), Constants.R_OK);
       if (showOutput) console.log('✔️ ', dir);
     }
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = e.message;
+    return output;
+  }
+}
+
+// async function generateModuleRoutes(): Promise<ScaffoldOutput> {}
+
+/**
+ * @async
+ * @function getSTRMModules
+ * @description Helper function that attempts to read the strm_modules.json file and returns a typed object or not
+ * @returns {Promise<STRMModulesFile|undefined>}
+ */
+async function getSTRMModules(): Promise<STRMModulesFile | undefined> {
+  try {
+    const modulesFilePath = path.resolve(
+      process.cwd(),
+      'strm_modules/strm_modules.json'
+    );
+    const modulesFileStringData = await readFile(modulesFilePath, {
+      encoding: 'utf-8',
+    });
+    return JSON.parse(modulesFileStringData) as STRMModulesFile;
+  } catch (e) {
+    return;
+  }
+}
+
+/**
+ * @async
+ * @function createSTRMModule
+ * @description Utility function that handles the creation of a STRM Stack Module
+ * @param {STRMModuleArgs} moduleArgs
+ * @returns {Promise<ScaffoldOutput>} Standard scaffold output indicating the result of attempting to create a module
+ */
+export async function createSTRMModule(
+  moduleArgs: STRMModuleArgs
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  try {
+    const { name, indexOnly } = moduleArgs;
 
     output.success = true;
     return output;

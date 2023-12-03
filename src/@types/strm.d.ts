@@ -229,6 +229,14 @@ declare namespace STRMStackCLI {
     pages: Array<STRMFERoute>;
   };
 
+  // STRM Modules File - A JSON file that represents a STRM Stack module collection
+  export type STRMModulesFile = {
+    appId: string;
+    resource: string;
+    lastUpdated: string;
+    modules: Record<string, STRMModule>;
+  };
+
   export type STRMModuleArgs = {
     name: string;
     indexOnly?: boolean;

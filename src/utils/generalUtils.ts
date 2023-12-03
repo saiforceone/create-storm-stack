@@ -9,11 +9,11 @@ import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 const VALID_DESTINATION_PATTERN = /^[a-z]\w+$/gim;
 
 /**
- * @description Helper function to validate a project name. Valid project names should start with a letter and not
+ * @description Helper function to validate a project or module name. Valid project names should start with a letter and not
  * contain spaces or dashes
  * @param {string} projectName
  */
-export function validateProjectName(projectName: string) {
+export function validateProjectOrModuleName(projectName: string) {
   if (!projectName) return;
   return projectName.match(VALID_DESTINATION_PATTERN);
 }
