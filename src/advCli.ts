@@ -10,6 +10,7 @@ import { Command } from 'commander';
 // STRM Stack imports
 import {
   checkSTRMProject,
+  createSTRMModule,
   getCLIVersion,
   loadLocaleFile,
 } from './utils/cliUtils.js';
@@ -99,6 +100,7 @@ export async function advCLI(): Promise<Command | undefined> {
         'Generates a module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend'
       )
       .requiredOption('-n --name <name>', 'the name of the module to be added')
+      .option('-plural --plural <plural>', 'optional pluralization for modules')
       .option(
         '-indexOnly --indexOnly',
         'specifies that the module will only have an index'
@@ -135,6 +137,8 @@ export async function advCLI(): Promise<Command | undefined> {
             `✅ Project is valid. Creating module: ${args['name']}. This shouldn't take too long...`
           )
         );
+        const makeModuleResult = await createSTRMModule(moduleArgs);
+        console.log(makeModuleResult);
       });
 
     return program;

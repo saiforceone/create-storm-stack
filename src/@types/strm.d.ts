@@ -234,7 +234,6 @@ declare namespace STRMStackCLI {
   // STRM Modules File - A JSON file that represents a STRM Stack module collection
   export type STRMModulesFile = {
     appId: string;
-    resource: string;
     lastUpdated: string;
     modules: Record<string, STRMModule>;
   };
@@ -245,5 +244,7 @@ declare namespace STRMStackCLI {
     name: string;
     /* Should the module have backend components only (no page components) */
     controllerOnly?: boolean;
+    /* Specifies the pluralization of a module name. This is optional */
+    plural?: string;
   };
 }
