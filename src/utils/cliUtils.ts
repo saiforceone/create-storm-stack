@@ -477,7 +477,7 @@ function buildSTRMModule(moduleArgs: STRMModuleArgs): STRMModule {
     const detailsPage: STRMFERoute = {
       path: `/${pluralizedName}/:id`,
       componentName: `${titleCase(name)}Detail`,
-      componentPath: `${titleCase(pluralizedName)}/${titleCase(name)}`,
+      componentPath: `${titleCase(pluralizedName)}/${titleCase(name)}Detail`,
     };
 
     pages.push(indexPage, detailsPage);

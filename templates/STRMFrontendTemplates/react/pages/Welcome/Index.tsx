@@ -44,7 +44,7 @@ const HighlightedText: React.FC<{ content: string }> = ({
  * @returns {Promise<STRMApp.BaseAPIResponse>}
  */
 async function getWelcomeData(): Promise<STRMApp.BaseAPIResponse> {
-  const url = '/api';
+  const url = '/api/welcome';
   const response = await fetch(url);
   return (await response.json()) as STRMApp.BaseAPIResponse;
 }
