@@ -7,17 +7,9 @@
 // STRM Stack Imports
 import FrontendOpt = STRMStackCLI.FrontendOpt;
 import { LocaleManager } from '../localeManager.js';
+import { getStandardImports } from './feHelperUtils.js';
 
 // Helpers
-function getStandardImports(frontendOpt: FrontendOpt): string {
-  const STANDARD_IMPORTS: Record<FrontendOpt, string> = {
-    lit: '',
-    vue: '',
-    react: "import React from 'react';",
-  };
-
-  return STANDARD_IMPORTS[frontendOpt];
-}
 
 /**
  * @function getIndexBuilder

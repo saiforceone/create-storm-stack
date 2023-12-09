@@ -29,6 +29,7 @@ import STRMModule = STRMStackCLI.STRMModule;
 import STRMController = STRMStackCLI.STRMController;
 import STRMFERoute = STRMStackCLI.STRMFERoute;
 import { generateIndexPage } from '../cliHelpers/fePageHelpers/generateIndexPage.js';
+import generateDetailsPage from '../cliHelpers/fePageHelpers/generateDetailsPage.js';
 
 /**
  * @async
@@ -401,9 +402,10 @@ async function buildSTRMFrontendComponents(
       return output;
     }
 
+    const feFolder = `strm_fe_${strmConfig.frontend}`;
     const feBasePath = path.resolve(
       process.cwd(),
-      `strm_fe_${strmConfig.frontend}`,
+      feFolder,
       'src/pages',
       titleCase(pluralizedModuleName)
     );
@@ -421,16 +423,19 @@ async function buildSTRMFrontendComponents(
     const { pages } = module;
     for (const page of pages) {
       // attempt to generate page components
-      if (page.componentPath.includes('Index')) {
-        // build the index page
-        const pageData = generateIndexPage(
-          strmConfig.frontend,
-          page.componentName
-        );
-        const pageFilePath = path.resolve(feBasePath, `Index.tsx`);
-        await writeFile(pageFilePath, pageData);
-        console.log('✅ wrote frontend component: ', pageFilePath);
-      }
+      const isIndexPage = page.componentPath.includes('Index');
+      const fileName = isIndexPage ? 'Index.tsx' : `${page.componentName}.tsx`;
+      const pageData = isIndexPage
+        ? generateIndexPage(strmConfig.frontend, page.componentName)
+        : generateDetailsPage(
+            strmConfig.frontend,
+            page.componentName,
+            page.componentPath,
+            module.controller.controllerName
+          );
+      const pageFilePath = path.resolve(feBasePath, fileName);
+      await writeFile(pageFilePath, pageData);
+      console.log('✅ wrote frontend component: ', pageFilePath);
     }
 
     output.success = true;
