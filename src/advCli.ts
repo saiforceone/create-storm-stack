@@ -18,6 +18,7 @@ import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { validateProjectOrModuleName } from './utils/generalUtils.js';
 import STRMModuleArgs = STRMStackCLI.STRMModuleArgs;
+import { ConsoleLogger } from './utils/consoleLogger.js';
 
 /**
  * @async
@@ -88,36 +89,36 @@ export async function advCLI(): Promise<Command | undefined> {
         );
       });
 
-    // add module command - adds a controller and frontend pages
-    // todo: add localized strings
     /**
-     * @example npx @saiforceone/strm-cli --make-module <module_name> [-options]
+     * make-module
+     * @description adds a ST🌀RM Stack module where a module is made up of a
+     * controller (backend), model (backend) and frontend page components
+     * @example npx @saiforceone/strm-cli --make-module --name <module_name> [-options]
      * The make-module command will have structure as defined above.
      */
     program
       .command('make-module')
-      .description(
-        'Generates a module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend'
+      .alias('makeModule')
+      .description(localeData.advCli.descriptions.MAKE_MODULE_CMD)
+      .requiredOption(
+        '-n --name <name>',
+        localeData.advCli.descriptions.MODULE_NAME
       )
-      .requiredOption('-n --name <name>', 'the name of the module to be added')
-      .option('-plural --plural <plural>', 'optional pluralization for modules')
       .option(
-        '-indexOnly --indexOnly',
-        'specifies that the module will only have an index'
+        '-plural --plural <plural>',
+        localeData.advCli.descriptions.MODULE_PLURAL
       )
       .option(
         '-controllerOnly --controllerOnly',
-        'Specifies that the module will only have controller (no frontend)'
+        localeData.advCli.descriptions.CONTROLLER_ONLY
       )
       .action(async (args) => {
         const { success: isProjectValid } = await checkSTRMProject(
           process.cwd()
         );
         if (!isProjectValid) {
-          console.log(
-            chalk.redBright.bold(
-              localeData.advCli.responses.PROJECT_APPEARS_INVALID
-            )
+          ConsoleLogger.printCLIProcessErrorMessage(
+            localeData.advCli.responses.PROJECT_APPEARS_INVALID
           );
           process.exit(1);
         }
@@ -125,24 +126,33 @@ export async function advCLI(): Promise<Command | undefined> {
         const moduleArgs = args as STRMModuleArgs;
 
         // validate the module name
-        const isValidProjectName = validateProjectOrModuleName(moduleArgs.name);
-        if (!isValidProjectName) {
-          console.log(chalk.redBright.bold('Invalid module name'));
+        const isValidModuleName = validateProjectOrModuleName(moduleArgs.name);
+        if (!isValidModuleName) {
+          ConsoleLogger.printCLIProcessErrorMessage(
+            localeData.advCli.responses.INVALID_MODULE_NAME
+          );
           process.exit(1);
         }
 
-        console.log('make-module with args: ', args);
-        console.log(
-          chalk.greenBright.bold(
-            `✅ Project is valid. Creating module: ${args['name']}. This shouldn't take too long...`
-          )
+        ConsoleLogger.printCLIProcessInfoMessage(
+          `${localeData.advCli.info.MODULE_CREATE}: ${args['name']}...`
         );
         const makeModuleResult = await createSTRMModule(moduleArgs);
-        console.log(makeModuleResult);
+        makeModuleResult.success
+          ? ConsoleLogger.printCLIProcessSuccessMessage(
+              `${localeData.advCli.success.MODULE_CREATE}: ${args['name']}`
+            )
+          : ConsoleLogger.printCLIProcessErrorMessage(
+              `${localeData.advCli.error.MODULE_CREATE}${
+                makeModuleResult.message
+                  ? ` ERR: ${makeModuleResult.message}`
+                  : ''
+              }`
+            );
       });
 
     return program;
   } catch (e) {
-    chalk.redBright(e.message);
+    ConsoleLogger.printCLIProcessErrorMessage(e.message);
   }
 }

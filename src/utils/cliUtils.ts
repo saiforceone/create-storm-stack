@@ -517,6 +517,13 @@ export async function createSTRMModule(
       output.message = 'Failed to read STRMModules file';
       return output;
     }
+
+    // check existing module
+    if (strmModulesFileData.modules[name]) {
+      output.message = 'Module already exists';
+      return output;
+    }
+
     // 0.1 update modules JSON file
     strmModulesFileData.modules[name] = buildSTRMModule(moduleArgs);
     const writeModulesResult = await writeSTRMModulesFile(strmModulesFileData);

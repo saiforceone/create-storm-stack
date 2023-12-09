@@ -127,10 +127,26 @@ declare namespace STRMStackCLI {
       descriptions: {
         PROGRAM: string;
         INFO_CMD: string;
+        MAKE_MODULE_CMD: string;
+        MODULE_NAME: string;
+        MODULE_PLURAL: string;
+        CONTROLLER_ONLY: string;
       };
       responses: {
         PROJECT_APPEARS_VALID: string;
         PROJECT_APPEARS_INVALID: string;
+        INVALID_MODULE_NAME: string;
+        MODULE_CREATED: string;
+        MODULE_NOT_CREATED: string;
+      };
+      info: {
+        MODULE_CREATE: string;
+      };
+      error: {
+        MODULE_CREATE: string;
+      };
+      success: {
+        MODULE_CREATE: string;
       };
     };
     cli: {

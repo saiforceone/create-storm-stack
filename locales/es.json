@@ -13,11 +13,27 @@
     },
     "descriptions": {
       "PROGRAM": "ST\uD83C\uDF00RM Stack Advanced CLI command executor - es",
-      "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI - es"
+      "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI - es",
+      "MAKE_MODULE_CMD": "Generates a ST\uD83C\uDF00RM Stack module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend - es",
+      "MODULE_NAME": "the name of the module to be added - es",
+      "MODULE_PLURAL": "(optional) pluralization for modules - es",
+      "CONTROLLER_ONLY": "(optional) specifies that the module will only have controller (no frontend components) - es"
     },
     "responses": {
       "PROJECT_APPEARS_VALID": "Appears to be a valid ST\uD83C\uDF00RM Stack Project - es",
-      "PROJECT_APPEARS_INVALID": "Appears to be an invalid ST\uD83C\uDF00RM Stack Project - es"
+      "PROJECT_APPEARS_INVALID": "Appears to be an invalid ST\uD83C\uDF00RM Stack Project - es",
+      "INVALID_MODULE_NAME": "The given module name is not valid - es",
+      "MODULE_CREATED": "Created module - es",
+      "MODULE_NOT_CREATED": "Failed to create module - es"
+    },
+    "info": {
+      "MODULE_CREATE": "Creating module - es"
+    },
+    "error": {
+      "MODULE_CREATE": "Failed to create module - es"
+    },
+    "success": {
+      "MODULE_CREATE": "Created module successfully - es"
     }
   },
   "cli": {
