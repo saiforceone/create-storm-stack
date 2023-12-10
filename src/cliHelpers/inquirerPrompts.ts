@@ -7,7 +7,7 @@
 import type { QuestionCollection } from 'inquirer';
 
 // STRM Stack Imports
-import { validateProjectName } from '../utils/generalUtils.js';
+import { validateProjectOrModuleName } from '../utils/generalUtils.js';
 import { LocaleManager } from './localeManager.js';
 
 /**
@@ -24,7 +24,7 @@ export function getCLIPrompts(): QuestionCollection {
       name: 'projectName',
       type: 'input',
       validate: function (input: string) {
-        return validateProjectName(input)
+        return validateProjectOrModuleName(input)
           ? true
           : localeData.cli.PROJECT_DIR_INVALID;
       },

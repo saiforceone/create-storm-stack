@@ -52,4 +52,30 @@ export class ConsoleLogger {
     const colorName = logConfig.color as ForegroundColorName;
     console.log(`${chalk[colorName].bold(`[${logConfig.label}]: ${message}`)}`);
   }
+
+  static printCLIProcessErrorMessage(message: string, detail?: string): void {
+    let output = `⛔ ${chalk.redBright.bold(message)}`;
+    if (detail) output += `: ${chalk.italic(detail)}`;
+    console.log(output);
+  }
+
+  static printCLIProcessInfoMessage(message: string, detail?: string): void {
+    let output = `ℹ️  ${chalk.dim.bold(message)}`;
+    if (detail) output += `: ${chalk.italic(detail)}`;
+    console.log(output);
+  }
+
+  /**
+   * @function printCLIProcessSuccessMessage
+   * @description Prints a success message with optional detail
+   * @param {string} message
+   * @param {string} detail
+   */
+  static printCLIProcessSuccessMessage(message: string, detail?: string): void {
+    let output = `✅ ${chalk.greenBright.bold(message)}`;
+    if (detail) {
+      output += `: ${chalk.italic(detail)}`;
+    }
+    console.log(output);
+  }
 }

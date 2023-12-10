@@ -10,11 +10,15 @@ import { Command } from 'commander';
 // STRM Stack imports
 import {
   checkSTRMProject,
+  createSTRMModule,
   getCLIVersion,
   loadLocaleFile,
 } from './utils/cliUtils.js';
 import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
+import { validateProjectOrModuleName } from './utils/generalUtils.js';
+import STRMModuleArgs = STRMStackCLI.STRMModuleArgs;
+import { ConsoleLogger } from './utils/consoleLogger.js';
 
 /**
  * @async
@@ -85,8 +89,70 @@ export async function advCLI(): Promise<Command | undefined> {
         );
       });
 
+    /**
+     * make-module
+     * @description adds a ST🌀RM Stack module where a module is made up of a
+     * controller (backend), model (backend) and frontend page components
+     * @example npx @saiforceone/strm-cli --make-module --name <module_name> [-options]
+     * The make-module command will have structure as defined above.
+     */
+    program
+      .command('make-module')
+      .alias('makeModule')
+      .description(localeData.advCli.descriptions.MAKE_MODULE_CMD)
+      .requiredOption(
+        '-n --name <name>',
+        localeData.advCli.descriptions.MODULE_NAME
+      )
+      .option(
+        '-plural --plural <plural>',
+        localeData.advCli.descriptions.MODULE_PLURAL
+      )
+      .option(
+        '-controllerOnly --controllerOnly',
+        localeData.advCli.descriptions.CONTROLLER_ONLY
+      )
+      .action(async (args) => {
+        const { success: isProjectValid } = await checkSTRMProject(
+          process.cwd()
+        );
+        if (!isProjectValid) {
+          ConsoleLogger.printCLIProcessErrorMessage(
+            localeData.advCli.responses.PROJECT_APPEARS_INVALID
+          );
+          process.exit(1);
+        }
+
+        const moduleArgs = args as STRMModuleArgs;
+
+        // validate the module name
+        const isValidModuleName = validateProjectOrModuleName(moduleArgs.name);
+        if (!isValidModuleName) {
+          ConsoleLogger.printCLIProcessErrorMessage(
+            localeData.advCli.responses.INVALID_MODULE_NAME
+          );
+          process.exit(1);
+        }
+
+        ConsoleLogger.printCLIProcessInfoMessage(
+          `${localeData.advCli.info.MODULE_CREATE}: ${args['name']}...`
+        );
+        const makeModuleResult = await createSTRMModule(moduleArgs);
+        makeModuleResult.success
+          ? ConsoleLogger.printCLIProcessSuccessMessage(
+              `${localeData.advCli.success.MODULE_CREATE}: ${args['name']}`
+            )
+          : ConsoleLogger.printCLIProcessErrorMessage(
+              `${localeData.advCli.error.MODULE_CREATE}${
+                makeModuleResult.message
+                  ? ` ERR: ${makeModuleResult.message}`
+                  : ''
+              }`
+            );
+      });
+
     return program;
   } catch (e) {
-    chalk.redBright(e.message);
+    ConsoleLogger.printCLIProcessErrorMessage(e.message);
   }
 }

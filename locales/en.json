@@ -13,11 +13,56 @@
     },
     "descriptions": {
       "PROGRAM": "ST\uD83C\uDF00RM Stack Advanced CLI command executor",
-      "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI"
+      "INFO_CMD": "Shows the version of the ST\uD83C\uDF00RM Stack CLI",
+      "MAKE_MODULE_CMD": "Generates a ST\uD83C\uDF00RM Stack module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend",
+      "MODULE_NAME": "the name of the module to be added",
+      "MODULE_PLURAL": "(optional) pluralization for modules",
+      "CONTROLLER_ONLY": "(optional) specifies that the module will only have controller (no frontend components)"
     },
     "responses": {
-      "PROJECT_APPEARS_VALID": "✅ Appears to be a valid ST\uD83C\uDF00RM Stack Project",
-      "PROJECT_APPEARS_INVALID": "❌ Appears to be an invalid ST\uD83C\uDF00RM Stack Project"
+      "PROJECT_APPEARS_VALID": "Appears to be a valid ST\uD83C\uDF00RM Stack Project",
+      "PROJECT_APPEARS_INVALID": "Appears to be an invalid ST\uD83C\uDF00RM Stack Project",
+      "INVALID_MODULE_NAME": "The given module name is not valid",
+      "INVALID_STRM_MODULE": "Invalid ST🌀RM Stack Module",
+      "MODULE_CREATED": "Created module",
+      "MODULE_NOT_CREATED": "Failed to create module",
+      "MODULE_ALREADY_EXISTS": "Module already exists"
+    },
+    "info": {
+      "BUILD_FRONTEND_COMPONENTS": "Building frontend components...",
+      "CREATE_CONTROLLER": "Creating ST\uD83C\uDF00RM Stack controller",
+      "CREATE_FE_COMPONENT": "Creating ST\uD83C\uDF00RM Stack frontend component",
+      "CREATE_MODEL": "Creating ST\uD83C\uDF00RM Stack model file",
+      "LOAD_STRM_CONFIG": "Loading ST\uD83C\uDF00RM Stack project configuration file",
+      "LOAD_STRM_MODULES": "Loading ST\uD83C\uDF00RM Stack project modules",
+      "MODULE_CREATE": "Creating module",
+      "REWRITE_MODULE_ROUTES": "Rewriting module routes",
+      "UPDATE_AUTO_IMPORTS": "Updating auto imports",
+      "WRITE_STRM_MODULES": "Writing changes to ST\uD83C\uDF00RM Stack Modules..."
+    },
+    "error": {
+      "BUILD_FRONTEND_COMPONENTS": "Failed to build frontend components",
+      "CREATE_CONTROLLER": "Failed to create ST\uD83C\uDF00RM Stack controller",
+      "CREATE_FE_COMPONENT": "Failed to create ST\uD83C\uDF00RM Stack frontend component",
+      "CREATE_MODEL": "Failed to create ST\uD83C\uDF00RM Stack model file",
+      "LOAD_STRM_CONFIG": "Failed to load ST\uD83C\uDF00RM Stack project configuration file",
+      "LOAD_STRM_MODULES": "Failed to load ST\uD83C\uDF00RM Stack project modules",
+      "MODULE_CREATE": "Failed to create module",
+      "REWRITE_MODULE_ROUTES": "Failed to rewrite module routes",
+      "UPDATE_AUTO_IMPORTS": "Failed to update auto imports",
+      "WRITE_STRM_MODULES": "Failed to write changes to ST\uD83C\uDF00RM Stack Modules"
+    },
+    "success": {
+      "BUILD_FRONTEND_COMPONENTS": "Built frontend components successfully",
+      "CREATE_CONTROLLER": "Created ST\uD83C\uDF00RM Stack controller successfully",
+      "CREATE_FE_COMPONENT": "Successfully created ST\uD83C\uDF00RM Stack frontend component",
+      "CREATE_MODEL": "Created ST\uD83C\uDF00RM Stack model file successfully",
+      "LOAD_STRM_CONFIG": "Successfully loaded ST\uD83C\uDF00RM Stack project configuration file",
+      "LOAD_STRM_MODULES": "Successfully loaded ST\uD83C\uDF00RM Stack project modules",
+      "MODULE_CREATE": "Created module successfully",
+      "REWRITE_MODULE_ROUTES": "Successfully rewrote module routes",
+      "UPDATE_AUTO_IMPORTS": "Updated auto imports successfully",
+      "WRITE_STRM_MODULES": "Successfully wrote changes to ST\uD83C\uDF00RM Stack Modules"
     }
   },
   "cli": {

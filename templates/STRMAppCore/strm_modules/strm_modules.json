@@ -1,0 +1,21 @@
+{
+  "appId": "",
+  "lastUpdated": "",
+  "modules": {
+    "welcome": {
+      "controller": {
+        "controllerName": "welcome_controller",
+        "endpointBase": "welcome",
+        "modelName": "welcome.py"
+      },
+      "controllerOnly": false,
+      "pages": [
+        {
+          "path": "/",
+          "componentName": "Welcome",
+          "componentPath": "Welcome/Index"
+        }
+      ]
+    }
+  }
+}

@@ -111,6 +111,20 @@ declare namespace STRMStackCLI {
     UPDATE_PKG_SCRIPTS: string;
   };
 
+  // ST🌀RM Stack Adv CLI messages
+  type STRMAdvCliMsgs = {
+    BUILD_FRONTEND_COMPONENTS: string;
+    CREATE_CONTROLLER: string;
+    CREATE_FE_COMPONENT: string;
+    CREATE_MODEL: string;
+    LOAD_STRM_CONFIG: string;
+    LOAD_STRM_MODULES: string;
+    MODULE_CREATE: string;
+    REWRITE_MODULE_ROUTES: string;
+    UPDATE_AUTO_IMPORTS: string;
+    WRITE_STRM_MODULES: string;
+  };
+
   export type STRMLocaleData = {
     misc: {
       STORM_BRANDED: string;
@@ -127,11 +141,23 @@ declare namespace STRMStackCLI {
       descriptions: {
         PROGRAM: string;
         INFO_CMD: string;
+        MAKE_MODULE_CMD: string;
+        MODULE_NAME: string;
+        MODULE_PLURAL: string;
+        CONTROLLER_ONLY: string;
       };
       responses: {
         PROJECT_APPEARS_VALID: string;
         PROJECT_APPEARS_INVALID: string;
+        INVALID_MODULE_NAME: string;
+        INVALID_STRM_MODULE: string;
+        MODULE_CREATED: string;
+        MODULE_NOT_CREATED: string;
+        MODULE_ALREADY_EXISTS: string;
       };
+      info: STRMAdvCliMsgs;
+      error: STRMAdvCliMsgs;
+      success: STRMAdvCliMsgs;
     };
     cli: {
       PROJECT_DIR_INVALID: string;
@@ -209,5 +235,42 @@ declare namespace STRMStackCLI {
         FRONTEND: string;
       };
     };
+  };
+
+  // STRM Frontend Route - Framework agnostic route representation
+  export type STRMFERoute = {
+    readonly path: string;
+    readonly componentName: string;
+    readonly componentPath: string;
+  };
+
+  export type STRMController = {
+    controllerName: string;
+    endpointBase: string;
+    modelName: string;
+  };
+
+  // STRM Module - Collection of a controller, model and frontend pages
+  export type STRMModule = {
+    controller: STRMController;
+    controllerOnly: boolean;
+    pages: Array<STRMFERoute>;
+  };
+
+  // STRM Modules File - A JSON file that represents a STRM Stack module collection
+  export type STRMModulesFile = {
+    appId: string;
+    lastUpdated: string;
+    modules: Record<string, STRMModule>;
+  };
+
+  // STRM Module Arguments - Command line arguments helper for creating modules
+  export type STRMModuleArgs = {
+    /* The name of the module */
+    name: string;
+    /* Should the module have backend components only (no page components) */
+    controllerOnly?: boolean;
+    /* Specifies the pluralization of a module name. This is optional */
+    plural?: string;
   };
 }
