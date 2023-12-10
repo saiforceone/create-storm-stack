@@ -111,6 +111,20 @@ declare namespace STRMStackCLI {
     UPDATE_PKG_SCRIPTS: string;
   };
 
+  // ST🌀RM Stack Adv CLI messages
+  type STRMAdvCliMsgs = {
+    BUILD_FRONTEND_COMPONENTS: string;
+    CREATE_CONTROLLER: string;
+    CREATE_FE_COMPONENT: string;
+    CREATE_MODEL: string;
+    LOAD_STRM_CONFIG: string;
+    LOAD_STRM_MODULES: string;
+    MODULE_CREATE: string;
+    REWRITE_MODULE_ROUTES: string;
+    UPDATE_AUTO_IMPORTS: string;
+    WRITE_STRM_MODULES: string;
+  };
+
   export type STRMLocaleData = {
     misc: {
       STORM_BRANDED: string;
@@ -136,18 +150,14 @@ declare namespace STRMStackCLI {
         PROJECT_APPEARS_VALID: string;
         PROJECT_APPEARS_INVALID: string;
         INVALID_MODULE_NAME: string;
+        INVALID_STRM_MODULE: string;
         MODULE_CREATED: string;
         MODULE_NOT_CREATED: string;
+        MODULE_ALREADY_EXISTS: string;
       };
-      info: {
-        MODULE_CREATE: string;
-      };
-      error: {
-        MODULE_CREATE: string;
-      };
-      success: {
-        MODULE_CREATE: string;
-      };
+      info: STRMAdvCliMsgs;
+      error: STRMAdvCliMsgs;
+      success: STRMAdvCliMsgs;
     };
     cli: {
       PROJECT_DIR_INVALID: string;

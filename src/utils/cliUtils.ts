@@ -4,7 +4,6 @@
  */
 // Core & third-party imports
 import * as Constants from 'constants';
-import chalk from 'chalk';
 import path from 'node:path';
 import {
   access,
@@ -30,6 +29,8 @@ import STRMController = STRMStackCLI.STRMController;
 import STRMFERoute = STRMStackCLI.STRMFERoute;
 import { generateIndexPage } from '../cliHelpers/fePageHelpers/generateIndexPage.js';
 import generateDetailsPage from '../cliHelpers/fePageHelpers/generateDetailsPage.js';
+
+const STRM_MODULES_PATH = 'strm_modules/strm_modules.json';
 
 /**
  * @async
@@ -112,7 +113,7 @@ export async function checkSTRMProject(
       `${frontendDir}/src/pages`,
       'strm_controllers',
       'strm_models',
-      'strm_modules/strm_modules.json',
+      STRM_MODULES_PATH,
       'strm_routes',
       'support/strm_hmr.py',
       'templates/app.html',
@@ -259,10 +260,7 @@ class ${titleCase(modelName)}(me.Document):
  */
 async function getSTRMModules(): Promise<STRMModulesFile | undefined> {
   try {
-    const modulesFilePath = path.resolve(
-      process.cwd(),
-      'strm_modules/strm_modules.json'
-    );
+    const modulesFilePath = path.resolve(process.cwd(), STRM_MODULES_PATH);
     const modulesFileStringData = await readFile(modulesFilePath, {
       encoding: 'utf-8',
     });
@@ -283,10 +281,7 @@ async function writeSTRMModulesFile(
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
-    const targetPath = path.resolve(
-      process.cwd(),
-      'strm_modules/strm_modules.json'
-    );
+    const targetPath = path.resolve(process.cwd(), STRM_MODULES_PATH);
     strmModulesFile.lastUpdated = new Date().toISOString();
     const dataToWrite = JSON.stringify(strmModulesFile, undefined, 2);
     await writeFile(targetPath, dataToWrite);
@@ -312,8 +307,7 @@ async function regenerateSTRMModuleRoutes(): Promise<ScaffoldOutput> {
     const modulesJSON = await getSTRMModules();
 
     if (!modulesJSON) {
-      // todo: replace with localized string
-      output.message = 'Failed to read modules file';
+      output.message = localeData.advCli.error.LOAD_STRM_MODULES;
       return output;
     }
 
@@ -388,17 +382,18 @@ async function buildSTRMFrontendComponents(
   pluralizedModuleName: string
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
+  const localeData = LocaleManager.getInstance().getLocaleData();
   try {
     // read our strm config
     const strmConfig = await getProjectConfig(process.cwd());
     if (!strmConfig) {
-      output.message = 'Failed to load project config';
+      output.message = localeData.advCli.error.LOAD_STRM_CONFIG;
       return output;
     }
     // read strm modules
     const strmModules = await getSTRMModules();
     if (!strmModules) {
-      output.message = 'Failed to load strm modules';
+      output.message = localeData.advCli.error.LOAD_STRM_MODULES;
       return output;
     }
 
@@ -416,7 +411,7 @@ async function buildSTRMFrontendComponents(
     // loop over pages and build components as needed
     const module = strmModules.modules[moduleKey];
     if (!module) {
-      output.message = 'Invalid STRM Module';
+      output.message = localeData.advCli.responses.INVALID_STRM_MODULE;
       return output;
     }
 
@@ -435,7 +430,10 @@ async function buildSTRMFrontendComponents(
           );
       const pageFilePath = path.resolve(feBasePath, fileName);
       await writeFile(pageFilePath, pageData);
-      console.log('✅ wrote frontend component: ', pageFilePath);
+      ConsoleLogger.printCLIProcessSuccessMessage(
+        localeData.advCli.success.CREATE_FE_COMPONENT,
+        pageFilePath
+      );
     }
 
     output.success = true;
@@ -505,87 +503,106 @@ export async function createSTRMModule(
   try {
     const { name } = moduleArgs;
     ConsoleLogger.printCLIProcessInfoMessage(
-      `Attempting to update ${localeData.misc.STORM_BRANDED} Modules...`
+      localeData.advCli.info.LOAD_STRM_MODULES,
+      STRM_MODULES_PATH
     );
     // 0. read configuration
     const strmModulesFileData = await getSTRMModules();
     if (!strmModulesFileData) {
       ConsoleLogger.printCLIProcessErrorMessage(
-        'Failed to read data from',
-        'strm_modules/strm_modules.json'
+        localeData.advCli.error.LOAD_STRM_MODULES,
+        STRM_MODULES_PATH
       );
-      output.message = 'Failed to read STRMModules file';
+      output.message = localeData.advCli.error.LOAD_STRM_MODULES;
       return output;
     }
 
+    ConsoleLogger.printCLIProcessSuccessMessage(
+      localeData.advCli.success.LOAD_STRM_MODULES,
+      STRM_MODULES_PATH
+    );
+
     // check existing module
     if (strmModulesFileData.modules[name]) {
-      output.message = 'Module already exists';
+      output.message = localeData.advCli.responses.MODULE_ALREADY_EXISTS;
       return output;
     }
 
     // 0.1 update modules JSON file
     strmModulesFileData.modules[name] = buildSTRMModule(moduleArgs);
+    ConsoleLogger.printCLIProcessInfoMessage(
+      localeData.advCli.info.WRITE_STRM_MODULES
+    );
     const writeModulesResult = await writeSTRMModulesFile(strmModulesFileData);
     if (!writeModulesResult.success) {
-      output.message = 'Failed to write Modules';
+      output.message = localeData.advCli.error.WRITE_STRM_MODULES;
       ConsoleLogger.printCLIProcessErrorMessage(
-        'Failed to update STRM Modules file'
+        localeData.advCli.error.WRITE_STRM_MODULES
       );
       return output;
     }
     ConsoleLogger.printCLIProcessSuccessMessage(
-      `Updated ${localeData.misc.STORM_BRANDED} Modules.`
+      localeData.advCli.success.WRITE_STRM_MODULES
     );
     // 1. build model
 
     ConsoleLogger.printCLIProcessInfoMessage(
-      'Attempting to create module file',
+      localeData.advCli.info.CREATE_MODEL,
       `strm_models/${name.toLowerCase()}.py`
     );
     const modelResult = await writeSTRMModelFile(name);
     if (!modelResult.success) {
       output.message = modelResult.message;
-      ConsoleLogger.printCLIProcessErrorMessage('Failed to create model file');
+      ConsoleLogger.printCLIProcessErrorMessage(
+        localeData.advCli.error.CREATE_MODEL
+      );
       return output;
     }
     ConsoleLogger.printCLIProcessSuccessMessage(
-      'Successfully created model file',
+      localeData.advCli.success.CREATE_MODEL,
       `strm_models/${name.toLowerCase()}.py`
     );
     // 2. build controller
     ConsoleLogger.printCLIProcessInfoMessage(
-      'Attempting to create controller with name',
+      localeData.advCli.info.CREATE_CONTROLLER,
       `strm_controllers/${name}_controller.py`
     );
     const controllerResult = await writeSTRMControllerFile(name);
     if (!controllerResult.success) {
       output.message = controllerResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
-        'Failed to create controller file'
+        localeData.advCli.error.CREATE_CONTROLLER
       );
       return output;
     }
     ConsoleLogger.printCLIProcessSuccessMessage(
-      'Successfully created controller file',
+      localeData.advCli.success.CREATE_CONTROLLER,
       `strm_controllers/${name.toLowerCase()}_controller.py`
     );
     // 3. rewrite backend routes
     ConsoleLogger.printCLIProcessInfoMessage(
-      'Attempting to rebuild module routes file',
+      localeData.advCli.info.REWRITE_MODULE_ROUTES,
       'strm_routes/__init__.py'
     );
+
     const moduleRoutesResult = await regenerateSTRMModuleRoutes();
+
     if (!moduleRoutesResult.success) {
       output.message = moduleRoutesResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
-        'Failed to rewrite strm_routes/__init__.py file'
+        localeData.advCli.error.REWRITE_MODULE_ROUTES,
+        'strm_routes/__init__.py file'
       );
       return output;
     }
+
+    ConsoleLogger.printCLIProcessSuccessMessage(
+      localeData.advCli.success.REWRITE_MODULE_ROUTES
+    );
+
     // 3.1 update auto imports
     ConsoleLogger.printCLIProcessInfoMessage(
-      'Updating auto imports',
+      localeData.advCli.info.UPDATE_AUTO_IMPORTS,
       'strm_controllers/__init__.py'
     );
     const updateAutoImportsResult =
@@ -593,17 +610,19 @@ export async function createSTRMModule(
     if (!updateAutoImportsResult.success) {
       output.message = updateAutoImportsResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
-        'Failed to module auto imports',
+        localeData.advCli.error.UPDATE_AUTO_IMPORTS,
         updateAutoImportsResult.message
       );
       return output;
     }
 
-    ConsoleLogger.printCLIProcessSuccessMessage('Updated auto imports');
+    ConsoleLogger.printCLIProcessSuccessMessage(
+      localeData.advCli.success.UPDATE_AUTO_IMPORTS
+    );
 
     // 4. build frontend components
     ConsoleLogger.printCLIProcessInfoMessage(
-      `Attempting to create frontend components...`
+      localeData.advCli.info.BUILD_FRONTEND_COMPONENTS
     );
     const buildFEComponentsResult = await buildSTRMFrontendComponents(
       name,
@@ -613,14 +632,14 @@ export async function createSTRMModule(
     if (!buildFEComponentsResult.success) {
       output.message = buildFEComponentsResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
-        'Failed to build FE components',
+        localeData.advCli.error.BUILD_FRONTEND_COMPONENTS,
         buildFEComponentsResult.message
       );
       return output;
     }
 
     ConsoleLogger.printCLIProcessSuccessMessage(
-      'Successfully created frontend page components'
+      localeData.advCli.success.BUILD_FRONTEND_COMPONENTS
     );
 
     output.success = true;
