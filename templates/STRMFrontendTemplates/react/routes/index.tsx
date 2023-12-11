@@ -10,6 +10,7 @@ import { RouteObject } from 'react-router-dom';
 // S.T.🌀.R.M Stack Imports
 import { STRMApp } from '🌀/@types/strm_fe';
 import _strmResources from '../../../strm_modules/strm_modules.json';
+import NotFoundErrorBoundary from '🌀/components/shared/NotFoundErrorBoundary';
 
 /**
  * @async
@@ -21,7 +22,6 @@ export function buildRoutes(): Array<RouteObject> {
   const strmModules = _strmResources as STRMApp.STRMModulesFile;
   const output: Array<RouteObject> = [];
 
-  // todo: can this be flattened?
   for (const moduleKey of Object.keys(strmModules.modules)) {
     const module = strmModules.modules[moduleKey] as STRMApp.STRMModule;
     for (const page of module.pages) {
@@ -33,6 +33,7 @@ export function buildRoutes(): Array<RouteObject> {
         element: <Element />,
         id: page.componentName,
         path: page.path,
+        errorElement: <NotFoundErrorBoundary />,
       };
 
       output.push(_route);
