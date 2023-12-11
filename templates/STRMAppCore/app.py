@@ -7,15 +7,14 @@ from starlette.config import Config
 from starlette.datastructures import CommaSeparatedStrings
 from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
-from starlette.templating import Jinja2Templates
 from mongoengine import connect
 
-# STORM stack imports
-from support.strm_hmr import StrmHmrExtension
+# ST🌀RM stack imports
+from support.strm_handlers import strm_index, not_found_handler, internal_server_error_handler
 # your application routes should be added to the routes module below
 from strm_routes import routes
 
-# load configuration. non-database and secret key settings will be auto-synced from strm_config/strm_config.json
+# load configuration. non-database and secret key settings will be auto-synced from smrt_config/smrt_config.json
 # You will be required to manage all other .env settings
 config = Config('.env')
 
@@ -32,26 +31,30 @@ connect(host=DATABASE_URI)
 print(f"App frontend: {FRONTEND}")
 print(f"Frontend extensions enabled: {FRONTEND_EXTENSIONS}")
 
-# template setup
-templates = Jinja2Templates(directory='templates')
-# HMR Extension
-templates.env.add_extension(StrmHmrExtension)
-# -- Add other extensions below this line --
-
-
-async def index(request):
-    """
-    Loads the index page which is contains our Reactive application
-    """
-    return templates.TemplateResponse(request, 'app.html')
-
-
 # app routes. here we have the default routes which have our controller routes merged
+# 📝 Developer Note: Your routes can be found in strm_routes/__init__.py. This is automatically
+# generated when a new module is added via the CLI and so you don't need to necessarily edit this.
 app_routes = [
     # default entry points
-    Route('/', endpoint=index),
+    # Application root (index)
+    Route('/', endpoint=strm_index),
+    # Static resources are located in the static folder in the root of this project
     Mount('/static', StaticFiles(directory='static'), name='static'),
 ] + routes
-# app middleware. here we have the default middleware which our app will use. You can add
+
+# app middleware. here we have the middleware which our app will use.
+# 📝 Developer Note: You can add your middleware to the List as needed
+# below. Refer to https://www.starlette.io/middleware/#using-middleware for more information about middleware
 middleware = []
-app = Starlette(debug=DEBUG, routes=app_routes, middleware=middleware)
+
+# application exception handlers :: 📝 Developer Note: Feel free to change the exception handlers as needed. Exception
+# handlers are defined in a Dict The custom HTTP 500 error handler will only get triggered when debug=False.
+# Otherwise, Starlette will print the traceback
+exception_handlers = {
+    404: not_found_handler,
+    500: internal_server_error_handler,
+}
+
+# Starlette Application Start.
+# 📝 Developer Note: Generally, you won't need to make any changes here.
+app = Starlette(debug=DEBUG, routes=app_routes, middleware=middleware, exception_handlers=exception_handlers)
