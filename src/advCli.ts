@@ -11,8 +11,10 @@ import { Command } from 'commander';
 import {
   checkSTRMProject,
   createSTRMModule,
+  execDependencyChecks,
   getCLIVersion,
   loadLocaleFile,
+  preScaffoldCommandExecCheck,
 } from './utils/cliUtils.js';
 import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
@@ -113,6 +115,8 @@ export async function advCLI(): Promise<Command | undefined> {
         localeData.advCli.descriptions.CONTROLLER_ONLY
       )
       .action(async (args) => {
+        await execDependencyChecks();
+
         const { success: isProjectValid } = await checkSTRMProject(
           process.cwd()
         );
@@ -148,6 +152,26 @@ export async function advCLI(): Promise<Command | undefined> {
                   ? ` ERR: ${makeModuleResult.message}`
                   : ''
               }`
+            );
+      });
+
+    /**
+     * command: check-requirements
+     * @description Checks if ST🌀RM Stack dependencies are installed on the
+     * target system. Requirements: Python 3.8+, pipenv, nodejs 16.7+
+     */
+    program
+      .command('check-requirements')
+      .alias('checkRequirements')
+      .description(localeData.advCli.descriptions.CHECK_SYSTEM_DEPS)
+      .action(async () => {
+        const execCheckResult = await preScaffoldCommandExecCheck();
+        execCheckResult.success
+          ? ConsoleLogger.printCLIProcessSuccessMessage(
+              localeData.advCli.success.CHECK_SYSTEM_DEPENDENCIES
+            )
+          : ConsoleLogger.printCLIProcessErrorMessage(
+              localeData.advCli.error.CHECK_SYSTEM_DEPENDENCIES
             );
       });
 
