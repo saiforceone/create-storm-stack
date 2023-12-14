@@ -114,6 +114,7 @@ declare namespace STRMStackCLI {
   // ST🌀RM Stack Adv CLI messages
   type STRMAdvCliMsgs = {
     BUILD_FRONTEND_COMPONENTS: string;
+    CHECK_SYSTEM_DEPENDENCIES: string;
     CREATE_CONTROLLER: string;
     CREATE_FE_COMPONENT: string;
     CREATE_MODEL: string;
@@ -145,6 +146,7 @@ declare namespace STRMStackCLI {
         MODULE_NAME: string;
         MODULE_PLURAL: string;
         CONTROLLER_ONLY: string;
+        CHECK_SYSTEM_DEPS: string;
       };
       responses: {
         PROJECT_APPEARS_VALID: string;
@@ -272,5 +274,16 @@ declare namespace STRMStackCLI {
     controllerOnly?: boolean;
     /* Specifies the pluralization of a module name. This is optional */
     plural?: string;
+  };
+
+  /**
+   * STORM command execution status - to be used as part of the scaffold start up process
+   * and represents the command execution status.
+   */
+  export type STORMCommandExecStatus = {
+    command: string;
+    details?: string;
+    success: boolean;
+    required: boolean;
   };
 }

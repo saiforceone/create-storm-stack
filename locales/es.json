@@ -30,6 +30,7 @@
     },
     "info": {
       "BUILD_FRONTEND_COMPONENTS": "Building frontend components... - es",
+      "CHECK_SYSTEM_DEPENDENCIES": "Checking for required ST\uD83C\uDF00RM Stack system dependencies... - es",
       "CREATE_CONTROLLER": "Creating ST\uD83C\uDF00RM Stack controller - es",
       "CREATE_FE_COMPONENT": "Creating ST\uD83C\uDF00RM Stack frontend component - es",
       "CREATE_MODEL": "Creating ST\uD83C\uDF00RM Stack model file - es",
@@ -41,6 +42,7 @@
     },
     "error": {
       "BUILD_FRONTEND_COMPONENTS": "Failed to build frontend components - es",
+      "CHECK_SYSTEM_DEPENDENCIES": "Failed to find one or more ST\uD83C\uDF00RM Stack system dependencies - es",
       "CREATE_CONTROLLER": "Failed to create ST\uD83C\uDF00RM Stack controller - es",
       "CREATE_FE_COMPONENT": "Failed to create ST\uD83C\uDF00RM Stack frontend component - es",
       "CREATE_MODEL": "Failed to create ST\uD83C\uDF00RM Stack model file - es",
@@ -52,6 +54,7 @@
     },
     "success": {
       "BUILD_FRONTEND_COMPONENTS": "Built frontend components successfully - es",
+      "CHECK_SYSTEM_DEPENDENCIES": "All ST\uD83C\uDF00RM Stack system dependencies have been met - es",
       "CREATE_CONTROLLER": "Created ST\uD83C\uDF00RM Stack controller successfully - es",
       "CREATE_FE_COMPONENT": "Successfully created ST\uD83C\uDF00RM Stack frontend component - es",
       "CREATE_MODEL": "Created ST\uD83C\uDF00RM Stack model file successfully - es",

@@ -17,7 +17,8 @@
       "MAKE_MODULE_CMD": "Generates a ST\uD83C\uDF00RM Stack module where a module is comprised of a controller, associated frontend pages and necessary routing on both the backend and frontend",
       "MODULE_NAME": "the name of the module to be added",
       "MODULE_PLURAL": "(optional) pluralization for modules",
-      "CONTROLLER_ONLY": "(optional) specifies that the module will only have controller (no frontend components)"
+      "CONTROLLER_ONLY": "(optional) specifies that the module will only have controller (no frontend components)",
+      "CHECK_SYSTEM_DEPS": "Checks your environment for the required ST\uD83C\uDF00RM Stack dependencies"
     },
     "responses": {
       "PROJECT_APPEARS_VALID": "Appears to be a valid ST\uD83C\uDF00RM Stack Project",
@@ -30,6 +31,7 @@
     },
     "info": {
       "BUILD_FRONTEND_COMPONENTS": "Building frontend components...",
+      "CHECK_SYSTEM_DEPENDENCIES": "Checking for required ST\uD83C\uDF00RM Stack system dependencies...",
       "CREATE_CONTROLLER": "Creating ST\uD83C\uDF00RM Stack controller",
       "CREATE_FE_COMPONENT": "Creating ST\uD83C\uDF00RM Stack frontend component",
       "CREATE_MODEL": "Creating ST\uD83C\uDF00RM Stack model file",
@@ -42,6 +44,7 @@
     },
     "error": {
       "BUILD_FRONTEND_COMPONENTS": "Failed to build frontend components",
+      "CHECK_SYSTEM_DEPENDENCIES": "Failed to find one or more ST\uD83C\uDF00RM Stack system dependencies",
       "CREATE_CONTROLLER": "Failed to create ST\uD83C\uDF00RM Stack controller",
       "CREATE_FE_COMPONENT": "Failed to create ST\uD83C\uDF00RM Stack frontend component",
       "CREATE_MODEL": "Failed to create ST\uD83C\uDF00RM Stack model file",
@@ -54,6 +57,7 @@
     },
     "success": {
       "BUILD_FRONTEND_COMPONENTS": "Built frontend components successfully",
+      "CHECK_SYSTEM_DEPENDENCIES": "All ST\uD83C\uDF00RM Stack system dependencies have been met",
       "CREATE_CONTROLLER": "Created ST\uD83C\uDF00RM Stack controller successfully",
       "CREATE_FE_COMPONENT": "Successfully created ST\uD83C\uDF00RM Stack frontend component",
       "CREATE_MODEL": "Created ST\uD83C\uDF00RM Stack model file successfully",

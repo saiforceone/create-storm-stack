@@ -29,8 +29,15 @@ import STRMController = STRMStackCLI.STRMController;
 import STRMFERoute = STRMStackCLI.STRMFERoute;
 import { generateIndexPage } from '../cliHelpers/fePageHelpers/generateIndexPage.js';
 import generateDetailsPage from '../cliHelpers/fePageHelpers/generateDetailsPage.js';
+import STORMCommandExecStatus = STRMStackCLI.STORMCommandExecStatus;
+import { execaCommand } from 'execa';
+import { platform } from 'os';
+import LoggerMode = STRMStackCLI.LoggerMode;
+import ora from 'ora';
 
 const STRM_MODULES_PATH = 'strm_modules/strm_modules.json';
+// Semantic Version pattern for dependencies
+const SEMVER_PATTERN = /\d+.\d+.\d+/g;
 
 /**
  * @async
@@ -648,4 +655,167 @@ export async function createSTRMModule(
     output.message = e.message;
     return output;
   }
+}
+
+/**
+ * @function checkPythonVersion
+ * @description Helper function that checks the version of Python installed on the
+ * current system and returns appropriate messaging
+ * @returns {Promise<STORMCommandExecStatus>}
+ */
+async function checkPythonVersion(): Promise<STORMCommandExecStatus> {
+  // define python command string based on the target OS
+  let command;
+  const targetPlatform = platform();
+  switch (targetPlatform) {
+    case 'linux':
+      command = 'python3 -V';
+      break;
+    default:
+      command = 'python3 -V';
+  }
+  // python command exec test
+  const pythonCmdStatus: STORMCommandExecStatus = {
+    success: false,
+    command,
+    details:
+      'Python was not found on your system. Please install before trying to use the STORM Stack CLI',
+    required: true,
+  };
+  try {
+    const { stdout: pyStdout } = await execaCommand(pythonCmdStatus.command);
+    // check the version returned
+    const pyVersionString = pyStdout.match(SEMVER_PATTERN);
+    if (!pyVersionString || !pyVersionString.length) {
+      pythonCmdStatus.details = 'Python was not found on your system';
+    } else {
+      // check the version by splitting the string since it was matched via Regex
+      const [pyMajorVersion, pyMinorVersion] = pyVersionString[0].split('.');
+      if (+pyMajorVersion! >= 3 && +pyMinorVersion! >= 8) {
+        pythonCmdStatus.success = true;
+      }
+    }
+  } catch (e) {
+    pythonCmdStatus.details = e.message;
+  }
+
+  return pythonCmdStatus;
+}
+
+/**
+ * @async
+ * @function checkPipenvVersion
+ * @description Helper function that checks to make sure that pipenv is installed
+ * and returns the appropriate messaging based on the result.
+ * @returns {Promise<STORMCommandExecStatus>} an object representing the result
+ */
+async function checkPipenvVersion(): Promise<STORMCommandExecStatus> {
+  const pipenvStatus: STORMCommandExecStatus = {
+    success: false,
+    command: 'pipenv --version',
+    details: 'Command not found',
+    required: true,
+  };
+
+  try {
+    const { stdout } = await execaCommand(pipenvStatus.command);
+    if (stdout.includes('pipenv')) pipenvStatus.success = true;
+  } catch (e) {
+    pipenvStatus.details = e.message;
+  }
+
+  return pipenvStatus;
+}
+
+/**
+ * @function checkNodeVersion
+ * @description Helper function that checks to make sure that the version of Node
+ * installed meets the minimum requirements of >= 16.7.0.
+ * @returns {Promise<STORMCommandExecStatus} an object representing the result
+ */
+async function checkNodeVersion(): Promise<STORMCommandExecStatus> {
+  const nodeStatus: STORMCommandExecStatus = {
+    success: false,
+    command: 'node -v',
+    details: 'command not found',
+    required: true,
+  };
+
+  try {
+    const { stdout } = await execaCommand(nodeStatus.command);
+    const nodeSemver = stdout.match(SEMVER_PATTERN);
+
+    if (!nodeSemver || !nodeSemver.length) {
+      nodeStatus.details = 'Something went wrong';
+    } else {
+      const [nodeMajorVersion, nodeMinorVersion] = nodeSemver[0].split('.');
+      if (
+        (+nodeMajorVersion! >= 16 && +nodeMinorVersion! >= 7) ||
+        +nodeMajorVersion! > 17
+      ) {
+        nodeStatus.success = true;
+        nodeStatus.details = 'Requirements met';
+      }
+    }
+  } catch (e) {
+    nodeStatus.details = e.message;
+  }
+
+  return nodeStatus;
+}
+
+/**
+ * @async
+ * @function preScaffoldCommandExecCheck
+ * @description when run, this function checks to make sure that the system-level
+ * dependencies are installed so that the CLI can function properly. In the event
+ * that a required dependency is not installed (ex. pipenv), the appropriate messaging
+ * should be output to the console
+ * @returns {Promise<ScaffoldOutput>} standard scaffold output object
+ */
+export async function preScaffoldCommandExecCheck(): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const commandList: Array<STORMCommandExecStatus> = [];
+
+  // check versions by calling helper functions and then pushing result to command list
+  commandList.push(await checkPythonVersion());
+  commandList.push(await checkPipenvVersion());
+  commandList.push(await checkNodeVersion());
+
+  for (const cmdStatus of commandList) {
+    if (!cmdStatus.success)
+      ConsoleLogger.printCLIProcessErrorMessage(
+        cmdStatus.command,
+        cmdStatus.details
+      );
+  }
+
+  const hasFailed = commandList.some((element) => !element.success);
+
+  output.success = !hasFailed;
+  return output;
+}
+
+/**
+ * @function execDependencyChecks
+ * @description Helper function that performs dependency checks for the CLI and
+ * in the event that dependencies are not met, exits the CLI
+ */
+export async function execDependencyChecks(): Promise<void> {
+  /**
+   * To ensure a smooth CLI experience, the minimum versions of dependencies need
+   * to be checked. Visual feedback will be provided to the user via a spinner
+   */
+  const dependencyCheckSpinner = ora(
+    'Checking ST🌀RM Stack core dependencies...'
+  ).start();
+
+  const dependencyCheckResult = await preScaffoldCommandExecCheck();
+
+  if (!dependencyCheckResult.success) {
+    dependencyCheckSpinner.fail();
+    process.exit(1);
+  }
+
+  dependencyCheckSpinner.succeed('Starting ST🌀RM Stack CLI');
 }
