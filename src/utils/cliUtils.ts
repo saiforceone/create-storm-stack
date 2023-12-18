@@ -32,12 +32,18 @@ import generateDetailsPage from '../cliHelpers/fePageHelpers/generateDetailsPage
 import STORMCommandExecStatus = STRMStackCLI.STORMCommandExecStatus;
 import { execaCommand } from 'execa';
 import { platform } from 'os';
-import LoggerMode = STRMStackCLI.LoggerMode;
 import ora from 'ora';
+import FrontendOpt = STRMStackCLI.FrontendOpt;
 
 const STRM_MODULES_PATH = 'strm_modules/strm_modules.json';
 // Semantic Version pattern for dependencies
 const SEMVER_PATTERN = /\d+.\d+.\d+/g;
+
+const FRONTEND_COMPONENT_EXT: Record<FrontendOpt, string> = {
+  react: 'tsx',
+  vue: 'vue',
+  lit: 'ts',
+};
 
 /**
  * @async
@@ -423,10 +429,13 @@ async function buildSTRMFrontendComponents(
     }
 
     const { pages } = module;
+    const componentExt = FRONTEND_COMPONENT_EXT[strmConfig.frontend];
     for (const page of pages) {
       // attempt to generate page components
       const isIndexPage = page.componentPath.includes('Index');
-      const fileName = isIndexPage ? 'Index.tsx' : `${page.componentName}.tsx`;
+      const fileName = isIndexPage
+        ? `Index.${componentExt}`
+        : `${page.componentName}.${componentExt}`;
       const pageData = isIndexPage
         ? generateIndexPage(strmConfig.frontend, page.componentName)
         : generateDetailsPage(
