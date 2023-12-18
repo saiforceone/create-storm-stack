@@ -19,7 +19,7 @@ export default defineComponent({
      */
     RESOLVED_404_IMG() {
       return new URL(
-        '../../../../static/dist/images/404-not-found.jpeg',
+        '../../../../static/dist/images/404-not-found.jpg',
         import.meta.url
       ).href;
     },
