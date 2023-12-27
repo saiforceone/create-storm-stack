@@ -141,7 +141,7 @@ function ${componentName}(): React.ReactElement {
                   storm_controllers/${controller.controllerName}.py
                 </span>
               </p>
-              <p className="text-lg">
+              <p className="text-lg mt-1">
                 <span className={COMMON_SPAN_STYLE}>2.</span> You will want to
                 modify the get method of the controller to handle retrieving by
                 an id
@@ -293,7 +293,7 @@ export default defineComponent({
                 :class="commonSpanStyle">strm_controllers/${
                   controller.controllerName
                 }.py</span></p>
-            <p><span :class="commonSpanStyle">2.</span> You will want to modify the get method of the controller to
+            <p class="mt-1"><span :class="commonSpanStyle">2.</span> You will want to modify the get method of the controller to
               handle retrieving by an id</p>
           </details>
         </div>
