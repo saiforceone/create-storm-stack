@@ -437,12 +437,17 @@ async function buildSTRMFrontendComponents(
         ? `Index.${componentExt}`
         : `${page.componentName}.${componentExt}`;
       const pageData = isIndexPage
-        ? generateIndexPage(strmConfig.frontend, page.componentName)
+        ? generateIndexPage(
+            strmConfig.frontend,
+            page.componentName,
+            page.componentPath,
+            module.controller
+          )
         : generateDetailsPage(
             strmConfig.frontend,
             page.componentName,
             page.componentPath,
-            module.controller.controllerName
+            module.controller
           );
       const pageFilePath = path.resolve(feBasePath, fileName);
       await writeFile(pageFilePath, pageData);
