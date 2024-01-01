@@ -127,14 +127,16 @@
     "error": {
       "PROJECT_DEST": "The project directory already exists - ES",
       "PKG_FILE_LOAD_FAIL": "Failed to load project package.json file - ES",
-      "CONFIG_FILE_LOAD_FAIL": "Failed to load the project configuration file - ES"
+      "CONFIG_FILE_LOAD_FAIL": "Failed to load the project configuration file - ES",
+      "ENABLE_GIT": "Failed to initialize GIT in your project. You may have to manually do so - ES"
     },
     "info": {
       "INSTALL_BASE_DEPS": "Installing ST\uD83C\uDF00RM Stack core... - ES",
       "COPY_BASE_TEMPLATE": "Copying base template to destination... - ES",
       "COPY_CORE_FILES": "Copying core app files to destination... - ES",
       "COPY_SUPPORT_FILES": "Copying support files to destination... - ES",
-      "SET_UP_VIRTUAL_ENV": "Setting up virtual environment... - ES"
+      "SET_UP_VIRTUAL_ENV": "Setting up virtual environment... - ES",
+      "ENABLE_GIT": "Initializing GIT in your project... - ES"
     },
     "warning": {},
     "success": {
@@ -142,7 +144,8 @@
       "COPY_BASE_TEMPLATE": "Copied base template to destination - ES",
       "COPY_CORE_FILES": "Copied core app files to destination - ES",
       "COPY_SUPPORT_FILES": "Copied support files to destination - ES",
-      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing ST\uD83C\uDF00RM Stack dependencies - ES"
+      "FINISHED_VIRTUAL_ENV": "Finished setting up virtual environment and installing ST\uD83C\uDF00RM Stack dependencies - ES",
+      "ENABLE_GIT": "GIT initialized in your project - ES"
     }
   },
   "postScaffold": {

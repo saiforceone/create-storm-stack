@@ -200,6 +200,7 @@ declare namespace STRMStackCLI {
         PKG_FILE_LOAD_FAIL: string;
         CONFIG_FILE_LOAD_FAIL: string;
         INSTALL_BASE_DEPS: string;
+        ENABLE_GIT: string;
       };
       info: {
         COPY_BASE_TEMPLATE: string;
@@ -207,6 +208,7 @@ declare namespace STRMStackCLI {
         COPY_SUPPORT_FILES: string;
         INSTALL_BASE_DEPS: string;
         SET_UP_VIRTUAL_ENV: string;
+        ENABLE_GIT: string;
       };
       success: {
         PROJECT_DEST: string;
@@ -215,6 +217,7 @@ declare namespace STRMStackCLI {
         COPY_SUPPORT_FILES: string;
         INSTALL_BASE_DEPS: string;
         FINISHED_VIRTUAL_ENV: string;
+        ENABLE_GIT: string;
       };
     };
     postScaffold: {
