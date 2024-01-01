@@ -451,10 +451,10 @@ async function buildSTRMFrontendComponents(
           );
       const pageFilePath = path.resolve(feBasePath, fileName);
       await writeFile(pageFilePath, pageData);
-      ConsoleLogger.printCLIProcessSuccessMessage(
-        localeData.advCli.success.CREATE_FE_COMPONENT,
-        pageFilePath
-      );
+      ConsoleLogger.printCLIProcessSuccessMessage({
+        message: localeData.advCli.success.CREATE_FE_COMPONENT,
+        detail: pageFilePath,
+      });
     }
 
     output.success = true;
@@ -538,10 +538,10 @@ export async function createSTRMModule(
       return output;
     }
 
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.LOAD_STRM_MODULES,
-      STRM_MODULES_PATH
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.LOAD_STRM_MODULES,
+      detail: STRM_MODULES_PATH,
+    });
 
     // check existing module
     if (strmModulesFileData.modules[name]) {
@@ -562,9 +562,9 @@ export async function createSTRMModule(
       );
       return output;
     }
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.WRITE_STRM_MODULES
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.WRITE_STRM_MODULES,
+    });
     // 1. build model
 
     ConsoleLogger.printCLIProcessInfoMessage(
@@ -579,10 +579,10 @@ export async function createSTRMModule(
       );
       return output;
     }
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.CREATE_MODEL,
-      `strm_models/${name.toLowerCase()}.py`
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.CREATE_MODEL,
+      detail: `strm_models/${name.toLowerCase()}.py`,
+    });
     // 2. build controller
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.CREATE_CONTROLLER,
@@ -596,10 +596,10 @@ export async function createSTRMModule(
       );
       return output;
     }
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.CREATE_CONTROLLER,
-      `strm_controllers/${name.toLowerCase()}_controller.py`
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.CREATE_CONTROLLER,
+      detail: `strm_controllers/${name.toLowerCase()}_controller.py`,
+    });
     // 3. rewrite backend routes
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.REWRITE_MODULE_ROUTES,
@@ -617,9 +617,9 @@ export async function createSTRMModule(
       return output;
     }
 
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.REWRITE_MODULE_ROUTES
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.REWRITE_MODULE_ROUTES,
+    });
 
     // 3.1 update auto imports
     ConsoleLogger.printCLIProcessInfoMessage(
@@ -637,9 +637,9 @@ export async function createSTRMModule(
       return output;
     }
 
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.UPDATE_AUTO_IMPORTS
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.UPDATE_AUTO_IMPORTS,
+    });
 
     // 4. build frontend components
     ConsoleLogger.printCLIProcessInfoMessage(
@@ -659,9 +659,9 @@ export async function createSTRMModule(
       return output;
     }
 
-    ConsoleLogger.printCLIProcessSuccessMessage(
-      localeData.advCli.success.BUILD_FRONTEND_COMPONENTS
-    );
+    ConsoleLogger.printCLIProcessSuccessMessage({
+      message: localeData.advCli.success.BUILD_FRONTEND_COMPONENTS,
+    });
 
     output.success = true;
     return output;
@@ -690,6 +690,7 @@ async function checkPythonVersion(): Promise<STORMCommandExecStatus> {
   }
   // python command exec test
   const pythonCmdStatus: STORMCommandExecStatus = {
+    label: 'Python',
     success: false,
     command,
     details:
@@ -707,6 +708,7 @@ async function checkPythonVersion(): Promise<STORMCommandExecStatus> {
       const [pyMajorVersion, pyMinorVersion] = pyVersionString[0].split('.');
       if (+pyMajorVersion! >= 3 && +pyMinorVersion! >= 8) {
         pythonCmdStatus.success = true;
+        pythonCmdStatus.details = `${pyStdout}`;
       }
     }
   } catch (e) {
@@ -725,6 +727,7 @@ async function checkPythonVersion(): Promise<STORMCommandExecStatus> {
  */
 async function checkPipenvVersion(): Promise<STORMCommandExecStatus> {
   const pipenvStatus: STORMCommandExecStatus = {
+    label: 'Pipenv',
     success: false,
     command: 'pipenv --version',
     details: 'Command not found',
@@ -733,7 +736,10 @@ async function checkPipenvVersion(): Promise<STORMCommandExecStatus> {
 
   try {
     const { stdout } = await execaCommand(pipenvStatus.command);
-    if (stdout.includes('pipenv')) pipenvStatus.success = true;
+    if (stdout.includes('pipenv')) {
+      pipenvStatus.success = true;
+      pipenvStatus.details = stdout;
+    }
   } catch (e) {
     pipenvStatus.details = e.message;
   }
@@ -749,6 +755,7 @@ async function checkPipenvVersion(): Promise<STORMCommandExecStatus> {
  */
 async function checkNodeVersion(): Promise<STORMCommandExecStatus> {
   const nodeStatus: STORMCommandExecStatus = {
+    label: 'NodeJs',
     success: false,
     command: 'node -v',
     details: 'command not found',
@@ -768,7 +775,7 @@ async function checkNodeVersion(): Promise<STORMCommandExecStatus> {
         +nodeMajorVersion! > 17
       ) {
         nodeStatus.success = true;
-        nodeStatus.details = 'Requirements met';
+        nodeStatus.details = `NodeJS ${stdout}`;
       }
     }
   } catch (e) {
@@ -779,15 +786,43 @@ async function checkNodeVersion(): Promise<STORMCommandExecStatus> {
 }
 
 /**
+ * @function checkGitVersion
+ * @description Helper function that checks for the optional requirement of git being installed.
+ * @returns {Promise<STORMCommandExecStatus>}
+ */
+async function checkGitVersion(): Promise<STORMCommandExecStatus> {
+  const gitStatus: STORMCommandExecStatus = {
+    label: 'Git',
+    success: false,
+    command: 'git --version',
+    details: 'command unavailable',
+    required: false,
+  };
+
+  try {
+    const { stdout } = await execaCommand(gitStatus.command);
+    gitStatus.success = true;
+    gitStatus.details = `${stdout}`;
+  } catch (e) {
+    gitStatus.details = e.message;
+  }
+
+  return gitStatus;
+}
+
+/**
  * @async
  * @function preScaffoldCommandExecCheck
+ * @param {boolean} printOutput
  * @description when run, this function checks to make sure that the system-level
  * dependencies are installed so that the CLI can function properly. In the event
  * that a required dependency is not installed (ex. pipenv), the appropriate messaging
  * should be output to the console
  * @returns {Promise<ScaffoldOutput>} standard scaffold output object
  */
-export async function preScaffoldCommandExecCheck(): Promise<ScaffoldOutput> {
+export async function preScaffoldCommandExecCheck(
+  printOutput: boolean
+): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   const commandList: Array<STORMCommandExecStatus> = [];
 
@@ -795,16 +830,37 @@ export async function preScaffoldCommandExecCheck(): Promise<ScaffoldOutput> {
   commandList.push(await checkPythonVersion());
   commandList.push(await checkPipenvVersion());
   commandList.push(await checkNodeVersion());
+  commandList.push(await checkGitVersion());
 
   for (const cmdStatus of commandList) {
-    if (!cmdStatus.success)
-      ConsoleLogger.printCLIProcessErrorMessage(
-        cmdStatus.command,
-        cmdStatus.details
-      );
+    const requiredText = cmdStatus.required ? 'required' : 'optional';
+    if (!cmdStatus.success && !printOutput)
+      if (cmdStatus.required)
+        ConsoleLogger.printCLIProcessErrorMessage(
+          `${cmdStatus.label} (${requiredText})`,
+          cmdStatus.details
+        );
+    if (printOutput) {
+      cmdStatus.success
+        ? ConsoleLogger.printCLIProcessSuccessMessage({
+            message: `${cmdStatus.label} (${requiredText})`,
+            detail: cmdStatus.details,
+          })
+        : cmdStatus.required
+        ? ConsoleLogger.printCLIProcessErrorMessage(
+            `${cmdStatus.label} (${requiredText})`,
+            cmdStatus.details
+          )
+        : ConsoleLogger.printCLIProcessWarningMessage({
+            message: `${cmdStatus.label} (${requiredText})`,
+            detail: cmdStatus.details,
+          });
+    }
   }
 
-  const hasFailed = commandList.some((element) => !element.success);
+  const hasFailed = commandList.some(
+    (element) => !element.success && element.required
+  );
 
   output.success = !hasFailed;
   return output;
@@ -824,7 +880,7 @@ export async function execDependencyChecks(): Promise<void> {
     'Checking ST🌀RM Stack core dependencies...'
   ).start();
 
-  const dependencyCheckResult = await preScaffoldCommandExecCheck();
+  const dependencyCheckResult = await preScaffoldCommandExecCheck(false);
 
   if (!dependencyCheckResult.success) {
     dependencyCheckSpinner.fail();

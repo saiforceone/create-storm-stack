@@ -10,6 +10,7 @@ import chalk, { ForegroundColorName } from 'chalk';
 import LogLevel = STRMStackCLI.LogLevel;
 import LogMessageConfiguration = STRMStackCLI.LogMessageConfiguration;
 import LogMessageConfigOpt = STRMStackCLI.LogMessageConfigOpt;
+import STORMCLIProcessMsgArgs = STRMStackCLI.STORMCLIProcessMsgArgs;
 
 const LOG_CONFIGURATION: LogMessageConfiguration = {
   error: {
@@ -66,12 +67,30 @@ export class ConsoleLogger {
   }
 
   /**
+   * @function printCLIProcessWarningMessage
+   * @description Prints a warning message with optional detail
+   * @param message
+   * @param detail
+   */
+  static printCLIProcessWarningMessage({
+    message,
+    detail,
+  }: STORMCLIProcessMsgArgs): void {
+    let output = `⚠️  ${chalk.yellowBright.bold(message)}`;
+    if (detail) output += `: ${chalk.italic(detail)}`;
+    console.log(output);
+  }
+
+  /**
    * @function printCLIProcessSuccessMessage
    * @description Prints a success message with optional detail
    * @param {string} message
-   * @param {string} detail
+   * @param detail additional information to print out
    */
-  static printCLIProcessSuccessMessage(message: string, detail?: string): void {
+  static printCLIProcessSuccessMessage({
+    message,
+    detail,
+  }: STORMCLIProcessMsgArgs): void {
     let output = `✅ ${chalk.greenBright.bold(message)}`;
     if (detail) {
       output += `: ${chalk.italic(detail)}`;

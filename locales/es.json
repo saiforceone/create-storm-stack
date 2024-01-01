@@ -42,7 +42,7 @@
     },
     "error": {
       "BUILD_FRONTEND_COMPONENTS": "Failed to build frontend components - es",
-      "CHECK_SYSTEM_DEPENDENCIES": "Failed to find one or more ST\uD83C\uDF00RM Stack system dependencies - es",
+      "CHECK_SYSTEM_DEPENDENCIES": "Failed to find one or more core ST\uD83C\uDF00RM Stack system dependencies - es",
       "CREATE_CONTROLLER": "Failed to create ST\uD83C\uDF00RM Stack controller - es",
       "CREATE_FE_COMPONENT": "Failed to create ST\uD83C\uDF00RM Stack frontend component - es",
       "CREATE_MODEL": "Failed to create ST\uD83C\uDF00RM Stack model file - es",
@@ -54,7 +54,7 @@
     },
     "success": {
       "BUILD_FRONTEND_COMPONENTS": "Built frontend components successfully - es",
-      "CHECK_SYSTEM_DEPENDENCIES": "All ST\uD83C\uDF00RM Stack system dependencies have been met - es",
+      "CHECK_SYSTEM_DEPENDENCIES": "All core ST\uD83C\uDF00RM Stack system dependencies have been met - es",
       "CREATE_CONTROLLER": "Created ST\uD83C\uDF00RM Stack controller successfully - es",
       "CREATE_FE_COMPONENT": "Successfully created ST\uD83C\uDF00RM Stack frontend component - es",
       "CREATE_MODEL": "Created ST\uD83C\uDF00RM Stack model file successfully - es",
@@ -72,7 +72,8 @@
       "PROJECT_NAME": "¿Cómo deberíamos llamar este proyecto?",
       "FRONTEND_CHOICE": "¿Qué interfaz te gustaría usar?",
       "LOGGING_MODE": "What kind of logging should we use - ES",
-      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional) - ES"
+      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional) - ES",
+      "ENABLE_OPTION": "Enable additional option (optional) - ES"
     },
     "error": {
       "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon - ES",

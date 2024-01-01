@@ -44,7 +44,7 @@
     },
     "error": {
       "BUILD_FRONTEND_COMPONENTS": "Failed to build frontend components",
-      "CHECK_SYSTEM_DEPENDENCIES": "Failed to find one or more ST\uD83C\uDF00RM Stack system dependencies",
+      "CHECK_SYSTEM_DEPENDENCIES": "Failed to find one or more core ST\uD83C\uDF00RM Stack system dependencies",
       "CREATE_CONTROLLER": "Failed to create ST\uD83C\uDF00RM Stack controller",
       "CREATE_FE_COMPONENT": "Failed to create ST\uD83C\uDF00RM Stack frontend component",
       "CREATE_MODEL": "Failed to create ST\uD83C\uDF00RM Stack model file",
@@ -57,7 +57,7 @@
     },
     "success": {
       "BUILD_FRONTEND_COMPONENTS": "Built frontend components successfully",
-      "CHECK_SYSTEM_DEPENDENCIES": "All ST\uD83C\uDF00RM Stack system dependencies have been met",
+      "CHECK_SYSTEM_DEPENDENCIES": "All core ST\uD83C\uDF00RM Stack system dependencies have been met",
       "CREATE_CONTROLLER": "Created ST\uD83C\uDF00RM Stack controller successfully",
       "CREATE_FE_COMPONENT": "Successfully created ST\uD83C\uDF00RM Stack frontend component",
       "CREATE_MODEL": "Created ST\uD83C\uDF00RM Stack model file successfully",
@@ -76,7 +76,8 @@
       "PROJECT_NAME": "What should we call this project",
       "FRONTEND_CHOICE": "Which frontend would you like to use",
       "LOGGING_MODE": "What kind of logging should we use",
-      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional)"
+      "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional)",
+      "ENABLE_OPTION": "Enable additional option (optional)"
     },
     "error": {
       "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM Stack addon",

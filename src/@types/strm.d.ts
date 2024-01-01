@@ -36,6 +36,7 @@ declare namespace STRMStackCLI {
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
     installPrettier: boolean;
+    enableGit: boolean;
   };
 
   // Structure for general STRM package files
@@ -169,6 +170,7 @@ declare namespace STRMStackCLI {
         FRONTEND_CHOICE: string;
         LOGGING_MODE: string;
         INSTALL_ADDON: string;
+        ENABLE_OPTION: string;
       };
       error: {
         INSTALL_ADDON: string;
@@ -281,9 +283,15 @@ declare namespace STRMStackCLI {
    * and represents the command execution status.
    */
   export type STORMCommandExecStatus = {
+    label: string;
     command: string;
     details?: string;
     success: boolean;
     required: boolean;
+  };
+
+  export type STORMCLIProcessMsgArgs = {
+    message: string;
+    detail?: string;
   };
 }

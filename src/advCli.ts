@@ -143,9 +143,10 @@ export async function advCLI(): Promise<Command | undefined> {
         );
         const makeModuleResult = await createSTRMModule(moduleArgs);
         makeModuleResult.success
-          ? ConsoleLogger.printCLIProcessSuccessMessage(
-              `${localeData.advCli.success.MODULE_CREATE}: ${args['name']}`
-            )
+          ? ConsoleLogger.printCLIProcessSuccessMessage({
+              message: `${localeData.advCli.success.MODULE_CREATE}`,
+              detail: args['name'],
+            })
           : ConsoleLogger.printCLIProcessErrorMessage(
               `${localeData.advCli.error.MODULE_CREATE}${
                 makeModuleResult.message
@@ -165,11 +166,11 @@ export async function advCLI(): Promise<Command | undefined> {
       .alias('checkRequirements')
       .description(localeData.advCli.descriptions.CHECK_SYSTEM_DEPS)
       .action(async () => {
-        const execCheckResult = await preScaffoldCommandExecCheck();
+        const execCheckResult = await preScaffoldCommandExecCheck(true);
         execCheckResult.success
-          ? ConsoleLogger.printCLIProcessSuccessMessage(
-              localeData.advCli.success.CHECK_SYSTEM_DEPENDENCIES
-            )
+          ? ConsoleLogger.printCLIProcessSuccessMessage({
+              message: localeData.advCli.success.CHECK_SYSTEM_DEPENDENCIES,
+            })
           : ConsoleLogger.printCLIProcessErrorMessage(
               localeData.advCli.error.CHECK_SYSTEM_DEPENDENCIES
             );

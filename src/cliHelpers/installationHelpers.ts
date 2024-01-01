@@ -69,6 +69,9 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         prettierSpinner.succeed();
       }
 
+      if (cliAnswers.enableGit) {
+      }
+
       const psSetupSpinner = ora(
         LocaleData.postScaffold.RUN_POST_PROCESSES
       ).start();
