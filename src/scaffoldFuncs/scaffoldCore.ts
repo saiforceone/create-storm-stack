@@ -5,8 +5,8 @@
  */
 import path from 'node:path';
 
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
   copyWebTemplateFiles,

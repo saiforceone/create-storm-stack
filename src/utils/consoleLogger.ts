@@ -6,11 +6,11 @@
 // Core & third-party imports
 import chalk, { ForegroundColorName } from 'chalk';
 
-// STRM Imports
-import LogLevel = STRMStackCLI.LogLevel;
-import LogMessageConfiguration = STRMStackCLI.LogMessageConfiguration;
-import LogMessageConfigOpt = STRMStackCLI.LogMessageConfigOpt;
-import STORMCLIProcessMsgArgs = STRMStackCLI.STORMCLIProcessMsgArgs;
+// ST🌀RM Imports
+import LogLevel = STORMStackCLI.LogLevel;
+import LogMessageConfiguration = STORMStackCLI.LogMessageConfiguration;
+import LogMessageConfigOpt = STORMStackCLI.LogMessageConfigOpt;
+import STORMCLIProcessMsgArgs = STORMStackCLI.STORMCLIProcessMsgArgs;
 
 const LOG_CONFIGURATION: LogMessageConfiguration = {
   error: {

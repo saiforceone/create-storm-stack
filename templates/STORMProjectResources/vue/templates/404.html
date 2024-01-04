@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 - Not Found</title>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap' rel='stylesheet'>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Nova+Mono&display=swap' rel='stylesheet'>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Jura&display=swap' rel='stylesheet'>
+  <!-- css -->
+  <link rel='stylesheet' href="{{ url_for('static', path='dist/css/main.css') }}">
+</head>
+<body class="flex flex-col bg-gradient-to-b from-strm-bg-dark to-strm-bg-lighter min-h-screen">
+<header class="text-center text-white mt-4 w-full md:container md:mx-auto md:self-center">
+  <h1 class="text-7xl text-white font-heading text-center">ST🌀RM Stack</h1>
+</header>
+<main class="p-4 text-white flex flex-col flex-1 content-center gap-y-4">
+  <h2 class="text-4xl text-center">404 - The 🌀 blew away the resource you were looking for 🙃</h2>
+  <img alt="tree blowing in the wind" src="{{ url_for('static', path='dist/images/404-not-found.jpg') }}">
+
+  <section class="bg-white rounded p-2 text-slate-700 flex flex-col gap-y-2">
+    <div>
+      <h2 class="text-3xl font-heading">Details of the Error</h2>
+      <p class="text-lg">Status Code: <span
+        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ status_code }}</span></p>
+      <p class="text-lg">Error Detail: <span
+        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ exception_detail }}</span></p>
+    </div>
+
+    <div>
+      <h2 class="text-3xl font-heading">Request Details</h2>
+      <p class="text-lg">URL Accessed: <span
+        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ request.url.path }}</span></p>
+      <p class="text-lg">Req Method: <span
+        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ request.method }}</span></p>
+    </div>
+  </section>
+</main>
+<footer class="mt-4 p-2 text-white flex flex-col items-center " id="strm-footer">
+  <div class="w-full md:w-3/5 grid grid-cols-2 gap-2">
+    <div>
+      <a
+        class="flex items-center gap-x-1"
+        href="https://discord.gg/sY3a5VN3y9"
+        title="Link to the Peanut Cart Express Discord"
+        target="_blank"
+      >
+        <img alt="Peanut Cart Express Discord" class="h-4 w-4" style="filter: invert(1)"
+             src="{{ url_for('static', path='dist/images/discord.svg') }}"> P.C.E Discord
+      </a>
+    </div>
+    <div class="flex">
+      <a
+        class="flex items-center gap-x-1"
+        title="Link to the STORM Stack on Github"
+        href="https://github.com/saiforceone/create-storm-stack"
+        target="_blank"
+      >
+        <img alt="Github" class="h-4 w-4 invert-0" style="filter: invert(1)" src="{{ url_for('static', path='dist/images/github.svg') }}"> ST🌀RM
+        Stack Github
+      </a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

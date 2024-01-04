@@ -1,16 +1,16 @@
 /**
  * @author SaiForceOne
- * @description Advanced CLI program for the STRM Stack CLI
+ * @description Advanced CLI program for the ST🌀RM Stack CLI
  */
 
 // Core & third-party imports
 import chalk from 'chalk';
 import { Command } from 'commander';
 
-// STRM Stack imports
+// ST🌀RM Stack imports
 import {
-  checkSTRMProject,
-  createSTRMModule,
+  checkSTORMProject,
+  createSTORMModule,
   execDependencyChecks,
   getCLIVersion,
   loadLocaleFile,
@@ -19,12 +19,12 @@ import {
 import { LocaleManager } from './cliHelpers/localeManager.js';
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { validateProjectOrModuleName } from './utils/generalUtils.js';
-import STRMModuleArgs = STRMStackCLI.STRMModuleArgs;
+import STORMModuleArgs = STORMStackCLI.STORMModuleArgs;
 import { ConsoleLogger } from './utils/consoleLogger.js';
 
 /**
  * @async
- * @description Sets up commander with localized strings which is callable by `create-strm-stack`
+ * @description Sets up commander with localized strings which is callable by `create-storm-stack`
  * @returns {Promise<Command|undefined>}
  */
 export async function advCLI(): Promise<Command | undefined> {
@@ -72,7 +72,7 @@ export async function advCLI(): Promise<Command | undefined> {
         'checks that the current directory contains a valid project.'
       )
       .action(async () => {
-        const validProjectResponse = await checkSTRMProject(
+        const validProjectResponse = await checkSTORMProject(
           process.cwd(),
           true
         );
@@ -95,7 +95,7 @@ export async function advCLI(): Promise<Command | undefined> {
      * make-module
      * @description adds a ST🌀RM Stack module where a module is made up of a
      * controller (backend), model (backend) and frontend page components
-     * @example npx @saiforceone/strm-cli --make-module --name <module_name> [-options]
+     * @example npx @saiforceone/create-storm-stack --make-module --name <module_name> [-options]
      * The make-module command will have structure as defined above.
      */
     program
@@ -117,7 +117,7 @@ export async function advCLI(): Promise<Command | undefined> {
       .action(async (args) => {
         await execDependencyChecks();
 
-        const { success: isProjectValid } = await checkSTRMProject(
+        const { success: isProjectValid } = await checkSTORMProject(
           process.cwd()
         );
         if (!isProjectValid) {
@@ -127,7 +127,7 @@ export async function advCLI(): Promise<Command | undefined> {
           process.exit(1);
         }
 
-        const moduleArgs = args as STRMModuleArgs;
+        const moduleArgs = args as STORMModuleArgs;
 
         // validate the module name
         const isValidModuleName = validateProjectOrModuleName(moduleArgs.name);
@@ -141,7 +141,7 @@ export async function advCLI(): Promise<Command | undefined> {
         ConsoleLogger.printCLIProcessInfoMessage(
           `${localeData.advCli.info.MODULE_CREATE}: ${args['name']}...`
         );
-        const makeModuleResult = await createSTRMModule(moduleArgs);
+        const makeModuleResult = await createSTORMModule(moduleArgs);
         makeModuleResult.success
           ? ConsoleLogger.printCLIProcessSuccessMessage({
               message: `${localeData.advCli.success.MODULE_CREATE}`,

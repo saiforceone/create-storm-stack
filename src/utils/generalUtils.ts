@@ -3,7 +3,7 @@
  * @description Collection of general-use utility functions
  */
 // ST🌀RM Stack Imports
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 
 // exclude starting with
 const VALID_DESTINATION_PATTERN = /^[a-z]\w+$/gim;

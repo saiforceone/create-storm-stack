@@ -4,8 +4,8 @@
  * Typically, this would be functions to update config files as well as printing
  * project running instructions to the user, etc
  */
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
   buildInitialEnvAtDest,

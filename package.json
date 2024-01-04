@@ -1,10 +1,10 @@
 {
-  "name": "strm-cli",
+  "name": "create-storm-stack",
   "version": "0.0.1",
-  "description": "Official utility for the S.T.R.M (STORM) Stack",
+  "description": "Official CLI utility for the STORM Stack",
   "bin": {
-    "@saiforceone/create-strm-stack": "bin/create-strm-stack.js",
-    "create-strm-stack": "bin/create-strm-stack.js"
+    "@saiforceone/create-storm-stack": "bin/create-storm-stack.js",
+    "create-storm-stack": "bin/create-storm-stack.js"
   },
   "main": "dist/cli.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "keywords": [
     "cli",
-    "Flask",
+    "Starlette",
     "Vite",
     "React",
     "Vue"

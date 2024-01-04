@@ -1,14 +1,14 @@
 /**
  * @author SaiForceOne
- * @description Handles installing of STRM Stack Add ons when they are selected
+ * @description Handles installing of ST🌀RM Stack Add ons when they are selected
  * from the CLI prompts
  */
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import { installPrettier } from '../utils/scaffoldAddOnUtils.js';
-import STRMAddOn = STRMStackCLI.STRMAddOn;
-import LoggerMode = STRMStackCLI.LoggerMode;
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import STORMAddOn = STORMStackCLI.STORMAddOn;
+import LoggerMode = STORMStackCLI.LoggerMode;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
 import { ConsoleLogger } from '../utils/consoleLogger.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
 
@@ -20,10 +20,10 @@ function buildDummyOutput() {
 
 /**
  * @description "object literal" to handle getting functions to install add ons
- * @param {STRMAddOn} strmAddOn
+ * @param {STORMAddOn} stormAddOn
  */
-export function scaffoldAddOns(strmAddOn: STRMAddOn) {
-  const addOnInstallOpts: Record<STRMAddOn, () => Promise<ScaffoldOutput>> = {
+export function scaffoldAddOns(stormAddOn: STORMAddOn) {
+  const addOnInstallOpts: Record<STORMAddOn, () => Promise<ScaffoldOutput>> = {
     prettier: async function () {
       return await installPrettier(process.cwd());
     },
@@ -38,17 +38,17 @@ export function scaffoldAddOns(strmAddOn: STRMAddOn) {
     },
   };
 
-  return addOnInstallOpts[strmAddOn];
+  return addOnInstallOpts[stormAddOn];
 }
 
 /**
  * @function buildAddOns
  * @param scaffoldOpts
- * @description Helper function that returns a list of STRM Stack addons based on
+ * @description Helper function that returns a list of ST🌀RM Stack addons based on
  * project options (scaffoldOpts)
  */
-export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STRMAddOn> {
-  const addOnsList: Array<STRMAddOn> = [];
+export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STORMAddOn> {
+  const addOnsList: Array<STORMAddOn> = [];
 
   if (scaffoldOpts.installPrettier) addOnsList.push('prettier');
 
@@ -57,12 +57,12 @@ export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STRMAddOn> {
 
 /**
  *
- * @param {Array<STRMAddOn>} addOnOpts
+ * @param {Array<STORMAddOn>} addOnOpts
  * @param {LoggerMode} loggerMode
  * @description Handles installation of all scaffold options
  */
 export async function installScaffoldAddOns(
-  addOnOpts: Array<STRMAddOn>,
+  addOnOpts: Array<STORMAddOn>,
   loggerMode: LoggerMode
 ): Promise<void> {
   const LocaleData = LocaleManager.getInstance().getLocaleData();

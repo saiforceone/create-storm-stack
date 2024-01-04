@@ -18,10 +18,10 @@ import {
 import { execaCommand } from 'execa';
 import { parse } from 'dotenv';
 
-// STRM STACK Imports
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
-import LoggerMode = STRMStackCLI.LoggerMode;
-import STRMPackageFile = STRMStackCLI.STRMPackageFile;
+// ST🌀RM STACK Imports
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
+import LoggerMode = STORMStackCLI.LoggerMode;
+import STORMPackageFile = STORMStackCLI.STORMPackageFile;
 import { buildScaffoldOutput } from './generalUtils.js';
 import {
   destinationPathExists,
@@ -33,11 +33,11 @@ import { ConsoleLogger } from './consoleLogger.js';
 import { FILE_UTIL_CONSTANTS } from '../constants/fileUtilConstants.js';
 import { PATH_CONSTANTS } from '../constants/pathConstants.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
-import FrontendOpt = STRMStackCLI.FrontendOpt;
-import FrontendDependenciesFile = STRMStackCLI.FrontendDependenciesFile;
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
-import STRMFrontendOptFile = STRMStackCLI.STRMFrontendOptFile;
-import STRMProjectScript = STRMStackCLI.STRMProjectScript;
+import FrontendOpt = STORMStackCLI.FrontendOpt;
+import FrontendDependenciesFile = STORMStackCLI.FrontendDependenciesFile;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
+import STORMFrontendOptFile = STORMStackCLI.STORMFrontendOptFile;
+import STORMProjectScript = STORMStackCLI.STORMProjectScript;
 
 // Import the Locale manager so that localized strings will be used
 import { LocaleManager } from '../cliHelpers/localeManager.js';
@@ -109,16 +109,16 @@ export async function setupVirtualEnv(
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;
 
-    const strmStackCoreDepsPath = path.resolve(
+    const stormStackCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       PATH_CONSTANTS.FILE_WEB_APP_CORE_DEPS
     );
 
     // read the file contents
-    const pkgFile = await readFile(strmStackCoreDepsPath, {
+    const pkgFile = await readFile(stormStackCoreDepsPath, {
       encoding: 'utf-8',
     });
-    const pkgData = JSON.parse(pkgFile) as STRMPackageFile;
+    const pkgData = JSON.parse(pkgFile) as STORMPackageFile;
     const { packages } = pkgData;
 
     // construct install string for dependencies
@@ -266,7 +266,7 @@ export async function setupBaseFrontend(
       encoding: 'utf-8',
     });
 
-    const depsData = JSON.parse(viteDepsFile) as STRMPackageFile;
+    const depsData = JSON.parse(viteDepsFile) as STORMPackageFile;
 
     const installString = Object.keys(depsData.packages)
       .map((dep: string) => `${dep}@${depsData.packages[dep]}`)
@@ -383,7 +383,7 @@ export async function copyFrontendTemplates(
       frontend
     );
 
-    const targetPath = path.join(projectPath, `strm_fe_${frontend}`, 'src');
+    const targetPath = path.join(projectPath, `storm_fe_${frontend}`, 'src');
 
     if (verbose)
       ConsoleLogger.printLog(
@@ -430,7 +430,7 @@ export async function copyFrontendResources(
     const feResourcesPath = path.resolve(
       path.normalize(new URL(currentURL).pathname),
       '../../../',
-      'templates/STRMProjectResources',
+      'templates/STORMProjectResources',
       scaffoldOpts.frontend
     );
 
@@ -458,7 +458,7 @@ export async function copyFrontendResources(
  * @param {string} projectPath
  * @param {ScaffoldOpts} scaffoldOptions
  * @returns {Promise<ScaffoldOutput>}
- * @description Updates the project configuration file (strm_config.json) based on
+ * @description Updates the project configuration file (storm_config.json) based on
  * options selected during the CLI prompting phase of the scaffold process.
  */
 export async function updateProjectConfiguration(
@@ -488,7 +488,7 @@ export async function updateProjectConfiguration(
     );
 
     const data = await readFile(configPath, { encoding: 'utf-8' });
-    const feConfigData = JSON.parse(data) as STRMFrontendOptFile;
+    const feConfigData = JSON.parse(data) as STORMFrontendOptFile;
 
     // 2. update configuration based scaffoldOpts
     configData.appId = scaffoldOptions.projectName;
@@ -685,14 +685,14 @@ export async function renameFilesAtDest(
  * @async
  * @function writeScriptUpdates
  * @param {string} projectPath path of the project being scaffolded
- * @param {Array<STRMProjectScript>} pkgScripts commands that should be written to package.json at the destination
+ * @param {Array<STORMProjectScript>} pkgScripts commands that should be written to package.json at the destination
  * @returns {Promise<ScaffoldOutput>}
  * @description utility function that writes commands to the scripts section of the package.json file at the destination
  * (scaffolded project)
  */
 export async function writeScriptUpdates(
   projectPath: string,
-  pkgScripts: Array<STRMProjectScript>
+  pkgScripts: Array<STORMProjectScript>
 ): Promise<ScaffoldOutput> {
   const LocaleData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
