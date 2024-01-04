@@ -36,6 +36,7 @@ declare namespace STRMStackCLI {
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
     installPrettier: boolean;
+    enableGit: boolean;
   };
 
   // Structure for general STRM package files
@@ -169,6 +170,7 @@ declare namespace STRMStackCLI {
         FRONTEND_CHOICE: string;
         LOGGING_MODE: string;
         INSTALL_ADDON: string;
+        ENABLE_OPTION: string;
       };
       error: {
         INSTALL_ADDON: string;
@@ -198,6 +200,7 @@ declare namespace STRMStackCLI {
         PKG_FILE_LOAD_FAIL: string;
         CONFIG_FILE_LOAD_FAIL: string;
         INSTALL_BASE_DEPS: string;
+        ENABLE_GIT: string;
       };
       info: {
         COPY_BASE_TEMPLATE: string;
@@ -205,6 +208,7 @@ declare namespace STRMStackCLI {
         COPY_SUPPORT_FILES: string;
         INSTALL_BASE_DEPS: string;
         SET_UP_VIRTUAL_ENV: string;
+        ENABLE_GIT: string;
       };
       success: {
         PROJECT_DEST: string;
@@ -213,6 +217,7 @@ declare namespace STRMStackCLI {
         COPY_SUPPORT_FILES: string;
         INSTALL_BASE_DEPS: string;
         FINISHED_VIRTUAL_ENV: string;
+        ENABLE_GIT: string;
       };
     };
     postScaffold: {
@@ -281,9 +286,15 @@ declare namespace STRMStackCLI {
    * and represents the command execution status.
    */
   export type STORMCommandExecStatus = {
+    label: string;
     command: string;
     details?: string;
     success: boolean;
     required: boolean;
+  };
+
+  export type STORMCLIProcessMsgArgs = {
+    message: string;
+    detail?: string;
   };
 }

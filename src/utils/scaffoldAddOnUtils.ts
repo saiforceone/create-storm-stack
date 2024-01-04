@@ -10,10 +10,8 @@ import { execaCommand } from 'execa';
 
 // STRM Stack imports
 import STRMAddOnsFile = STRMStackCLI.STRMAddOnsFile;
-import LoggerMode = STRMStackCLI.LoggerMode;
 import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
-import { ConsoleLogger } from './consoleLogger.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
 import { getSTRMCLIRoot } from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';

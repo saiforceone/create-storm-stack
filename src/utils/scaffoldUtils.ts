@@ -730,3 +730,35 @@ export async function writeScriptUpdates(
     return output;
   }
 }
+
+/**
+ * @function enableGit
+ * @param {LoggerMode} loggerMode
+ * @description runs the command to enable git
+ * @returns {Promise<ScaffoldOutput>}
+ */
+export async function enableGit(
+  loggerMode: LoggerMode
+): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const verbose = loggerMode === 'verbose';
+  const LocaleData = LocaleManager.getInstance().getLocaleData();
+  try {
+    if (verbose)
+      ConsoleLogger.printLog(`${LocaleData.backend.info.ENABLE_GIT}`);
+    await execaCommand(COMMAND_CONSTANTS.CMD_GIT_INIT);
+    if (verbose)
+      ConsoleLogger.printLog(
+        `${LocaleData.backend.success.ENABLE_GIT}`,
+        'success'
+      );
+    output.message = LocaleData.backend.success.ENABLE_GIT;
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    if (verbose)
+      ConsoleLogger.printLog(`${LocaleData.backend.error.ENABLE_GIT}`, 'error');
+    return output;
+  }
+}

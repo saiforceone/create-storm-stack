@@ -19,6 +19,7 @@ import {
   scaffoldAddOns,
 } from '../scaffoldFuncs/scaffoldAddOns.js';
 import { LocaleManager } from './localeManager.js';
+import { enableGit } from '../utils/scaffoldUtils.js';
 
 /**
  * @function execCLIInstallation
@@ -69,6 +70,14 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         prettierSpinner.succeed();
       }
 
+      if (cliAnswers.enableGit) {
+        const gitSpinner = ora(`${LocaleData.backend.info.ENABLE_GIT}`).start();
+        const { message: gitMsg, success: gitSuccess } = await enableGit(
+          cliAnswers.loggerMode
+        );
+        gitSuccess ? gitSpinner.succeed() : gitSpinner.warn(gitMsg);
+      }
+
       const psSetupSpinner = ora(
         LocaleData.postScaffold.RUN_POST_PROCESSES
       ).start();
@@ -102,6 +111,11 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
       // 2. Scaffold Add-ons
       const addOns = buildAddOns(cliAnswers);
       await installScaffoldAddOns(addOns, cliAnswers.loggerMode);
+
+      // Git
+      if (cliAnswers.enableGit) {
+        await enableGit(cliAnswers.loggerMode);
+      }
 
       // 3. Post Scaffold
       const postScaffoldResult = await scaffoldPost(cliAnswers);

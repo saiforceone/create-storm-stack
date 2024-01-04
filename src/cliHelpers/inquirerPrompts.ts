@@ -43,6 +43,13 @@ export function getCLIPrompts(): QuestionCollection {
       type: 'confirm',
       default: false,
     },
+    // GIT option
+    {
+      message: `${localeData.cli.prompts.ENABLE_OPTION}: Git`,
+      name: 'enableGit',
+      type: 'confirm',
+      default: false,
+    },
     // ConsoleLogger Type
     {
       message: localeData.cli.prompts.LOGGING_MODE,
