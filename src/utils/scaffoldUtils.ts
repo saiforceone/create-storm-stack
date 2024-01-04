@@ -663,6 +663,13 @@ export async function renameFilesAtDest(
   const output = buildScaffoldOutput();
 
   try {
+    // rename _dist to dist at destination
+    const oldDistPath = path.resolve(projectPath, 'static', '_dist');
+
+    const distPath = path.join(projectPath, 'static', 'dist');
+
+    await rename(oldDistPath, distPath);
+
     // rename .gitignore.template to .gitignore
     const ignoreTemplateFilePath = path.resolve(
       projectPath,
@@ -673,7 +680,7 @@ export async function renameFilesAtDest(
 
     await rename(ignoreTemplateFilePath, gitIgnorePath);
 
-    output.message = 'File renamed';
+    output.message = 'Files renamed';
     output.success = true;
     return output;
   } catch (e) {

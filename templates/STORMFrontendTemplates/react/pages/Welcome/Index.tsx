@@ -12,7 +12,8 @@ import {
   SiVite,
   SiGit,
   SiDiscord,
-} from '@icons-pack/react-simple-icons';
+} from 'react-icons/si';
+import { BiSolidStar } from 'react-icons/bi';
 
 // ST🌀RM Stack Imports
 import { STORMApp } from '🌀/@types/storm_fe';
@@ -139,7 +140,7 @@ function WelcomeIndex(): React.ReactElement {
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
           <div className="flex flex-col items-center">
-            <div className="h-8"></div>
+            <BiSolidStar size={TECH_ICON_SIZE} />
             Starlette
           </div>
           <div className="flex flex-col items-center">
@@ -164,11 +165,11 @@ function WelcomeIndex(): React.ReactElement {
         </div>
       </section>
       <footer
-        className="mt-4 p-2 text-white flex flex-col items-center "
+        className="mt-4 p-2 text-white flex flex-col items-center"
         id="storm-footer"
       >
         <div className="w-full md:w-2/5 grid grid-cols-2 gap-2">
-          <div>
+          <div className="flex">
             <a
               className="flex items-center gap-x-1"
               href=""
@@ -178,7 +179,7 @@ function WelcomeIndex(): React.ReactElement {
               <SiDiscord size={CONTACT_ICON_SIZE} /> P.C.E Discord
             </a>
           </div>
-          <div className="flex ">
+          <div className="flex">
             <a
               className="flex items-center gap-x-1"
               title="Link to the STORM Stack on Github"

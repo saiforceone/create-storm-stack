@@ -5,19 +5,19 @@
  * You are expected to replace or edit this to better fit your project.
  */
 import { defineComponent } from 'vue';
-import { STRMApp } from '🌀/@types/strm_fe';
-import StrmConfig from '../../../../strm_config/strm_config.json';
+import { STORMApp } from '🌀/@types/storm_fe';
+import StormConfig from '../../../../storm_config/storm_config.json';
 
 export default defineComponent({
   name: 'Welcome',
   computed: {
-    strmConfig: () => StrmConfig,
+    stormConfig: () => StormConfig,
     pageTitle: () => 'ST🌀RM Stack',
     techIconSize: () => 2.25,
     contactIconSize: () => 1.5,
   },
   components: {},
-  data(): { apiResponse: STRMApp.BaseAPIResponse | null } {
+  data(): { apiResponse: STORMApp.BaseAPIResponse | null } {
     return {
       apiResponse: null,
     };
@@ -30,7 +30,7 @@ export default defineComponent({
      * from `mounted`
      */
     fetchApiData() {
-      const url = '/api/';
+      const url = '/api/welcome';
       fetch(url)
         .then((res) => res.json())
         .then((json) => {
@@ -49,7 +49,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="w-full h-full flex flex-col bg-gradient-to-b from-strm-bg-dark to-strm-bg-lighter p-2"
+    class="w-full h-full flex flex-col bg-gradient-to-b from-storm-bg-dark to-storm-bg-lighter p-2"
   >
     <header
       class="text-center text-white mt-4 w-full md:container md:mx-auto md:self-center"
@@ -67,40 +67,42 @@ export default defineComponent({
     <section
       v-if="apiResponse"
       class="rounded bg-white p-4 w-full md:w-4/5 self-center my-4"
-      id="strm-api-response"
+      id="storm-api-response"
     >
       <h2 class="font-heading font-bold text-2xl">
         {{ pageTitle }} Welcome API Response
       </h2>
       <p class="text-lg">Here is an example of an API response</p>
-      <div class="rounded bg-strm-bg-lighter p-4 text-white">
+      <div class="rounded bg-storm-bg-lighter p-4 text-white">
         {{ JSON.stringify(apiResponse['data']) }}
       </div>
       <p class="mt-2">
         * API functions can be found at:
-        <span class="bg-strm-bg-lighter p-1 rounded text-white font-medium"
-          >strm_controllers/[controller_name]</span
+        <span class="bg-storm-bg-lighter p-1 rounded text-white font-medium"
+          >storm_controllers/[controller_name]</span
         >
       </p>
     </section>
 
     <section
       class="rounded bg-white p-4 w-full md:w-4/5 self-center"
-      id="strm-do-next"
+      id="storm-do-next"
     >
       <h2 class="font-heading font-bold text-2xl">Project Details</h2>
       <div class="grid grid cols-1 my-2 gap-1">
         <p class="font-bold">
           Project Name:
-          <span class="bg-strm-bg-lighter p-1 rounded text-white font-medium">{{
-            strmConfig.appId
-          }}</span>
+          <span
+            class="bg-storm-bg-lighter p-1 rounded text-white font-medium"
+            >{{ stormConfig.appId }}</span
+          >
         </p>
         <p class="font-bold">
           Frontend:
-          <span class="bg-strm-bg-lighter p-1 rounded text-white font-medium">{{
-            strmConfig.frontend
-          }}</span>
+          <span
+            class="bg-storm-bg-lighter p-1 rounded text-white font-medium"
+            >{{ stormConfig.frontend }}</span
+          >
         </p>
       </div>
       <h2 class="font-heading font-bold text-2xl">What to do next</h2>
@@ -111,15 +113,17 @@ export default defineComponent({
       <div class="grid grid-cols-1 gap-1 mt-2">
         <p>
           1. Edit or replace this page found at:
-          <span class="bg-strm-bg-lighter p-1 rounded text-white font-medium">{{
-            `${strmConfig.frontendBasePath}/src/pages/Welcome/Index.vue`
-          }}</span>
+          <span
+            class="bg-storm-bg-lighter p-1 rounded text-white font-medium"
+            >{{
+              `${stormConfig.frontendBasePath}/src/pages/Welcome/Index.vue`
+            }}</span
+          >
         </p>
         <p>
           2. Create a controller:
-          <span class="bg-strm-bg-lighter p-1 rounded text-white font-medium">
-            npx @saiforceone/strm-cli --create-controller
-            [controller_name]</span
+          <span class="bg-storm-bg-lighter p-1 rounded text-white font-medium">
+            npx @saiforceone/create-storm-stack --makeModule [module_name]</span
           >
         </p>
       </div>
@@ -129,7 +133,7 @@ export default defineComponent({
         folder, consider reading the getting started guide (coming soon)
       </p>
     </section>
-    <section class="text-white mt-10" id="strm-powered">
+    <section class="text-white mt-10" id="storm-powered">
       <p class="text-lg text-center font-heading font-bold mb-2">
         The {{ pageTitle }} is powered by
       </p>
@@ -157,7 +161,7 @@ export default defineComponent({
         <a href="https://vuejs.org/" target="_blank" title="Link to Vue">
           <div class="flex flex-col items-center">
             <v-icon name="si-vuedotjs" :scale="techIconSize" />
-            Reactive UI ({{ strmConfig.frontend }})
+            Reactive UI ({{ stormConfig.frontend }})
           </div>
         </a>
         <a
@@ -183,10 +187,10 @@ export default defineComponent({
     </section>
     <footer
       class="mt-4 p-2 text-white flex flex-col items-center"
-      id="strm-footer"
+      id="storm-footer"
     >
       <div class="w-full md:w-2/5 grid grid-cols-2 gap-2">
-        <div>
+        <div class="flex">
           <a
             class="flex items-center gap-x-1"
             href="https://discord.gg/sY3a5VN3y9"
@@ -201,11 +205,11 @@ export default defineComponent({
           <a
             class="flex items-center gap-x-1"
             title="Link to the STORM Stack on Github"
-            href="https://github.com/saiforceone/strm-cli"
+            href="https://github.com/saiforceone/create-storm-stack"
             target="_blank"
           >
             <v-icon name="si-github" :scale="contactIconSize" />
-            {{ pageTitle }} Stack Git
+            {{ pageTitle }} Stack Github
           </a>
         </div>
       </div>

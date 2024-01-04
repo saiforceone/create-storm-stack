@@ -16,7 +16,7 @@
   <!-- css -->
   <link rel='stylesheet' href="{{ url_for('static', path='dist/css/main.css') }}">
 </head>
-<body class="flex flex-col bg-gradient-to-b from-strm-bg-dark to-strm-bg-lighter min-h-screen">
+<body class="flex flex-col bg-gradient-to-b from-storm-bg-dark to-storm-bg-lighter min-h-screen">
 <header class="text-center text-white mt-4 w-full md:container md:mx-auto md:self-center">
   <h1 class="text-7xl text-white font-heading text-center">ST🌀RM Stack</h1>
 </header>
@@ -28,21 +28,21 @@
     <div>
       <h2 class="text-3xl font-heading">Details of the Error</h2>
       <p class="text-lg">Status Code: <span
-        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ status_code }}</span></p>
+        class="px-1 py-0.5 bg-storm-bg-dark text-white font-bold rounded-sm">{{ status_code }}</span></p>
       <p class="text-lg">Error Detail: <span
-        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ exception_detail }}</span></p>
+        class="px-1 py-0.5 bg-storm-bg-dark text-white font-bold rounded-sm">{{ exception_detail }}</span></p>
     </div>
 
     <div>
       <h2 class="text-3xl font-heading">Request Details</h2>
       <p class="text-lg">URL Accessed: <span
-        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ request.url.path }}</span></p>
+        class="px-1 py-0.5 bg-storm-bg-dark text-white font-bold rounded-sm">{{ request.url.path }}</span></p>
       <p class="text-lg">Req Method: <span
-        class="px-1 py-0.5 bg-strm-bg-dark text-white font-bold rounded-sm">{{ request.method }}</span></p>
+        class="px-1 py-0.5 bg-storm-bg-dark text-white font-bold rounded-sm">{{ request.method }}</span></p>
     </div>
   </section>
 </main>
-<footer class="mt-4 p-2 text-white flex flex-col items-center " id="strm-footer">
+<footer class="mt-4 p-2 text-white flex flex-col items-center " id="storm-footer">
   <div class="w-full md:w-3/5 grid grid-cols-2 gap-2">
     <div>
       <a

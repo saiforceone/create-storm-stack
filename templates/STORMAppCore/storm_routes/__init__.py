@@ -7,5 +7,5 @@ from starlette.routing import Route
 from storm_controllers import *
 
 routes = [
-    Route('/api', WelcomeController),
+    Route('/api/welcome', WelcomeController),
 ]

@@ -83,7 +83,6 @@ async def not_found_handler(request, exc):
     The template will render out relevant details from the exc (exception) or in the case of JSON, return the relevant
     details in the Dictionary
     """
-    print("404 not found error handler")
     if re.match(URL_PATTERN, request.url.path):
         return JSONResponse(
             build_error_json_response(request, 'The 🌀 blew away the resource you were looking for', exc.status_code))
@@ -98,7 +97,6 @@ async def internal_server_error_handler(request, exc):
     Handles the internal server error / HTTP 500 page or in the case of an API related url, we return the appropriate
     JSON response
     """
-    print("internal server error handler triggered")
     if re.match(URL_PATTERN, request.url.path):
         return JSONResponse(
             build_error_json_response(request, 'The not-so-perfect 🌀 has broken your app', 500)

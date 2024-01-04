@@ -7,8 +7,8 @@
 import { RouteRecordRaw } from 'vue-router';
 
 // ST🌀RM Stack imports
-import routeListing from './_routes.json';
 import { STORMApp } from '🌀/@types/storm_fe';
+import _stormResources from '../../../storm_modules/storm_modules.json';
 
 /**
  * @function buildRoutes
@@ -16,15 +16,20 @@ import { STORMApp } from '🌀/@types/storm_fe';
  * @returns {Array<RouteRecordRaw>} the list of routes
  */
 export function buildRoutes(): Array<RouteRecordRaw> {
-  const _routes = routeListing as Array<STORMApp.STORMFERoute>;
+  const stormModules = _stormResources as STORMApp.STORMModulesFile;
   const output: Array<RouteRecordRaw> = [];
-  for (const routeObj of _routes) {
-    output.push({
-      name: routeObj.componentName,
-      path: routeObj.path,
-      component: () =>
-        import(/*@vite-ignore*/ `../pages/${routeObj.componentPath}.vue`),
-    });
+
+  for (const moduleKey of Object.keys(stormModules.modules)) {
+    const module = stormModules.modules[moduleKey] as STORMApp.STORMModule;
+    for (const page of module.pages) {
+      output.push({
+        name: page.componentName,
+        path: page.path,
+        component: () =>
+          import(/*@vite-ignore*/ `../pages/${page.componentPath}.vue`),
+      });
+    }
   }
+
   return output;
 }
