@@ -33,7 +33,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="w-full min-h-screen text-white flex flex-col bg-gradient-to-b from-strm-bg-dark to-strm-bg-lighter p-2"
+    class="w-full min-h-screen text-white flex flex-col bg-gradient-to-b from-storm-bg-dark to-storm-bg-lighter p-2"
   >
     <div class="flex flex-col gap-y-4">
       <h1 class="font-heading text-4xl text-center">{{ PAGE_TITLE }} Stack</h1>
