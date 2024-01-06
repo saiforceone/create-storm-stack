@@ -6,13 +6,13 @@ import type { Answers } from 'inquirer';
 // Core & Third-party import
 import inquirer from 'inquirer';
 
-// STRM Stack Imports
+// ST🌀RM Stack Imports
 import { printPreScaffoldMessage } from './cliHelpers/printPreScaffoldMessage.js';
 import { printScaffoldSummary } from './cliHelpers/postScaffold.js';
 import { getCLIPrompts } from './cliHelpers/inquirerPrompts.js';
 import { execCLIInstallation } from './cliHelpers/installationHelpers.js';
 import { scaffoldBoot } from './scaffoldFuncs/scaffoldBoot.js';
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
 
 /**
  * @async

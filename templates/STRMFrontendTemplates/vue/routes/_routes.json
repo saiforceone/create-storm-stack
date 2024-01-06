@@ -1,9 +1,0 @@
-[{
-  "path": "/",
-  "componentName": "Welcome",
-  "componentPath": "Welcome/Index"
-}, {
-  "path": "/books",
-  "componentName": "Books",
-  "componentPath": "Books/Index"
-}]

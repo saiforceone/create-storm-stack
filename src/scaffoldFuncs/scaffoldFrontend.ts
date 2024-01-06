@@ -4,9 +4,9 @@
  * do with the Frontend of the project and copies relevant files
  */
 
-// STRM Stack imports
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+// STORM Stack imports
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
 import {
   copyFrontendResources,

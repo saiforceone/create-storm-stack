@@ -1,4 +1,4 @@
-# Python & Flask-specific
+# Python & Starlette-specific
 instance/
 *.pyc
 *.db

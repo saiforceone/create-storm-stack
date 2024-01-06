@@ -2,8 +2,8 @@
  * @author SaiForceOne
  * @description singleton to make locale available to CLI
  */
-// STRM-Stack Imports
-import STRMLocaleData = STRMStackCLI.STRMLocaleData;
+// ST🌀RM-Stack Imports
+import STORMLocaleData = STORMStackCLI.STORMLocaleData;
 
 /**
  * @class LocaleManager
@@ -14,7 +14,7 @@ import STRMLocaleData = STRMStackCLI.STRMLocaleData;
 export class LocaleManager {
   private static instance: LocaleManager;
   private locale: string;
-  private localeData: STRMLocaleData;
+  private localeData: STORMLocaleData;
 
   // prevents accidental instantiation
   private constructor() {}
@@ -37,19 +37,19 @@ export class LocaleManager {
 
   /**
    * @public
-   * @param {STRMLocaleData} localeData
+   * @param {STORMLocaleData} localeData
    * @description Given locale data, sets the singleton's locale data
    */
-  public setLocaleData(localeData: STRMLocaleData) {
+  public setLocaleData(localeData: STORMLocaleData) {
     this.localeData = localeData;
   }
 
   /**
    * @public
-   * @returns {STRMLocaleData} locale data
+   * @returns {STORMLocaleData} locale data
    * @description Gets locale data so that it can be used throughout the CLI
    */
-  public getLocaleData(): STRMLocaleData {
+  public getLocaleData(): STORMLocaleData {
     return this.localeData;
   }
 }

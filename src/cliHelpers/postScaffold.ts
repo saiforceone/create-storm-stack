@@ -6,7 +6,7 @@
 import chalk from 'chalk';
 
 // ST🌀RM Stack Imports
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
 import { buildAddOns } from '../scaffoldFuncs/scaffoldAddOns.js';
 import { LocaleManager } from './localeManager.js';
 
@@ -53,7 +53,7 @@ export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
    'pipenv shell'
  )}
  3. ${LocaleData.postScaffold.instructions.RUN_PROJECT}: ${chalk.greenBright(
-   'npm run strm-dev'
+   'npm run storm-dev'
  )}
  4. ${LocaleData.postScaffold.instructions.NAV_IN_BROWSER}: ${chalk.greenBright(
    'http://127.0.0.1:5000'

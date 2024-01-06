@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 
 // STORM Stack Imports
-import ScaffoldOpts = STRMStackCLI.ScaffoldOpts;
+import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
 import { scaffoldCore } from '../scaffoldFuncs/scaffoldCore.js';
 import { ConsoleLogger } from '../utils/consoleLogger.js';
 import { scaffoldFrontend } from '../scaffoldFuncs/scaffoldFrontend.js';
@@ -29,103 +29,106 @@ import { enableGit } from '../utils/scaffoldUtils.js';
  */
 export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
   const LocaleData = LocaleManager.getInstance().getLocaleData();
-  const cliInstallOpts: Record<STRMStackCLI.LoggerMode, () => Promise<void>> = {
-    // handles quiet-mode installation
-    quiet: async function (): Promise<void> {
-      // set up ora spinners
-      const coreSetupSpinner = ora(
-        LocaleData.backend.info.INSTALL_BASE_DEPS
-      ).start();
-      const { message: coreMessage, success: coreSuccess } =
-        await scaffoldCore(cliAnswers);
-      if (!coreSuccess) {
-        coreSetupSpinner.fail(coreMessage);
-        process.exit(1);
-      }
-      coreSetupSpinner.succeed();
-
-      const feSetupSpinner = ora(
-        `${LocaleData.frontend.info.INSTALL_FE_DEPS} (${chalk.bold(
-          cliAnswers.frontend
-        )})...`
-      ).start();
-      const { message: feMessage, success: feSuccess } =
-        await scaffoldFrontend(cliAnswers);
-      if (!feSuccess) {
-        feSetupSpinner.fail(feMessage);
-        process.exit(1);
-      }
-      feSetupSpinner.succeed();
-
-      if (cliAnswers.installPrettier) {
-        const prettierSpinner = ora(
-          `${LocaleData.frontend.info.INSTALL_FE_ADDON}: Prettier`
+  const cliInstallOpts: Record<STORMStackCLI.LoggerMode, () => Promise<void>> =
+    {
+      // handles quiet-mode installation
+      quiet: async function (): Promise<void> {
+        // set up ora spinners
+        const coreSetupSpinner = ora(
+          LocaleData.backend.info.INSTALL_BASE_DEPS
         ).start();
-        const { message: prettierMsg, success: prettierSuccess } =
-          await scaffoldAddOns('prettier')();
-        if (!prettierSuccess) {
-          prettierSpinner.fail(prettierMsg);
+        const { message: coreMessage, success: coreSuccess } =
+          await scaffoldCore(cliAnswers);
+        if (!coreSuccess) {
+          coreSetupSpinner.fail(coreMessage);
           process.exit(1);
         }
-        prettierSpinner.succeed();
-      }
+        coreSetupSpinner.succeed();
 
-      if (cliAnswers.enableGit) {
-        const gitSpinner = ora(`${LocaleData.backend.info.ENABLE_GIT}`).start();
-        const { message: gitMsg, success: gitSuccess } = await enableGit(
-          cliAnswers.loggerMode
-        );
-        gitSuccess ? gitSpinner.succeed() : gitSpinner.warn(gitMsg);
-      }
+        const feSetupSpinner = ora(
+          `${LocaleData.frontend.info.INSTALL_FE_DEPS} (${chalk.bold(
+            cliAnswers.frontend
+          )})...`
+        ).start();
+        const { message: feMessage, success: feSuccess } =
+          await scaffoldFrontend(cliAnswers);
+        if (!feSuccess) {
+          feSetupSpinner.fail(feMessage);
+          process.exit(1);
+        }
+        feSetupSpinner.succeed();
 
-      const psSetupSpinner = ora(
-        LocaleData.postScaffold.RUN_POST_PROCESSES
-      ).start();
-      const { message: psMessage, success: psSuccess } =
-        await scaffoldPost(cliAnswers);
-      if (!psSuccess) {
-        psSetupSpinner.fail(psMessage);
-        process.exit(1);
-      }
-      psSetupSpinner.succeed();
-    },
-    // handles verbose-mode installation
-    verbose: async function (): Promise<void> {
-      // install showing verbose logs
-      // 1. Scaffold backend / core
-      const coreSetupResult = await scaffoldCore(cliAnswers);
+        if (cliAnswers.installPrettier) {
+          const prettierSpinner = ora(
+            `${LocaleData.frontend.info.INSTALL_FE_ADDON}: Prettier`
+          ).start();
+          const { message: prettierMsg, success: prettierSuccess } =
+            await scaffoldAddOns('prettier')();
+          if (!prettierSuccess) {
+            prettierSpinner.fail(prettierMsg);
+            process.exit(1);
+          }
+          prettierSpinner.succeed();
+        }
 
-      if (!coreSetupResult.success) {
-        ConsoleLogger.printLog(`${coreSetupResult.message}`, 'error');
-        process.exit(1);
-      }
+        if (cliAnswers.enableGit) {
+          const gitSpinner = ora(
+            `${LocaleData.backend.info.ENABLE_GIT}`
+          ).start();
+          const { message: gitMsg, success: gitSuccess } = await enableGit(
+            cliAnswers.loggerMode
+          );
+          gitSuccess ? gitSpinner.succeed() : gitSpinner.warn(gitMsg);
+        }
 
-      // 2. Scaffold frontend
-      const frontendSetupResult = await scaffoldFrontend(cliAnswers);
+        const psSetupSpinner = ora(
+          LocaleData.postScaffold.RUN_POST_PROCESSES
+        ).start();
+        const { message: psMessage, success: psSuccess } =
+          await scaffoldPost(cliAnswers);
+        if (!psSuccess) {
+          psSetupSpinner.fail(psMessage);
+          process.exit(1);
+        }
+        psSetupSpinner.succeed();
+      },
+      // handles verbose-mode installation
+      verbose: async function (): Promise<void> {
+        // install showing verbose logs
+        // 1. Scaffold backend / core
+        const coreSetupResult = await scaffoldCore(cliAnswers);
 
-      if (!frontendSetupResult.success) {
-        ConsoleLogger.printLog(`${frontendSetupResult.message}`, 'error');
-        process.exit(1);
-      }
+        if (!coreSetupResult.success) {
+          ConsoleLogger.printLog(`${coreSetupResult.message}`, 'error');
+          process.exit(1);
+        }
 
-      // 2. Scaffold Add-ons
-      const addOns = buildAddOns(cliAnswers);
-      await installScaffoldAddOns(addOns, cliAnswers.loggerMode);
+        // 2. Scaffold frontend
+        const frontendSetupResult = await scaffoldFrontend(cliAnswers);
 
-      // Git
-      if (cliAnswers.enableGit) {
-        await enableGit(cliAnswers.loggerMode);
-      }
+        if (!frontendSetupResult.success) {
+          ConsoleLogger.printLog(`${frontendSetupResult.message}`, 'error');
+          process.exit(1);
+        }
 
-      // 3. Post Scaffold
-      const postScaffoldResult = await scaffoldPost(cliAnswers);
+        // 2. Scaffold Add-ons
+        const addOns = buildAddOns(cliAnswers);
+        await installScaffoldAddOns(addOns, cliAnswers.loggerMode);
 
-      if (!postScaffoldResult.success) {
-        ConsoleLogger.printLog(`${postScaffoldResult.message}`, 'error');
-        process.exit(1);
-      }
-    },
-  };
+        // Git
+        if (cliAnswers.enableGit) {
+          await enableGit(cliAnswers.loggerMode);
+        }
+
+        // 3. Post Scaffold
+        const postScaffoldResult = await scaffoldPost(cliAnswers);
+
+        if (!postScaffoldResult.success) {
+          ConsoleLogger.printLog(`${postScaffoldResult.message}`, 'error');
+          process.exit(1);
+        }
+      },
+    };
 
   return cliInstallOpts[cliAnswers.loggerMode];
 }

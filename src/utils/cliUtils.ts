@@ -4,6 +4,8 @@
  */
 // Core & third-party imports
 import * as Constants from 'constants';
+import { execaCommand } from 'execa';
+import ora from 'ora';
 import path from 'node:path';
 import {
   access,
@@ -12,37 +14,34 @@ import {
   readFile,
   writeFile,
 } from 'node:fs/promises';
+import { platform } from 'os';
 
-// STRM Stack imports
+// ST🌀RM Stack imports
 import { ConsoleLogger } from './consoleLogger.js';
-import { getProjectConfig, getSTRMCLIRoot } from './fileUtils.js';
+import { getProjectConfig, getSTORMCLIRoot } from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
 import { buildScaffoldOutput, titleCase } from './generalUtils.js';
-import STRMProjectPkgFile = STRMStackCLI.STRMProjectPkgFile;
-import STRMLocaleData = STRMStackCLI.STRMLocaleData;
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
-import STRMConfigFile = STRMStackCLI.STRMConfigFile;
-import STRMModuleArgs = STRMStackCLI.STRMModuleArgs;
-import STRMModulesFile = STRMStackCLI.STRMModulesFile;
-import STRMModule = STRMStackCLI.STRMModule;
-import STRMController = STRMStackCLI.STRMController;
-import STRMFERoute = STRMStackCLI.STRMFERoute;
+import STORMProjectPkgFile = STORMStackCLI.STORMProjectPkgFile;
+import STORMLocaleData = STORMStackCLI.STORMLocaleData;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
+import STORMConfigFile = STORMStackCLI.STORMConfigFile;
+import STORMModuleArgs = STORMStackCLI.STORMModuleArgs;
+import STORMModulesFile = STORMStackCLI.STORMModulesFile;
+import STORMModule = STORMStackCLI.STORMModule;
+import STORMController = STORMStackCLI.STORMController;
+import STORMFERoute = STORMStackCLI.STORMFERoute;
 import { generateIndexPage } from '../cliHelpers/fePageHelpers/generateIndexPage.js';
 import generateDetailsPage from '../cliHelpers/fePageHelpers/generateDetailsPage.js';
-import STORMCommandExecStatus = STRMStackCLI.STORMCommandExecStatus;
-import { execaCommand } from 'execa';
-import { platform } from 'os';
-import ora from 'ora';
-import FrontendOpt = STRMStackCLI.FrontendOpt;
+import STORMCommandExecStatus = STORMStackCLI.STORMCommandExecStatus;
+import FrontendOpt = STORMStackCLI.FrontendOpt;
 
-const STRM_MODULES_PATH = 'strm_modules/strm_modules.json';
+const STORM_MODULES_PATH = 'storm_modules/storm_modules.json';
 // Semantic Version pattern for dependencies
 const SEMVER_PATTERN = /\d+.\d+.\d+/g;
 
 const FRONTEND_COMPONENT_EXT: Record<FrontendOpt, string> = {
   react: 'tsx',
   vue: 'vue',
-  lit: 'ts',
 };
 
 /**
@@ -63,7 +62,7 @@ export async function getCLIVersion(): Promise<string | undefined> {
       encoding: 'utf-8',
     });
 
-    const parsedPkg = JSON.parse(pkgData) as STRMProjectPkgFile;
+    const parsedPkg = JSON.parse(pkgData) as STORMProjectPkgFile;
 
     return parsedPkg.version;
   } catch (e) {
@@ -79,12 +78,12 @@ export async function getCLIVersion(): Promise<string | undefined> {
  */
 export async function loadLocaleFile(locale: string) {
   try {
-    const cliRoot = getSTRMCLIRoot();
+    const cliRoot = getSTORMCLIRoot();
     const localeFilePath = path.resolve(cliRoot, `locales/${locale}.json`);
     const localeFileData = await readFile(localeFilePath, {
       encoding: 'utf-8',
     });
-    const localeData = JSON.parse(localeFileData) as STRMLocaleData;
+    const localeData = JSON.parse(localeFileData) as STORMLocaleData;
     LocaleManager.getInstance().setLocaleData(localeData);
     LocaleManager.getInstance().setLocale(locale);
   } catch (e) {
@@ -95,13 +94,13 @@ export async function loadLocaleFile(locale: string) {
 
 /**
  * @async
- * @function checkSTRMProject
+ * @function checkSTORMProject
  * @param {string} projectDir the directory to be checked
  * @param {boolean} showOutput determines if the output should be shown
- * @description Checks that the target directory contains a STRM Stack Project
+ * @description Checks that the target directory contains a ST🌀RM Stack Project
  * @returns {Promise<ScaffoldOutput>}
  */
-export async function checkSTRMProject(
+export async function checkSTORMProject(
   projectDir: string,
   showOutput: boolean = false
 ): Promise<ScaffoldOutput> {
@@ -111,24 +110,24 @@ export async function checkSTRMProject(
     // read the JSON config file
     const configPath = path.resolve(
       projectDir,
-      'strm_config',
-      'strm_config.json'
+      'storm_config',
+      'storm_config.json'
     );
 
     const configData = await readFile(configPath, { encoding: 'utf-8' });
-    const parsedConfig = JSON.parse(configData) as STRMConfigFile;
+    const parsedConfig = JSON.parse(configData) as STORMConfigFile;
 
     // check if project has the appropriate files and folders
-    const frontendDir = `strm_fe_${parsedConfig.frontend}`;
+    const frontendDir = `storm_fe_${parsedConfig.frontend}`;
     const PATHS = [
       frontendDir,
       `${frontendDir}/src/${parsedConfig.frontendEntryPoint}`,
       `${frontendDir}/src/pages`,
-      'strm_controllers',
-      'strm_models',
-      STRM_MODULES_PATH,
-      'strm_routes',
-      'support/strm_hmr.py',
+      'storm_controllers',
+      'storm_models',
+      STORM_MODULES_PATH,
+      'storm_routes',
+      'support/storm_hmr.py',
       'templates/app.html',
       'app.py',
       'vite.config.ts',
@@ -152,12 +151,12 @@ export async function checkSTRMProject(
 
 /**
  * @async
- * @function writeSTRMControllerFile
+ * @function writeSTORMControllerFile
  * @description Attempts to create a controller file based on the given name.
  * @param {string} controllerName the name of the controller
  * @returns {Promise<ScaffoldOutput>} an object indicating result
  */
-async function writeSTRMControllerFile(
+async function writeSTORMControllerFile(
   controllerName: string
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
@@ -178,13 +177,13 @@ class ${titleCase(controllerName)}Controller(HTTPEndpoint):
 \tdef get(self, request):
 \t\treturn JSONResponse({
 \t\t\t"success": True,
-\t\t\t"message": "Controller generated by the CLI. Edit 'strm_models/${controllerName}.py as needed"
+\t\t\t"message": "Controller generated by the CLI. Edit 'storm_models/${controllerName}.py as needed"
 \t\t})\n
 `;
 
     const controllerFilePath = path.resolve(
       process.cwd(),
-      `strm_controllers/${controllerName}_controller.py`
+      `storm_controllers/${controllerName}_controller.py`
     );
     // write output
     await writeFile(controllerFilePath, controllerData);
@@ -198,19 +197,19 @@ class ${titleCase(controllerName)}Controller(HTTPEndpoint):
 
 /**
  * @async
- * @function updateSTRMModuleRouteAutoImports
- * @description given a controller name, updates the auto imports (strm_controllers/__init__.py)
+ * @function updateSTORMModuleRouteAutoImports
+ * @description given a controller name, updates the auto imports (storm_controllers/__init__.py)
  * @param {string} controllerName
  * @returns {Promise<ScaffoldOutput>} an object indicating the result of the operation
  */
-async function updateSTRMModuleRouteAutoImports(
+async function updateSTORMModuleRouteAutoImports(
   controllerName: string
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
     const autoImportPath = path.resolve(
       process.cwd(),
-      `strm_controllers/__init__.py`
+      `storm_controllers/__init__.py`
     );
     // append to the file
     const autoImportData = `from .${controllerName}_controller import ${titleCase(
@@ -226,12 +225,12 @@ async function updateSTRMModuleRouteAutoImports(
 }
 
 /**
- * @function writeSTRMModelFile
+ * @function writeSTORMModelFile
  * @description given a model name, attempts to create the model file
  * @param {string} modelName the name of the model
  * @returns {Promise<ScaffoldOutput>}
  */
-async function writeSTRMModelFile(modelName: string): Promise<ScaffoldOutput> {
+async function writeSTORMModelFile(modelName: string): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
     const localeData = LocaleManager.getInstance().getLocaleData();
@@ -254,7 +253,7 @@ class ${titleCase(modelName)}(me.Document):
     `;
     const modelFilePath = path.resolve(
       process.cwd(),
-      `strm_models/${modelName}.py`
+      `storm_models/${modelName}.py`
     );
     await writeFile(modelFilePath, modelFileData);
     output.success = true;
@@ -267,36 +266,36 @@ class ${titleCase(modelName)}(me.Document):
 
 /**
  * @async
- * @function getSTRMModules
- * @description Helper function that attempts to read the strm_modules.json file and returns a typed object or not
- * @returns {Promise<STRMModulesFile|undefined>}
+ * @function getSTORMModules
+ * @description Helper function that attempts to read the storm_modules.json file and returns a typed object or not
+ * @returns {Promise<STORMModulesFile|undefined>}
  */
-async function getSTRMModules(): Promise<STRMModulesFile | undefined> {
+async function getSTORMModules(): Promise<STORMModulesFile | undefined> {
   try {
-    const modulesFilePath = path.resolve(process.cwd(), STRM_MODULES_PATH);
+    const modulesFilePath = path.resolve(process.cwd(), STORM_MODULES_PATH);
     const modulesFileStringData = await readFile(modulesFilePath, {
       encoding: 'utf-8',
     });
-    return JSON.parse(modulesFileStringData) as STRMModulesFile;
+    return JSON.parse(modulesFileStringData) as STORMModulesFile;
   } catch (e) {
     return;
   }
 }
 
 /**
- * @function writeSTRMModulesFile
- * @description Given STRMModulesFile data, attempts to write to the filesystem
- * @param {STRMModulesFile} strmModulesFile the STRMModules files data that should be written to the filesystem
+ * @function writeSTORMModulesFile
+ * @description Given STORMModulesFile data, attempts to write to the filesystem
+ * @param {STORMModulesFile} stormModulesFile the STORMModules files data that should be written to the filesystem
  * @returns {Promise<ScaffoldOutput>}
  */
-async function writeSTRMModulesFile(
-  strmModulesFile: STRMModulesFile
+async function writeSTORMModulesFile(
+  stormModulesFile: STORMModulesFile
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
-    const targetPath = path.resolve(process.cwd(), STRM_MODULES_PATH);
-    strmModulesFile.lastUpdated = new Date().toISOString();
-    const dataToWrite = JSON.stringify(strmModulesFile, undefined, 2);
+    const targetPath = path.resolve(process.cwd(), STORM_MODULES_PATH);
+    stormModulesFile.lastUpdated = new Date().toISOString();
+    const dataToWrite = JSON.stringify(stormModulesFile, undefined, 2);
     await writeFile(targetPath, dataToWrite);
 
     output.success = true;
@@ -308,19 +307,19 @@ async function writeSTRMModulesFile(
 }
 
 /**
- * @function regenerateSTRMModuleRoutes
- * @description Attempts to rewrite the backend routes (strm_routes/__init__.py) based on the contents of the modules file (strm_modules/strm_modules.json)
+ * @function regenerateSTORMModuleRoutes
+ * @description Attempts to rewrite the backend routes (storm_routes/__init__.py) based on the contents of the modules file (storm_modules/storm_modules.json)
  * @returns {Promise<ScaffoldOutput>} an object indicating the result of operation
  */
-async function regenerateSTRMModuleRoutes(): Promise<ScaffoldOutput> {
+async function regenerateSTORMModuleRoutes(): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   const localeData = LocaleManager.getInstance().getLocaleData();
   try {
-    // read strm_modules
-    const modulesJSON = await getSTRMModules();
+    // read storm_modules
+    const modulesJSON = await getSTORMModules();
 
     if (!modulesJSON) {
-      output.message = localeData.advCli.error.LOAD_STRM_MODULES;
+      output.message = localeData.advCli.error.LOAD_STORM_MODULES;
       return output;
     }
 
@@ -355,7 +354,7 @@ async function regenerateSTRMModuleRoutes(): Promise<ScaffoldOutput> {
 # core imports
 from starlette.routing import Mount, Route
 # ${localeData.misc.STORM_BRANDED} imports
-from strm_controllers import *
+from storm_controllers import *
 
 
 # generated routes
@@ -368,7 +367,7 @@ ${controllerRoutesString}
     // write to file replacing contents
     const targetFilePath = path.resolve(
       process.cwd(),
-      'strm_routes/__init__.py'
+      'storm_routes/__init__.py'
     );
     await writeFile(targetFilePath, routesString);
 
@@ -381,36 +380,36 @@ ${controllerRoutesString}
 }
 
 /**
- * @function buildSTRMFrontendComponents
- * @description Given an array of STRMFERoute objects read from the modules file
- * (strm_modules/strm_modules.json), reads the config file and generates the
+ * @function buildSTORMFrontendComponents
+ * @description Given an array of STORMFERoute objects read from the modules file
+ * (storm_modules/storm_modules.json), reads the config file and generates the
  * frontend component based on the frontend option specified in the config
- * (strm_config/strm_config.json) file and the given pluralizedModuleName.
+ * (storm_config/storm_config.json) file and the given pluralizedModuleName.
  * @param {string} moduleKey
  * @param {string} pluralizedModuleName
  * @returns {Promise<ScaffoldOutput>} an object indicating the result of the operation
  */
-async function buildSTRMFrontendComponents(
+async function buildSTORMFrontendComponents(
   moduleKey: string,
   pluralizedModuleName: string
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   const localeData = LocaleManager.getInstance().getLocaleData();
   try {
-    // read our strm config
-    const strmConfig = await getProjectConfig(process.cwd());
-    if (!strmConfig) {
-      output.message = localeData.advCli.error.LOAD_STRM_CONFIG;
+    // read our storm config
+    const stormConfig = await getProjectConfig(process.cwd());
+    if (!stormConfig) {
+      output.message = localeData.advCli.error.LOAD_STORM_CONFIG;
       return output;
     }
-    // read strm modules
-    const strmModules = await getSTRMModules();
-    if (!strmModules) {
-      output.message = localeData.advCli.error.LOAD_STRM_MODULES;
+    // read storm modules
+    const stormModules = await getSTORMModules();
+    if (!stormModules) {
+      output.message = localeData.advCli.error.LOAD_STORM_MODULES;
       return output;
     }
 
-    const feFolder = `strm_fe_${strmConfig.frontend}`;
+    const feFolder = `storm_fe_${stormConfig.frontend}`;
     const feBasePath = path.resolve(
       process.cwd(),
       feFolder,
@@ -422,14 +421,14 @@ async function buildSTRMFrontendComponents(
     await mkdir(feBasePath);
 
     // loop over pages and build components as needed
-    const module = strmModules.modules[moduleKey];
+    const module = stormModules.modules[moduleKey];
     if (!module) {
-      output.message = localeData.advCli.responses.INVALID_STRM_MODULE;
+      output.message = localeData.advCli.responses.INVALID_STORM_MODULE;
       return output;
     }
 
     const { pages } = module;
-    const componentExt = FRONTEND_COMPONENT_EXT[strmConfig.frontend];
+    const componentExt = FRONTEND_COMPONENT_EXT[stormConfig.frontend];
     for (const page of pages) {
       // attempt to generate page components
       const isIndexPage = page.componentPath.includes('Index');
@@ -438,13 +437,13 @@ async function buildSTRMFrontendComponents(
         : `${page.componentName}.${componentExt}`;
       const pageData = isIndexPage
         ? generateIndexPage(
-            strmConfig.frontend,
+            stormConfig.frontend,
             page.componentName,
             page.componentPath,
             module.controller
           )
         : generateDetailsPage(
-            strmConfig.frontend,
+            stormConfig.frontend,
             page.componentName,
             page.componentPath,
             module.controller
@@ -466,34 +465,34 @@ async function buildSTRMFrontendComponents(
 }
 
 /**
- * @function buildSTRMModule
- * @description Helper function that constructs a STRM module based on the given parameters
- * @param {STRMModuleArgs} moduleArgs command line arguments passed in
- * @returns {STRMModule} an object representing a module
+ * @function buildSTORMModule
+ * @description Helper function that constructs a ST🌀RM module based on the given parameters
+ * @param {STORMModuleArgs} moduleArgs command line arguments passed in
+ * @returns {STORMModule} an object representing a module
  */
-function buildSTRMModule(moduleArgs: STRMModuleArgs): STRMModule {
+function buildSTORMModule(moduleArgs: STORMModuleArgs): STORMModule {
   const { name, controllerOnly, plural } = moduleArgs;
 
   const pluralizedName = plural ? plural : name;
   const lowercaseName = name.toLowerCase();
   // setup controller
-  const controller: STRMController = {
+  const controller: STORMController = {
     controllerName: `${lowercaseName}_controller`,
     modelName: `${lowercaseName}.py`,
     endpointBase: pluralizedName,
   };
 
-  const pages: Array<STRMFERoute> = [];
+  const pages: Array<STORMFERoute> = [];
 
   // setup pages (if controllerOnly = false)
   if (!controllerOnly) {
-    const indexPage: STRMFERoute = {
+    const indexPage: STORMFERoute = {
       path: `/${pluralizedName}`,
       componentName: titleCase(name),
       componentPath: `${titleCase(pluralizedName)}/Index`,
     };
 
-    const detailsPage: STRMFERoute = {
+    const detailsPage: STORMFERoute = {
       path: `/${pluralizedName}/:id`,
       componentName: `${titleCase(name)}Detail`,
       componentPath: `${titleCase(pluralizedName)}/${titleCase(name)}Detail`,
@@ -511,67 +510,68 @@ function buildSTRMModule(moduleArgs: STRMModuleArgs): STRMModule {
 
 /**
  * @async
- * @function createSTRMModule
- * @description Utility function that handles the creation of a STRM Stack Module
- * @param {STRMModuleArgs} moduleArgs
+ * @function createSTORMModule
+ * @description Utility function that handles the creation of a ST🌀RM Stack Module
+ * @param {STORMModuleArgs} moduleArgs
  * @returns {Promise<ScaffoldOutput>} Standard scaffold output indicating the result of attempting to create a module
  */
-export async function createSTRMModule(
-  moduleArgs: STRMModuleArgs
+export async function createSTORMModule(
+  moduleArgs: STORMModuleArgs
 ): Promise<ScaffoldOutput> {
   const localeData = LocaleManager.getInstance().getLocaleData();
   const output = buildScaffoldOutput();
   try {
     const { name } = moduleArgs;
     ConsoleLogger.printCLIProcessInfoMessage(
-      localeData.advCli.info.LOAD_STRM_MODULES,
-      STRM_MODULES_PATH
+      localeData.advCli.info.LOAD_STORM_MODULES,
+      STORM_MODULES_PATH
     );
     // 0. read configuration
-    const strmModulesFileData = await getSTRMModules();
-    if (!strmModulesFileData) {
+    const stormModulesFileData = await getSTORMModules();
+    if (!stormModulesFileData) {
       ConsoleLogger.printCLIProcessErrorMessage(
-        localeData.advCli.error.LOAD_STRM_MODULES,
-        STRM_MODULES_PATH
+        localeData.advCli.error.LOAD_STORM_MODULES,
+        STORM_MODULES_PATH
       );
-      output.message = localeData.advCli.error.LOAD_STRM_MODULES;
+      output.message = localeData.advCli.error.LOAD_STORM_MODULES;
       return output;
     }
 
     ConsoleLogger.printCLIProcessSuccessMessage({
-      message: localeData.advCli.success.LOAD_STRM_MODULES,
-      detail: STRM_MODULES_PATH,
+      message: localeData.advCli.success.LOAD_STORM_MODULES,
+      detail: STORM_MODULES_PATH,
     });
 
     // check existing module
-    if (strmModulesFileData.modules[name]) {
+    if (stormModulesFileData.modules[name]) {
       output.message = localeData.advCli.responses.MODULE_ALREADY_EXISTS;
       return output;
     }
 
     // 0.1 update modules JSON file
-    strmModulesFileData.modules[name] = buildSTRMModule(moduleArgs);
+    stormModulesFileData.modules[name] = buildSTORMModule(moduleArgs);
     ConsoleLogger.printCLIProcessInfoMessage(
-      localeData.advCli.info.WRITE_STRM_MODULES
+      localeData.advCli.info.WRITE_STORM_MODULES
     );
-    const writeModulesResult = await writeSTRMModulesFile(strmModulesFileData);
+    const writeModulesResult =
+      await writeSTORMModulesFile(stormModulesFileData);
     if (!writeModulesResult.success) {
-      output.message = localeData.advCli.error.WRITE_STRM_MODULES;
+      output.message = localeData.advCli.error.WRITE_STORM_MODULES;
       ConsoleLogger.printCLIProcessErrorMessage(
-        localeData.advCli.error.WRITE_STRM_MODULES
+        localeData.advCli.error.WRITE_STORM_MODULES
       );
       return output;
     }
     ConsoleLogger.printCLIProcessSuccessMessage({
-      message: localeData.advCli.success.WRITE_STRM_MODULES,
+      message: localeData.advCli.success.WRITE_STORM_MODULES,
     });
     // 1. build model
 
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.CREATE_MODEL,
-      `strm_models/${name.toLowerCase()}.py`
+      `storm_models/${name.toLowerCase()}.py`
     );
-    const modelResult = await writeSTRMModelFile(name);
+    const modelResult = await writeSTORMModelFile(name);
     if (!modelResult.success) {
       output.message = modelResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
@@ -581,14 +581,14 @@ export async function createSTRMModule(
     }
     ConsoleLogger.printCLIProcessSuccessMessage({
       message: localeData.advCli.success.CREATE_MODEL,
-      detail: `strm_models/${name.toLowerCase()}.py`,
+      detail: `storm_models/${name.toLowerCase()}.py`,
     });
     // 2. build controller
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.CREATE_CONTROLLER,
-      `strm_controllers/${name}_controller.py`
+      `storm_controllers/${name}_controller.py`
     );
-    const controllerResult = await writeSTRMControllerFile(name);
+    const controllerResult = await writeSTORMControllerFile(name);
     if (!controllerResult.success) {
       output.message = controllerResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
@@ -598,21 +598,21 @@ export async function createSTRMModule(
     }
     ConsoleLogger.printCLIProcessSuccessMessage({
       message: localeData.advCli.success.CREATE_CONTROLLER,
-      detail: `strm_controllers/${name.toLowerCase()}_controller.py`,
+      detail: `storm_controllers/${name.toLowerCase()}_controller.py`,
     });
     // 3. rewrite backend routes
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.REWRITE_MODULE_ROUTES,
-      'strm_routes/__init__.py'
+      'storm_routes/__init__.py'
     );
 
-    const moduleRoutesResult = await regenerateSTRMModuleRoutes();
+    const moduleRoutesResult = await regenerateSTORMModuleRoutes();
 
     if (!moduleRoutesResult.success) {
       output.message = moduleRoutesResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
         localeData.advCli.error.REWRITE_MODULE_ROUTES,
-        'strm_routes/__init__.py file'
+        'storm_routes/__init__.py file'
       );
       return output;
     }
@@ -624,10 +624,10 @@ export async function createSTRMModule(
     // 3.1 update auto imports
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.UPDATE_AUTO_IMPORTS,
-      'strm_controllers/__init__.py'
+      'storm_controllers/__init__.py'
     );
     const updateAutoImportsResult =
-      await updateSTRMModuleRouteAutoImports(name);
+      await updateSTORMModuleRouteAutoImports(name);
     if (!updateAutoImportsResult.success) {
       output.message = updateAutoImportsResult.message;
       ConsoleLogger.printCLIProcessErrorMessage(
@@ -645,7 +645,7 @@ export async function createSTRMModule(
     ConsoleLogger.printCLIProcessInfoMessage(
       localeData.advCli.info.BUILD_FRONTEND_COMPONENTS
     );
-    const buildFEComponentsResult = await buildSTRMFrontendComponents(
+    const buildFEComponentsResult = await buildSTORMFrontendComponents(
       name,
       moduleArgs.plural ? moduleArgs.plural : name
     );

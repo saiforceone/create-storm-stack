@@ -6,7 +6,7 @@
 // Core & Third-party Imports
 import type { QuestionCollection } from 'inquirer';
 
-// STRM Stack Imports
+// ST🌀RM Stack Imports
 import { validateProjectOrModuleName } from '../utils/generalUtils.js';
 import { LocaleManager } from './localeManager.js';
 
@@ -34,9 +34,9 @@ export function getCLIPrompts(): QuestionCollection {
       message: localeData.cli.prompts.FRONTEND_CHOICE,
       name: 'frontend',
       type: 'list',
-      choices: ['react', 'lit', 'vue'],
+      choices: ['react', 'vue'],
     },
-    // STRM Add Ons
+    // ST🌀RM Add Ons
     {
       message: `${localeData.cli.prompts.INSTALL_ADDON}: Prettier`,
       name: 'installPrettier',

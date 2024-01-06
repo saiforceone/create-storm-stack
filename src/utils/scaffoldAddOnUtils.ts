@@ -1,6 +1,6 @@
 /**
  * @author SaiForceOne
- * @description Contains STRM Stack add on installation functions
+ * @description Contains ST🌀RM Stack add on installation functions
  */
 
 // core & third-party imports
@@ -8,20 +8,20 @@ import path from 'node:path';
 import { readFile, cp as copyFile } from 'node:fs/promises';
 import { execaCommand } from 'execa';
 
-// STRM Stack imports
-import STRMAddOnsFile = STRMStackCLI.STRMAddOnsFile;
-import ScaffoldOutput = STRMStackCLI.ScaffoldOutput;
+// ST🌀RM Stack imports
+import STORMAddOnsFile = STORMStackCLI.STORMAddOnsFile;
+import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
-import { getSTRMCLIRoot } from './fileUtils.js';
+import { getSTORMCLIRoot } from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
 
 /**
- * @returns {Promise<STRMAddOnsFile|undefined>}
+ * @returns {Promise<STORMAddOnsFile|undefined>}
  * @description Helper function that attempts to read the contents of the json
  * file containing project addons
  */
-async function getAddOnsFile(): Promise<STRMAddOnsFile | undefined> {
+async function getAddOnsFile(): Promise<STORMAddOnsFile | undefined> {
   try {
     const currentUrl = import.meta.url;
     const addOnsPath = path.resolve(
@@ -32,7 +32,7 @@ async function getAddOnsFile(): Promise<STRMAddOnsFile | undefined> {
     );
 
     const fileData = await readFile(addOnsPath, { encoding: 'utf-8' });
-    return JSON.parse(fileData) as STRMAddOnsFile;
+    return JSON.parse(fileData) as STORMAddOnsFile;
   } catch (e) {
     return;
   }
@@ -72,8 +72,8 @@ export async function installPrettier(
 
     // build the path
     const templatesPath = path.join(
-      getSTRMCLIRoot(),
-      'templates/STRMAddOns/prettier'
+      getSTORMCLIRoot(),
+      'templates/STORMAddOns/prettier'
     );
 
     // copy template file

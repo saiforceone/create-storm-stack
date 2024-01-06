@@ -4,16 +4,11 @@
  * prompting
  */
 // Core & third-party imports
-import ora from 'ora';
 import inquirer, { Answers, QuestionCollection } from 'inquirer';
 
-// STRM-Stack Imports
-import STRMBootOpts = STRMStackCLI.STRMBootOpts;
-import {
-  execDependencyChecks,
-  loadLocaleFile,
-  preScaffoldCommandExecCheck,
-} from '../utils/cliUtils.js';
+// ST🌀RM-Stack Imports
+import STORMBootOpts = STORMStackCLI.STORMBootOpts;
+import { execDependencyChecks, loadLocaleFile } from '../utils/cliUtils.js';
 
 /**
  * @function setupScaffoldBootPrompts
@@ -65,7 +60,7 @@ export async function scaffoldBoot(): Promise<void> {
   // prompt for locale selection
   const setupAnswers = (await scaffoldBootPrompts(
     localeString
-  )) as STRMBootOpts;
+  )) as STORMBootOpts;
 
   // load appropriate locale JSON file
   await loadLocaleFile(setupAnswers.locale);

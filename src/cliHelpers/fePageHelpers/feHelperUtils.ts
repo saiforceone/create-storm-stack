@@ -3,8 +3,8 @@
  * @description A collection of frontend page helper utility functions
  */
 
-// STRM Stack Imports
-import FrontendOpt = STRMStackCLI.FrontendOpt;
+// ST🌀RM Stack Imports
+import FrontendOpt = STORMStackCLI.FrontendOpt;
 
 /**
  * @function getStandardImports
@@ -14,7 +14,6 @@ import FrontendOpt = STRMStackCLI.FrontendOpt;
  */
 export function getStandardImports(frontendOpt: FrontendOpt): string {
   const STANDARD_IMPORTS: Record<FrontendOpt, string> = {
-    lit: '',
     vue: "import { defineComponent } from 'vue';",
     react: "import React from 'react';",
   };
