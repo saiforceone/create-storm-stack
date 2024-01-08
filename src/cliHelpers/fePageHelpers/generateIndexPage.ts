@@ -183,7 +183,7 @@ export default defineComponent({
       } ${new Date().toLocaleDateString()}
 // core imports
 ${getStandardImports(frontendOpt)}
-import {SiDiscord, SiGithub} from "@icons-pack/react-simple-icons";
+import {SiDiscord, SiGithub} from 'react-icons/si';
 
 /**
  * Temporary Constant Definitions
