@@ -29,7 +29,7 @@ class StormHmrExtension(StandaloneTag):
 
             # Print debug output
             print(f"debug mode: {self.is_debug}")
-            print(f"debug mode: ST🌀RM CLI vite port: {vite_port}")
+            print(f"debug mode: STORM CLI vite port: {vite_port}")
 
             # set up paths
             vite_client_src = f"{vite_host}:{vite_port}/static/@vite/client"
