@@ -219,10 +219,13 @@ export async function copyWebTemplateFiles(
       );
 
     // 4. copy support files
-    const supportFilesTemplatePath = path.resolve(
+    let supportFilesTemplatePath = path.resolve(
       normalizedPath,
       PATH_CONSTANTS.PATH_VITE_HMR_TAGS
     );
+
+    if (platform() === 'win32')
+      supportFilesTemplatePath = normalizeWinFilePath(supportFilesTemplatePath);
 
     let supportFilesDestPath = path.join(
       projectPath,
@@ -230,7 +233,7 @@ export async function copyWebTemplateFiles(
     );
 
     if (platform() === 'win32')
-      supportFilesDestPath = normalizeWinFilePath(supportFilesTemplatePath);
+      supportFilesDestPath = normalizeWinFilePath(supportFilesDestPath);
 
     if (verboseLogs)
       ConsoleLogger.printLog(LocaleData.backend.info.COPY_SUPPORT_FILES);
