@@ -25,12 +25,14 @@ import { platform } from 'os';
 async function getAddOnsFile(): Promise<STORMAddOnsFile | undefined> {
   try {
     const currentUrl = import.meta.url;
-    const addOnsPath = path.resolve(
+    let addOnsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       '../../../',
       'configs',
       'addOnDependencies.json'
     );
+
+    if (platform() === 'win32') addOnsPath = normalizeWinFilePath(addOnsPath);
 
     const fileData = await readFile(addOnsPath, { encoding: 'utf-8' });
     return JSON.parse(fileData) as STORMAddOnsFile;
