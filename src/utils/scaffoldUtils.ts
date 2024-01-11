@@ -191,10 +191,13 @@ export async function copyWebTemplateFiles(
       );
 
     // 3. copy base template files
-    const baseTemplatePath = path.resolve(
+    let baseTemplatePath = path.resolve(
       normalizedPath,
       PATH_CONSTANTS.PATH_WEB_BASE_TEMPLATE
     );
+
+    if (platform() === 'win32')
+      baseTemplatePath = normalizeWinFilePath(baseTemplatePath);
 
     let appTemplateDestPath = path.join(
       projectPath,
