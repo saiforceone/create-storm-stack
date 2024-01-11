@@ -13,8 +13,9 @@ import STORMAddOnsFile = STORMStackCLI.STORMAddOnsFile;
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
-import { getSTORMCLIRoot } from './fileUtils.js';
+import { getSTORMCLIRoot, normalizeWinFilePath } from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
+import { platform } from 'os';
 
 /**
  * @returns {Promise<STORMAddOnsFile|undefined>}
@@ -71,10 +72,13 @@ export async function installPrettier(
     );
 
     // build the path
-    const templatesPath = path.join(
+    let templatesPath = path.join(
       getSTORMCLIRoot(),
       'templates/STORMAddOns/prettier'
     );
+
+    if (platform() === 'win32')
+      templatesPath = normalizeWinFilePath(templatesPath);
 
     // copy template file
     await copyFile(templatesPath, projectPath, { recursive: true });

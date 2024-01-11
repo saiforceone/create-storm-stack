@@ -27,6 +27,7 @@ import {
   destinationPathExists,
   getProjectConfig,
   getProjectPkg,
+  normalizeWinFilePath,
   writeProjectConfigData,
 } from './fileUtils.js';
 import { ConsoleLogger } from './consoleLogger.js';
@@ -41,6 +42,7 @@ import STORMProjectScript = STORMStackCLI.STORMProjectScript;
 
 // Import the Locale manager so that localized strings will be used
 import { LocaleManager } from '../cliHelpers/localeManager.js';
+import { platform } from 'os';
 
 /**
  * @function setupProjectDir
@@ -54,7 +56,8 @@ export async function setupProjectDir(
   const output = buildScaffoldOutput();
   try {
     // 0. check that the destination does not already exist
-    const targetPath = path.join(process.cwd(), projectName);
+    let targetPath = path.join(process.cwd(), projectName);
+    if (platform() === 'win32') targetPath = normalizeWinFilePath(targetPath);
 
     // 1. check the destination
     if (await destinationPathExists(targetPath)) {
@@ -109,10 +112,13 @@ export async function setupVirtualEnv(
     // 3. load flask dependencies and install them
     const currentUrl = import.meta.url;
 
-    const stormStackCoreDepsPath = path.resolve(
+    let stormStackCoreDepsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       PATH_CONSTANTS.FILE_WEB_APP_CORE_DEPS
     );
+
+    if (platform() === 'win32')
+      stormStackCoreDepsPath = normalizeWinFilePath(stormStackCoreDepsPath);
 
     // read the file contents
     const pkgFile = await readFile(stormStackCoreDepsPath, {
@@ -165,10 +171,13 @@ export async function copyWebTemplateFiles(
     const normalizedPath = path.normalize(new URL(currentPath).pathname);
 
     // 2. copy core files
-    const coreAppFilesPath = path.resolve(
+    let coreAppFilesPath = path.resolve(
       normalizedPath,
       PATH_CONSTANTS.PATH_WEB_APP_CORE_TEMPLATE
     );
+
+    if (platform() === 'win32')
+      coreAppFilesPath = normalizeWinFilePath(coreAppFilesPath);
 
     if (verboseLogs)
       ConsoleLogger.printLog(LocaleData.backend.info.COPY_CORE_FILES);
@@ -187,10 +196,13 @@ export async function copyWebTemplateFiles(
       PATH_CONSTANTS.PATH_WEB_BASE_TEMPLATE
     );
 
-    const appTemplateDestPath = path.join(
+    let appTemplateDestPath = path.join(
       projectPath,
       PATH_CONSTANTS.DIR_NAME_TEMPLATES
     );
+
+    if (platform() === 'win32')
+      appTemplateDestPath = normalizeWinFilePath(appTemplateDestPath);
 
     if (verboseLogs)
       ConsoleLogger.printLog(LocaleData.backend.info.COPY_BASE_TEMPLATE);
@@ -209,10 +221,13 @@ export async function copyWebTemplateFiles(
       PATH_CONSTANTS.PATH_VITE_HMR_TAGS
     );
 
-    const supportFilesDestPath = path.join(
+    let supportFilesDestPath = path.join(
       projectPath,
       PATH_CONSTANTS.DIR_NAME_SUPPORT
     );
+
+    if (platform() === 'win32')
+      supportFilesDestPath = normalizeWinFilePath(supportFilesTemplatePath);
 
     if (verboseLogs)
       ConsoleLogger.printLog(LocaleData.backend.info.COPY_SUPPORT_FILES);
@@ -257,10 +272,13 @@ export async function setupBaseFrontend(
     // 1. load and install dependencies
     const currentUrl = import.meta.url;
 
-    const viteDepsFilePath = path.resolve(
+    let viteDepsFilePath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       PATH_CONSTANTS.FILE_FRONTEND_CORE_DEPS
     );
+
+    if (platform() === 'win32')
+      viteDepsFilePath = normalizeWinFilePath(viteDepsFilePath);
 
     const viteDepsFile = await readFile(viteDepsFilePath, {
       encoding: 'utf-8',
@@ -309,10 +327,13 @@ export async function setupFrontend(
   try {
     // load frontend dependencies file
     const currentPath = import.meta.url;
-    const frontendDepsPath = path.resolve(
+    let frontendDepsPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
       PATH_CONSTANTS.FILE_FRONTEND_MAIN_DEPS
     );
+
+    if (platform() === 'win32')
+      frontendDepsPath = normalizeWinFilePath(frontendDepsPath);
 
     // 2. determine which fronted to install
     const frontendDepsFile = await readFile(frontendDepsPath, {
@@ -377,13 +398,17 @@ export async function copyFrontendTemplates(
     // 1. find source directory to copy from
     const currentPath = import.meta.url;
 
-    const frontendTemplatesPath = path.resolve(
+    let frontendTemplatesPath = path.resolve(
       path.normalize(new URL(currentPath).pathname),
       PATH_CONSTANTS.PATH_FRONTEND_TEMPLATES,
       frontend
     );
 
-    const targetPath = path.join(projectPath, `storm_fe_${frontend}`, 'src');
+    if (platform() === 'win32')
+      frontendTemplatesPath = normalizeWinFilePath(frontendTemplatesPath);
+
+    let targetPath = path.join(projectPath, `storm_fe_${frontend}`, 'src');
+    if (platform() === 'win32') targetPath = normalizeWinFilePath(targetPath);
 
     if (verbose)
       ConsoleLogger.printLog(
@@ -427,12 +452,15 @@ export async function copyFrontendResources(
     // 1. get path to frontend resources
     const currentURL = import.meta.url;
 
-    const feResourcesPath = path.resolve(
+    let feResourcesPath = path.resolve(
       path.normalize(new URL(currentURL).pathname),
       '../../../',
       'templates/STORMProjectResources',
       scaffoldOpts.frontend
     );
+
+    if (platform() === 'win32')
+      feResourcesPath = normalizeWinFilePath(feResourcesPath);
 
     // 2. copy all the files
     await copy(feResourcesPath, projectPath, { recursive: true });
@@ -482,10 +510,12 @@ export async function updateProjectConfiguration(
 
     // read config file and then get the relevant config data
     const currentUrl = import.meta.url;
-    const configPath = path.resolve(
+    let configPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       PATH_CONSTANTS.FILE_FRONTEND_CONFIGS
     );
+
+    if (platform() === 'win32') configPath = normalizeWinFilePath(configPath);
 
     const data = await readFile(configPath, { encoding: 'utf-8' });
     const feConfigData = JSON.parse(data) as STORMFrontendOptFile;
@@ -500,8 +530,15 @@ export async function updateProjectConfiguration(
     configData.frontendBasePath =
       feConfigData[scaffoldOptions.frontend].basePath;
 
+    let configDestPath = path.join(
+      projectPath,
+      PATH_CONSTANTS.DIR_NAME_FE_CONFIG
+    );
+    if (platform() === 'win32')
+      configDestPath = normalizeWinFilePath(configDestPath);
+
     const configWriteResult = await writeProjectConfigData(
-      path.join(projectPath, PATH_CONSTANTS.DIR_NAME_FE_CONFIG),
+      configDestPath,
       PATH_CONSTANTS.FILE_FE_APP_CONFIG,
       JSON.stringify(configData, null, 2)
     );
@@ -597,10 +634,13 @@ export async function buildInitialEnvAtDest(
   const verbose = scaffoldOpts.loggerMode === 'verbose';
   try {
     if (verbose) ConsoleLogger.printLog(LocaleData.cli.info.WRITE_ENV_DATA);
-    const envExamplePath = path.resolve(
+    let envExamplePath = path.resolve(
       projectPath,
       PATH_CONSTANTS.FILE_ENV_EXAMPLE
     );
+
+    if (platform() === 'win32')
+      envExamplePath = normalizeWinFilePath(envExamplePath);
 
     const projectConfig = await getProjectConfig(projectPath);
 
@@ -636,7 +676,10 @@ export async function buildInitialEnvAtDest(
       envData += `${key}=${parsedEnv[key]}\n`;
     });
 
-    const envDestination = path.join(projectPath, PATH_CONSTANTS.FILE_ENV);
+    let envDestination = path.join(projectPath, PATH_CONSTANTS.FILE_ENV);
+
+    if (platform() === 'win32')
+      envDestination = normalizeWinFilePath(envDestination);
 
     // write to destination
     await writeFile(envDestination, envData);
@@ -664,9 +707,11 @@ export async function renameFilesAtDest(
 
   try {
     // rename _dist to dist at destination
-    const oldDistPath = path.resolve(projectPath, 'static', '_dist');
+    let oldDistPath = path.resolve(projectPath, 'static', '_dist');
+    if (platform() === 'win32') oldDistPath = normalizeWinFilePath(oldDistPath);
 
-    const distPath = path.join(projectPath, 'static', 'dist');
+    let distPath = path.join(projectPath, 'static', 'dist');
+    if (platform() === 'win32') distPath = normalizeWinFilePath(distPath);
 
     await rename(oldDistPath, distPath);
 
@@ -676,7 +721,9 @@ export async function renameFilesAtDest(
       '.gitignore.template'
     );
 
-    const gitIgnorePath = path.join(projectPath, '.gitignore');
+    let gitIgnorePath = path.join(projectPath, '.gitignore');
+    if (platform() === 'win32')
+      gitIgnorePath = normalizeWinFilePath(gitIgnorePath);
 
     await rename(ignoreTemplateFilePath, gitIgnorePath);
 

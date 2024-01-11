@@ -13,6 +13,7 @@ import { buildScaffoldOutput } from './generalUtils.js';
 import STORMProjectPkgFile = STORMStackCLI.STORMProjectPkgFile;
 import { PATH_CONSTANTS } from '../constants/pathConstants.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
+import { platform } from 'os';
 
 /**
  * @async
@@ -50,11 +51,14 @@ export async function getProjectConfig(
 ): Promise<STORMConfigFile | undefined> {
   try {
     // 1. try to load config file
-    const configFilePath = path.resolve(
+    let configFilePath = path.resolve(
       projectRoot,
       'storm_config',
       'storm_config.json'
     );
+
+    if (platform() === 'win32')
+      configFilePath = normalizeWinFilePath(configFilePath);
 
     const configFileData = await readFile(configFilePath, {
       encoding: 'utf-8',
@@ -89,7 +93,8 @@ export async function getProjectPkg(
   projectPath: string
 ): Promise<STORMProjectPkgFile | undefined> {
   try {
-    const pkgFilePath = path.resolve(projectPath, 'package.json');
+    let pkgFilePath = path.resolve(projectPath, 'package.json');
+    if (platform() === 'win32') pkgFilePath = normalizeWinFilePath(pkgFilePath);
     const pkgFileData = await readFile(pkgFilePath, { encoding: 'utf-8' });
     return JSON.parse(pkgFileData) as STORMProjectPkgFile;
   } catch (e) {
@@ -113,7 +118,8 @@ export async function writeProjectConfigData(
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
-    const targetPath = path.resolve(destinationRoot, targetFile);
+    let targetPath = path.resolve(destinationRoot, targetFile);
+    if (platform() === 'win32') targetPath = normalizeWinFilePath(targetPath);
 
     await writeFile(targetPath, data);
     output.message =
@@ -134,5 +140,15 @@ export async function writeProjectConfigData(
  */
 export function getSTORMCLIRoot(): string {
   const currentUrl = import.meta.url;
-  return path.resolve(new URL(currentUrl).pathname, '../../../');
+  let cliRoot = path.resolve(new URL(currentUrl).pathname, '../../../');
+  if (platform() === 'win32') cliRoot = normalizeWinFilePath(cliRoot);
+  return cliRoot;
+}
+
+/**
+ * @description Helper function that fixes Windows file paths. Not needed for Posix
+ * @param {string} filePath
+ */
+export function normalizeWinFilePath(filePath: string) {
+  return filePath.replace(/^([A-Z]:\\)([A-Z]:\\)/i, '$2');
 }

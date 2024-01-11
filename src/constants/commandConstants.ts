@@ -12,11 +12,20 @@ export const COMMAND_CONSTANTS = {
   CMD_GIT_INIT: 'git init',
   CMD_NPM_RUN_STORM_DEV:
     'concurrently -c auto --names st🌀rm-be,st🌀rm-fe,st🌀rm-tw "PYTHONUNBUFFERED=1 exec uvicorn app:app --reload --port 5000" "npm run vite-dev" "npm run tw-dev"',
+  CMD_NPM_RUN_STORM_DEV_WIN:
+    'concurrently -c auto --names st🌀rm-be,st🌀rm-fe,st🌀rm-tw "py uvicorn app:app --reload --port 5000" "npm run vite-dev" "npm run tw-dev"',
 } as const;
 
 export const PKG_SCRIPTS: STORMProjectScript[] = [
   {
     name: 'storm-dev',
     command: COMMAND_CONSTANTS.CMD_NPM_RUN_STORM_DEV,
+  },
+];
+
+export const PKG_SCRIPTS_WINDOWS: STORMProjectScript[] = [
+  {
+    name: 'storm-dev',
+    command: '',
   },
 ];
