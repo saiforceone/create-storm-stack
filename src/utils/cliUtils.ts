@@ -704,6 +704,9 @@ async function checkPythonVersion(): Promise<STORMCommandExecStatus> {
   let command;
   const targetPlatform = platform();
   switch (targetPlatform) {
+    case 'win32':
+      command = 'py -V';
+      break;
     case 'linux':
       command = 'python3 -V';
       break;
