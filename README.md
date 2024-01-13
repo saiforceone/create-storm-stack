@@ -18,7 +18,7 @@ support currently.
 
 * ✅ Linux (Ubuntu 22.04+) 
 * ✅ MacOS 
-* ⚠️ Windows (not tested, yet...)
+* ✅ Windows (Powershell or Gitbash works fine)
 
 ## The Main Stack
 
