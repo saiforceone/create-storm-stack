@@ -18,7 +18,7 @@ export default defineConfig({
   root: path.resolve(`${stormConfig.frontendBasePath}`),
   base: '/static/',
   server: {
-    host: 'localhost',
+    host: '127.0.0.1',
     port: stormConfig ? stormConfig.vitePort : 3003,
     open: false,
     watch: {

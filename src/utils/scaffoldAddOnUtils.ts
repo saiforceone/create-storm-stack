@@ -13,8 +13,9 @@ import STORMAddOnsFile = STORMStackCLI.STORMAddOnsFile;
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from './generalUtils.js';
 import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
-import { getSTORMCLIRoot } from './fileUtils.js';
+import { getSTORMCLIRoot, normalizeWinFilePath } from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
+import { platform } from 'os';
 
 /**
  * @returns {Promise<STORMAddOnsFile|undefined>}
@@ -24,12 +25,14 @@ import { LocaleManager } from '../cliHelpers/localeManager.js';
 async function getAddOnsFile(): Promise<STORMAddOnsFile | undefined> {
   try {
     const currentUrl = import.meta.url;
-    const addOnsPath = path.resolve(
+    let addOnsPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       '../../../',
       'configs',
       'addOnDependencies.json'
     );
+
+    if (platform() === 'win32') addOnsPath = normalizeWinFilePath(addOnsPath);
 
     const fileData = await readFile(addOnsPath, { encoding: 'utf-8' });
     return JSON.parse(fileData) as STORMAddOnsFile;
@@ -71,10 +74,13 @@ export async function installPrettier(
     );
 
     // build the path
-    const templatesPath = path.join(
+    let templatesPath = path.join(
       getSTORMCLIRoot(),
       'templates/STORMAddOns/prettier'
     );
+
+    if (platform() === 'win32')
+      templatesPath = normalizeWinFilePath(templatesPath);
 
     // copy template file
     await copyFile(templatesPath, projectPath, { recursive: true });

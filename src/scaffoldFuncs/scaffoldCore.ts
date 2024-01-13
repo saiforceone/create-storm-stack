@@ -8,11 +8,13 @@ import path from 'node:path';
 import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
+import { platform } from 'os';
 import {
   copyWebTemplateFiles,
   setupProjectDir,
   setupVirtualEnv,
 } from '../utils/scaffoldUtils.js';
+import { normalizeWinFilePath } from '../utils/fileUtils.js';
 
 /**
  * @async
@@ -36,7 +38,8 @@ export async function scaffoldCore(
     }
 
     // 2. Environment initialization and Starlette installation
-    const projectPath = path.join(process.cwd(), scaffoldOptions.projectName);
+    let projectPath = path.join(process.cwd(), scaffoldOptions.projectName);
+    if (platform() === 'win32') projectPath = normalizeWinFilePath(projectPath);
 
     const envInitResult = await setupVirtualEnv(
       projectPath,

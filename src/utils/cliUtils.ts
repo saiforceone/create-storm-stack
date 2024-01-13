@@ -18,7 +18,11 @@ import { platform } from 'os';
 
 // ST🌀RM Stack imports
 import { ConsoleLogger } from './consoleLogger.js';
-import { getProjectConfig, getSTORMCLIRoot } from './fileUtils.js';
+import {
+  getProjectConfig,
+  getSTORMCLIRoot,
+  normalizeWinFilePath,
+} from './fileUtils.js';
 import { LocaleManager } from '../cliHelpers/localeManager.js';
 import { buildScaffoldOutput, titleCase } from './generalUtils.js';
 import STORMProjectPkgFile = STORMStackCLI.STORMProjectPkgFile;
@@ -52,11 +56,13 @@ const FRONTEND_COMPONENT_EXT: Record<FrontendOpt, string> = {
 export async function getCLIVersion(): Promise<string | undefined> {
   try {
     const currentUrl = import.meta.url;
-    const pkgPath = path.resolve(
+    let pkgPath = path.resolve(
       path.normalize(new URL(currentUrl).pathname),
       '../../../',
       'package.json'
     );
+
+    if (platform() === 'win32') pkgPath = normalizeWinFilePath(pkgPath);
 
     const pkgData = await readFile(pkgPath, {
       encoding: 'utf-8',
@@ -79,7 +85,9 @@ export async function getCLIVersion(): Promise<string | undefined> {
 export async function loadLocaleFile(locale: string) {
   try {
     const cliRoot = getSTORMCLIRoot();
-    const localeFilePath = path.resolve(cliRoot, `locales/${locale}.json`);
+    let localeFilePath = path.resolve(cliRoot, `locales/${locale}.json`);
+    if (platform() === 'win32')
+      localeFilePath = normalizeWinFilePath(localeFilePath);
     const localeFileData = await readFile(localeFilePath, {
       encoding: 'utf-8',
     });
@@ -108,11 +116,13 @@ export async function checkSTORMProject(
 
   try {
     // read the JSON config file
-    const configPath = path.resolve(
+    let configPath = path.resolve(
       projectDir,
       'storm_config',
       'storm_config.json'
     );
+
+    if (platform() === 'win32') configPath = normalizeWinFilePath(configPath);
 
     const configData = await readFile(configPath, { encoding: 'utf-8' });
     const parsedConfig = JSON.parse(configData) as STORMConfigFile;
@@ -146,8 +156,6 @@ export async function checkSTORMProject(
     return output;
   }
 }
-
-// async function generateModuleRoutes(): Promise<ScaffoldOutput> {}
 
 /**
  * @async
@@ -207,10 +215,13 @@ async function updateSTORMModuleRouteAutoImports(
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
-    const autoImportPath = path.resolve(
+    let autoImportPath = path.resolve(
       process.cwd(),
       `storm_controllers/__init__.py`
     );
+
+    if (platform() === 'win32')
+      autoImportPath = normalizeWinFilePath(autoImportPath);
     // append to the file
     const autoImportData = `from .${controllerName}_controller import ${titleCase(
       controllerName
@@ -272,7 +283,9 @@ class ${titleCase(modelName)}(me.Document):
  */
 async function getSTORMModules(): Promise<STORMModulesFile | undefined> {
   try {
-    const modulesFilePath = path.resolve(process.cwd(), STORM_MODULES_PATH);
+    let modulesFilePath = path.resolve(process.cwd(), STORM_MODULES_PATH);
+    if (platform() === 'win32')
+      modulesFilePath = normalizeWinFilePath(modulesFilePath);
     const modulesFileStringData = await readFile(modulesFilePath, {
       encoding: 'utf-8',
     });
@@ -293,7 +306,8 @@ async function writeSTORMModulesFile(
 ): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
   try {
-    const targetPath = path.resolve(process.cwd(), STORM_MODULES_PATH);
+    let targetPath = path.resolve(process.cwd(), STORM_MODULES_PATH);
+    if (platform() === 'win32') targetPath = normalizeWinFilePath(targetPath);
     stormModulesFile.lastUpdated = new Date().toISOString();
     const dataToWrite = JSON.stringify(stormModulesFile, undefined, 2);
     await writeFile(targetPath, dataToWrite);
@@ -365,10 +379,14 @@ ${controllerRoutesString}
 ]
 `;
     // write to file replacing contents
-    const targetFilePath = path.resolve(
+    let targetFilePath = path.resolve(
       process.cwd(),
       'storm_routes/__init__.py'
     );
+
+    if (platform() === 'win32')
+      targetFilePath = normalizeWinFilePath(targetFilePath);
+
     await writeFile(targetFilePath, routesString);
 
     output.success = true;
@@ -410,12 +428,14 @@ async function buildSTORMFrontendComponents(
     }
 
     const feFolder = `storm_fe_${stormConfig.frontend}`;
-    const feBasePath = path.resolve(
+    let feBasePath = path.resolve(
       process.cwd(),
       feFolder,
       'src/pages',
       titleCase(pluralizedModuleName)
     );
+
+    if (platform() === 'win32') feBasePath = normalizeWinFilePath(feBasePath);
 
     // create folder
     await mkdir(feBasePath);
@@ -448,7 +468,9 @@ async function buildSTORMFrontendComponents(
             page.componentPath,
             module.controller
           );
-      const pageFilePath = path.resolve(feBasePath, fileName);
+      let pageFilePath = path.resolve(feBasePath, fileName);
+      if (platform() === 'win32')
+        pageFilePath = normalizeWinFilePath(pageFilePath);
       await writeFile(pageFilePath, pageData);
       ConsoleLogger.printCLIProcessSuccessMessage({
         message: localeData.advCli.success.CREATE_FE_COMPONENT,
@@ -682,6 +704,9 @@ async function checkPythonVersion(): Promise<STORMCommandExecStatus> {
   let command;
   const targetPlatform = platform();
   switch (targetPlatform) {
+    case 'win32':
+      command = 'py -V';
+      break;
     case 'linux':
       command = 'python3 -V';
       break;

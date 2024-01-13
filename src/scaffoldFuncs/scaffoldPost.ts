@@ -14,7 +14,11 @@ import {
   updateProjectPkgFile,
   writeScriptUpdates,
 } from '../utils/scaffoldUtils.js';
-import { PKG_SCRIPTS } from '../constants/commandConstants.js';
+import {
+  PKG_SCRIPTS,
+  PKG_SCRIPTS_WINDOWS,
+} from '../constants/commandConstants.js';
+import { platform } from 'os';
 
 /**
  * @function scaffoldPost
@@ -51,7 +55,7 @@ export async function scaffoldPost(
     // write pkg script updates
     const writePkgScriptsResult = await writeScriptUpdates(
       process.cwd(),
-      PKG_SCRIPTS
+      platform() === 'win32' ? PKG_SCRIPTS_WINDOWS : PKG_SCRIPTS
     );
 
     if (!writePkgScriptsResult.success) {
