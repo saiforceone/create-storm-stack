@@ -5,7 +5,7 @@ We believe that using S.T.🌀.R.M will be a breeze 🙃
 
 ## Requirements
 
-The S.T.🌀.R.M stack has a few basic requirements to get you started which are shown below
+The S.T.🌀.R.M stack has a few core requirements shown below
 
 * [Python 3.8+](https://www.python.org/)
 * [NodeJs 18.x](https://nodejs.org/en)
@@ -18,7 +18,7 @@ support currently.
 
 * ✅ Linux (Ubuntu 22.04+) 
 * ✅ MacOS 
-* ✅ Windows (Powershell or Gitbash works fine)
+* ✅ Windows
 
 ## The Main Stack
 
@@ -29,8 +29,9 @@ support currently.
 
 ## Things to keep in mind
 
-- This is an early version of the CLI and things won't be exciting yet
+- This is an early version of the CLI and things may change in future versions
 - Some things might not work properly with later versions or Python
+- When running on windows, it is better to use `Powershell` or `Gitbash` when running `storm-dev` via `npm`
 
 ## Creating your first S.T.🌀.R.M Stack project
 
@@ -51,11 +52,12 @@ Once completed, the instructions for running the project will be printed out.
 * ⛔ my storm project
 
 ### Running your project
+Activate the virtual environment
 ```shell
-# activate the virtual environment
 pipenv shell
-
-# run the project
+```
+Run the project
+```shell
 npm run storm-dev
 ```
 
@@ -86,6 +88,17 @@ npx create-storm-stack@latest makeModule --name <module_name> [--plural <plurali
 * `--plural <pluralized_module_name>`: optionally specifies the pluralized name of the module. Setting this will make API endpoints and frontend paths more REST-like
 * `--controllerOnly`: optionally specifies if the creation of frontend components should be skipped for the module being created
 
+#### Examples of module creation
+Here are a few examples to get you started with creating your own modules
+
+**Example of making a normal module**
+```shell
+npx create-storm-stack@latest makeModule --name biscuit --plural biscuits
+```
+**Example of making an api-only module**
+```shell
+npx create-storm-stack@latest makeModule --name lemon --plural lemons --controllerOnly
+```
 #### Accessing your newly-created module
 
 When a module is created, your can access the corresponding api endpoint at `http://127.0.0.1:5000/api/<module_name>` or `http://127.0.0.1:5000/api/<pluralized_module_name>`
