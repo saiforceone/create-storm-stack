@@ -113,7 +113,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
 
         // 2. Scaffold Add-ons
         const addOns = buildAddOns(cliAnswers);
-        await installScaffoldAddOns(addOns, cliAnswers.loggerMode);
+        await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
 
         // Git
         if (cliAnswers.enableGit) {

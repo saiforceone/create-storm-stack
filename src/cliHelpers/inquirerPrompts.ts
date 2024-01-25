@@ -9,6 +9,7 @@ import type { QuestionCollection } from 'inquirer';
 // ST🌀RM Stack Imports
 import { validateProjectOrModuleName } from '../utils/generalUtils.js';
 import { LocaleManager } from './localeManager.js';
+import inquirer from "inquirer";
 
 /**
  * @function getCLIPrompts
@@ -42,6 +43,23 @@ export function getCLIPrompts(): QuestionCollection {
       name: 'installPrettier',
       type: 'confirm',
       default: false,
+    },
+    // Optional ST🌀RM add-ons
+    {
+      message: `Select ST🌀RM Add Ons`,
+      name: 'stormAddons',
+      type: 'checkbox',
+      choices: [
+        {
+          name: 'Prettier (code style)',
+          value: 'prettier',
+        },
+        new inquirer.Separator(),
+        {
+          name: 'Sentry (logging)',
+          value: 'sentry',
+        },
+      ]
     },
     // GIT option
     {

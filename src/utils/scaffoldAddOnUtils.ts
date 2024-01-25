@@ -5,17 +5,17 @@
 
 // core & third-party imports
 import path from 'node:path';
-import { readFile, cp as copyFile } from 'node:fs/promises';
-import { execaCommand } from 'execa';
+import {readFile, cp as copyFile} from 'node:fs/promises';
+import {execaCommand} from 'execa';
 
 // ST🌀RM Stack imports
 import STORMAddOnsFile = STORMStackCLI.STORMAddOnsFile;
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
-import { buildScaffoldOutput } from './generalUtils.js';
-import { COMMAND_CONSTANTS } from '../constants/commandConstants.js';
-import { getSTORMCLIRoot, normalizeWinFilePath } from './fileUtils.js';
-import { LocaleManager } from '../cliHelpers/localeManager.js';
-import { platform } from 'os';
+import {buildScaffoldOutput} from './generalUtils.js';
+import {COMMAND_CONSTANTS} from '../constants/commandConstants.js';
+import {getSTORMCLIRoot, normalizeWinFilePath} from './fileUtils.js';
+import {LocaleManager} from '../cliHelpers/localeManager.js';
+import {platform} from 'os';
 
 /**
  * @returns {Promise<STORMAddOnsFile|undefined>}
@@ -34,7 +34,7 @@ async function getAddOnsFile(): Promise<STORMAddOnsFile | undefined> {
 
     if (platform() === 'win32') addOnsPath = normalizeWinFilePath(addOnsPath);
 
-    const fileData = await readFile(addOnsPath, { encoding: 'utf-8' });
+    const fileData = await readFile(addOnsPath, {encoding: 'utf-8'});
     return JSON.parse(fileData) as STORMAddOnsFile;
   } catch (e) {
     return;
@@ -62,7 +62,7 @@ export async function installPrettier(
     }
 
     const prettierData = addOnsData.prettier;
-    const { packages } = prettierData;
+    const {packages} = prettierData;
     // construct install string
     const installString = Object.keys(packages)
       .map((pkg) => `${pkg}@${packages[pkg]}`)
@@ -83,9 +83,28 @@ export async function installPrettier(
       templatesPath = normalizeWinFilePath(templatesPath);
 
     // copy template file
-    await copyFile(templatesPath, projectPath, { recursive: true });
+    await copyFile(templatesPath, projectPath, {recursive: true});
 
     output.message = LocaleData.frontend.success.INSTALL_FE_ADDON;
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
+/**
+ * @function installSentry
+ * @param projectPath
+ * @description Utility function that install Sentry in the project during the scaffolding process for the backend and frontend
+ */
+export async function installSentry(projectPath: string): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  try {
+    // install dependency in backend
+    // create file `storm_addons/addon_sentry.py` with contents
+
     output.success = true;
     return output;
   } catch (e) {

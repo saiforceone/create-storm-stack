@@ -36,6 +36,7 @@ declare namespace STORMStackCLI {
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
     installPrettier: boolean;
+    stormAddons: STORMAddOn[];
     enableGit: boolean;
   };
 
@@ -87,7 +88,7 @@ declare namespace STORMStackCLI {
   export type STORMFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
 
   // STORM stack addon
-  export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest';
+  export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest' | 'sentry';
 
   export type STORMAddOnsStructure = {
     packages: Record<string, string>;

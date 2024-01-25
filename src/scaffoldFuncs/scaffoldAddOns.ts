@@ -5,7 +5,7 @@
  */
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import { buildScaffoldOutput } from '../utils/generalUtils.js';
-import { installPrettier } from '../utils/scaffoldAddOnUtils.js';
+import { installPrettier, installSentry } from '../utils/scaffoldAddOnUtils.js';
 import STORMAddOn = STORMStackCLI.STORMAddOn;
 import LoggerMode = STORMStackCLI.LoggerMode;
 import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
@@ -17,6 +17,8 @@ function buildDummyOutput() {
   output.message = 'Not implemented';
   return output;
 }
+
+
 
 /**
  * @description "object literal" to handle getting functions to install add ons
@@ -36,12 +38,17 @@ export function scaffoldAddOns(stormAddOn: STORMAddOn) {
     vitetest: async function () {
       return buildDummyOutput();
     },
+    sentry: async function() {
+      return await installSentry(process.cwd());
+    }
   };
 
   return addOnInstallOpts[stormAddOn];
 }
 
 /**
+ * // todo: remove this once installing addons via other prompt works properly
+ * @deprecated
  * @function buildAddOns
  * @param scaffoldOpts
  * @description Helper function that returns a list of ST🌀RM Stack addons based on
@@ -50,7 +57,7 @@ export function scaffoldAddOns(stormAddOn: STORMAddOn) {
 export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STORMAddOn> {
   const addOnsList: Array<STORMAddOn> = [];
 
-  if (scaffoldOpts.installPrettier) addOnsList.push('prettier');
+  if (scaffoldOpts.installPrettier) addOnsList.push('prettier')
 
   return addOnsList;
 }
