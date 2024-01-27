@@ -44,6 +44,7 @@ export function getCLIPrompts(): QuestionCollection {
       type: 'confirm',
       default: false,
     },
+    // Optional ST🌀RM Code Quality add-ons
     // Optional ST🌀RM add-ons
     {
       message: `Select ST🌀RM Add Ons`,

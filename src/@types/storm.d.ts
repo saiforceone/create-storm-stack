@@ -90,6 +90,15 @@ declare namespace STORMStackCLI {
   // STORM stack addon
   export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest' | 'sentry';
 
+  // STORM Code quality Addon options
+  export type STORMCodeQualityAddon = 'prettier' | 'eslint' | 'pycodestyle';
+
+  // STORM Frontend Addon options
+  export type STORMFEAddon = 'storybook' | 'vitest';
+
+  // STORM Backend Addon options
+  export type STORMBEAddon = 'sentry' | 'vercel';
+
   export type STORMAddOnsStructure = {
     packages: Record<string, string>;
   };
@@ -296,4 +305,9 @@ declare namespace STORMStackCLI {
     message: string;
     detail?: string;
   };
+
+  /**
+   * Represents a STORM/Tempest Backend addons file
+   */
+  export type STORMBackendAddonsFile = Record<STORMBEAddon, STORMPackageFile>;
 }
