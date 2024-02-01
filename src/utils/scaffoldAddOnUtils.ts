@@ -5,7 +5,7 @@
 
 // core & third-party imports
 import path from 'node:path';
-import {readFile, cp as copyFile} from 'node:fs/promises';
+import {readFile, cp as copyFile, appendFile} from 'node:fs/promises';
 import {execaCommand} from 'execa';
 
 // ST🌀RM Stack imports
@@ -16,6 +16,8 @@ import {COMMAND_CONSTANTS} from '../constants/commandConstants.js';
 import {getSTORMCLIRoot, normalizeWinFilePath} from './fileUtils.js';
 import {LocaleManager} from '../cliHelpers/localeManager.js';
 import {platform} from 'os';
+import {PATH_CONSTANTS} from "../constants/pathConstants.js";
+import STORMBackendAddonsFile = STORMStackCLI.STORMBackendAddonsFile;
 
 /**
  * @returns {Promise<STORMAddOnsFile|undefined>}
@@ -94,16 +96,99 @@ export async function installPrettier(
   }
 }
 
+
+/**
+ *
+ * @param currentUrl
+ * @param isWindows
+ * @param projectPath
+ */
+async function installSentryForBackend(currentUrl: string, isWindows: boolean, projectPath: string): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  try {
+
+    let webCoreAddonsPath = path.resolve(
+      new URL(currentUrl).pathname,
+      PATH_CONSTANTS.PATH_WEB_CORE_ADDONS
+    );
+
+    if (isWindows)
+      webCoreAddonsPath = normalizeWinFilePath(webCoreAddonsPath);
+
+    // read file
+    const fileDataString = await readFile(webCoreAddonsPath, {encoding: 'utf-8'});
+    const webCoreAddonsData = JSON.parse(fileDataString) as STORMBackendAddonsFile;
+    const sentryPkg = webCoreAddonsData.sentry.packages;
+    const installString = `${COMMAND_CONSTANTS.CMD_PIPENV_INSTALL} ${Object.keys(sentryPkg).map(s => `${s}`).join(' ')}`
+
+
+    // install dependency in backend
+    await execaCommand(installString)
+
+    // copy file `storm_addons/addon_sentry.py` with contents
+    let sentryAddonTemplatePath = path.resolve(
+      new URL(currentUrl).pathname,
+      PATH_CONSTANTS.PATH_STORM_ADDONS,
+      'sentry',
+      'addon_sentry.py',
+    );
+
+    if (isWindows)
+      sentryAddonTemplatePath = normalizeWinFilePath(sentryAddonTemplatePath);
+
+    let stormProjectAddonsPath = path.resolve(
+      projectPath,
+      'storm_addons',
+      'addon_sentry.py'
+    );
+
+    if (isWindows)
+      stormProjectAddonsPath = normalizeWinFilePath(stormProjectAddonsPath);
+
+    // copy addons file to destination
+    await copyFile(sentryAddonTemplatePath, stormProjectAddonsPath);
+
+    // update contents of storm_addons/__init__.py
+    let stormAddonsAutoloadPath = path.resolve(
+      projectPath,
+      'storm_addons',
+      '__init__.py',
+    );
+
+    if (isWindows) stormAddonsAutoloadPath = normalizeWinFilePath(stormAddonsAutoloadPath);
+
+    await appendFile(stormAddonsAutoloadPath, `from . import addons_sentry\n`);
+    output.success = true;
+    return output;
+  } catch (e) {
+
+    output.message = (e as Error).message;
+    return output;
+  }
+}
+
 /**
  * @function installSentry
  * @param projectPath
- * @description Utility function that install Sentry in the project during the scaffolding process for the backend and frontend
+ * @description Utility function that install Sentry in the project during the scaffolding process for the
+ * backend and frontend
  */
 export async function installSentry(projectPath: string): Promise<ScaffoldOutput> {
   const output = buildScaffoldOutput();
+  const isWindows = platform() === 'win32';
   try {
-    // install dependency in backend
-    // create file `storm_addons/addon_sentry.py` with contents
+
+    const currentUrl = import.meta.url;
+
+    // install sentry for backend
+    const installBEResult = await installSentryForBackend(currentUrl, isWindows, projectPath);
+
+    if (!installBEResult.success) {
+      output.message = installBEResult.message;
+      return output;
+    }
+
+    // install dependency in frontend
 
     output.success = true;
     return output;

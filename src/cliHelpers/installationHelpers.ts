@@ -71,6 +71,10 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
           prettierSpinner.succeed();
         }
 
+        if (cliAnswers.stormAddons.length) {
+          await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        }
+
         if (cliAnswers.enableGit) {
           const gitSpinner = ora(
             `${LocaleData.backend.info.ENABLE_GIT}`
@@ -114,6 +118,11 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         // 2. Scaffold Add-ons
         const addOns = buildAddOns(cliAnswers);
         await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+
+        // add-ons
+        if (cliAnswers.stormAddons.length) {
+          await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        }
 
         // Git
         if (cliAnswers.enableGit) {

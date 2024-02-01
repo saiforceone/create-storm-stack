@@ -14,6 +14,8 @@ export const PATH_CONSTANTS = {
   FILE_WEB_APP_CORE_DEPS: '../../../configs/webCoreDependencies.json',
   FILE_FRONTEND_CORE_DEPS: '../../../configs/viteBaseDependencies.json',
   FILE_FRONTEND_MAIN_DEPS: '../../../configs/frontendDependencies.json',
+  PATH_STORM_ADDONS: '../../../templates/STORMAddOns',
+  PATH_WEB_CORE_ADDONS: '../../../configs/webAddonDependencies.json',
   PATH_FRONTEND_TEMPLATES: '../../../templates/STORMFrontendTemplates',
   DIR_NAME_FE_CONFIG: 'storm_config',
   FILE_FE_APP_CONFIG: 'storm_config.json',

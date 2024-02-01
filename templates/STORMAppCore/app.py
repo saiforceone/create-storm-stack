@@ -10,6 +10,10 @@ from starlette.staticfiles import StaticFiles
 from mongoengine import connect
 
 # ST🌀RM stack imports
+
+# autoload addons
+from storm_addons import *
+# import default routes and handlers
 from support.storm_handlers import storm_index, not_found_handler, internal_server_error_handler
 # your application routes should be added to the routes module below
 from storm_routes import routes
@@ -32,7 +36,7 @@ print(f"App frontend: {FRONTEND}")
 print(f"Frontend extensions enabled: {FRONTEND_EXTENSIONS}")
 
 # app routes. here we have the default routes which have our controller routes merged
-# 📝 Developer Note: Your routes can be found in strm_routes/__init__.py. This is automatically
+# 📝 Developer Note: Your routes can be found in storm_routes/__init__.py. This is automatically
 # generated when a new module is added via the CLI and so you don't need to necessarily edit this.
 app_routes = [
     # default entry points

@@ -669,6 +669,7 @@ export async function buildInitialEnvAtDest(
     parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_PORT] = String(
       projectConfig.vitePort
     );
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_SENTRY_DSN] = 'ADD-YOUR-SENTRY-DSN';
 
     // Write default database uri by itself
     parsedEnv[
