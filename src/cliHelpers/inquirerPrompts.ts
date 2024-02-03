@@ -45,24 +45,41 @@ export function getCLIPrompts(): QuestionCollection {
       default: false,
     },
     // Optional ST🌀RM Code Quality add-ons
-    // Optional ST🌀RM add-ons
     {
-      message: `Select ST🌀RM Add Ons`,
-      name: 'stormAddons',
+      message: `Select ST🌀RM Code Quality Add Ons`,
+      name: 'stormCQAddons',
       type: 'checkbox',
       choices: [
         {
           name: 'Prettier (code style)',
           value: 'prettier',
         },
-        new inquirer.Separator(),
-        {
-          name: 'Sentry (logging)',
-          value: 'sentry',
-        },
       ]
     },
-    // GIT option
+    // Optional ST🌀RM Frontend addons
+    {
+      message: `Select ST🌀RM Frontend Addons`,
+      name: 'stormFEAddons',
+      type: 'checkbox',
+      choices: [
+        {
+          name: 'Sentry (FE Logging)',
+          value: 'sentry',
+        }
+      ],
+    },
+    // Optional ST🌀RM Backend addons
+    {
+      message: 'Select ST🌀RM Backend Addons',
+      name: 'stormBEAddons',
+      type: 'checkbox',
+      choices: [
+        {
+          name: 'Sentry (BE Logging)',
+          value: 'sentry'
+        }
+      ]
+    },
     {
       message: `${localeData.cli.prompts.ENABLE_OPTION}: Git`,
       name: 'enableGit',

@@ -18,6 +18,7 @@ import {LocaleManager} from '../cliHelpers/localeManager.js';
 import {platform} from 'os';
 import {PATH_CONSTANTS} from "../constants/pathConstants.js";
 import STORMBackendAddonsFile = STORMStackCLI.STORMBackendAddonsFile;
+import FrontendOpt = STORMStackCLI.FrontendOpt;
 
 /**
  * @returns {Promise<STORMAddOnsFile|undefined>}
@@ -166,6 +167,29 @@ async function installSentryForBackend(currentUrl: string, isWindows: boolean, p
     return output;
   }
 }
+
+/**
+ * @function installSentryForFrontend
+ * @description Utility function that installs Sentry in the frontend for the frontend during the scaffolding process
+ * @param {string} projectPath the path of the scaffolded project
+ * @param {FrontendOpt} frontendOpt the frontend that Sentry should be installed for
+ */
+// export async function installSentryForFrontend(projectPath: string, frontendOpt: FrontendOpt): Promise<ScaffoldOutput> {
+//   const output = buildScaffoldOutput();
+//   const isWindows = platform() === 'win32';
+//   try {
+//
+//     const currentUrl = import.meta.url;
+//
+//
+//     output.success = true;
+//     return output;
+//   } catch (e) {
+//     output.message = (e as Error).message;
+//     return output;
+//   }
+//
+// }
 
 /**
  * @function installSentry

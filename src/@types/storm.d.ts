@@ -37,6 +37,9 @@ declare namespace STORMStackCLI {
     loggerMode: LoggerMode;
     installPrettier: boolean;
     stormAddons: STORMAddOn[];
+    stormCQAddons: STORMCodeQualityAddon[];
+    stormFEAddons: STORMFEAddon[];
+    stormBEAddons: STORMBEAddon[];
     enableGit: boolean;
   };
 
@@ -88,13 +91,14 @@ declare namespace STORMStackCLI {
   export type STORMFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
 
   // STORM stack addon
+  // todo: remove this
   export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest' | 'sentry';
 
   // STORM Code quality Addon options
   export type STORMCodeQualityAddon = 'prettier' | 'eslint' | 'pycodestyle';
 
   // STORM Frontend Addon options
-  export type STORMFEAddon = 'storybook' | 'vitest';
+  export type STORMFEAddon = 'sentry' | 'storybook' | 'vitest';
 
   // STORM Backend Addon options
   export type STORMBEAddon = 'sentry' | 'vercel';

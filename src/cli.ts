@@ -34,6 +34,7 @@ export async function cli(): Promise<void> {
 
   const cliAnswers = (await cliPrompts()) as ScaffoldOpts;
 
+  console.log(cliAnswers);
   // Execute CLI installation with options
   await execCLIInstallation(cliAnswers)();
 

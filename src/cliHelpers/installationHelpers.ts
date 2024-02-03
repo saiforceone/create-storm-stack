@@ -14,7 +14,7 @@ import { ConsoleLogger } from '../utils/consoleLogger.js';
 import { scaffoldFrontend } from '../scaffoldFuncs/scaffoldFrontend.js';
 import { scaffoldPost } from '../scaffoldFuncs/scaffoldPost.js';
 import {
-  buildAddOns,
+  buildAddOns, installBEAddons, installCQAddons, installFEAddons,
   installScaffoldAddOns,
   scaffoldAddOns,
 } from '../scaffoldFuncs/scaffoldAddOns.js';
@@ -71,8 +71,21 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
           prettierSpinner.succeed();
         }
 
-        if (cliAnswers.stormAddons.length) {
-          await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        // todo: remove this
+        // if (cliAnswers.stormAddons.length) {
+        //   await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        // }
+
+        if (cliAnswers.stormCQAddons.length) {
+          await installCQAddons(cliAnswers.stormCQAddons, cliAnswers.loggerMode);
+        }
+
+        if (cliAnswers.stormFEAddons.length) {
+          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.loggerMode);
+        }
+
+        if (cliAnswers.stormBEAddons.length) {
+          await installBEAddons(cliAnswers.stormBEAddons, cliAnswers.loggerMode);
         }
 
         if (cliAnswers.enableGit) {
@@ -116,12 +129,28 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         }
 
         // 2. Scaffold Add-ons
-        const addOns = buildAddOns(cliAnswers);
-        await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        // scaffold code quality addons
+        if (cliAnswers.stormCQAddons.length) {
+          await installCQAddons(cliAnswers.stormCQAddons, cliAnswers.loggerMode);
+        }
+
+        if (cliAnswers.stormFEAddons.length) {
+          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.loggerMode);
+        }
+
+        // scaffold frontend addons
+        // todo: remove this
+        // await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
 
         // add-ons
-        if (cliAnswers.stormAddons.length) {
-          await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        // todo: remove this as well
+        // if (cliAnswers.stormAddons.length) {
+        //   await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        // }
+
+        // scaffold backend addons
+        if (cliAnswers.stormBEAddons.length) {
+          await installBEAddons(cliAnswers.stormBEAddons, cliAnswers.loggerMode);
         }
 
         // Git
