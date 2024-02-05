@@ -7,7 +7,6 @@ import chalk from 'chalk';
 
 // ST🌀RM Stack Imports
 import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
-import { buildAddOns } from '../scaffoldFuncs/scaffoldAddOns.js';
 import { LocaleManager } from './localeManager.js';
 
 /**
@@ -18,18 +17,35 @@ import { LocaleManager } from './localeManager.js';
  */
 export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
   const LocaleData = LocaleManager.getInstance().getLocaleData();
-  const addOnsList = buildAddOns(scaffoldOpts);
 
-  const addOnsText = `
- ${chalk.underline(LocaleData.postScaffold.ADDONS_INSTALLED)}\n
+  const cqAddonsText = `
+ ${chalk.underline('Code Quality Addons')}\n
  ${
-   addOnsList.length
-     ? addOnsList.map(
-         (addOn, index) =>
-           `${chalk.bold.greenBright(index + 1 + '. ' + addOn)}\n`
-       )
-     : chalk.dim(LocaleData.postScaffold.NO_ADDONS_INSTALLED)
- }
+    scaffoldOpts.stormCQAddons.length ?
+      scaffoldOpts.stormCQAddons.map((addon, index) => 
+      `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`
+      ) : 'No code quality addons installed'
+  }
+`;
+
+  const feAddonsText = `
+ ${chalk.underline('Frontend Addons')}\n
+ ${
+    scaffoldOpts.stormFEAddons.length ?
+      scaffoldOpts.stormFEAddons.map((addon, index) =>
+      `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`  
+      ) : 'No frontend addon installed'
+  }
+`;
+
+  const beAddonsText = `
+ ${chalk.underline('Backend Addons')}\n
+ ${
+    scaffoldOpts.stormBEAddons.length ?
+      scaffoldOpts.stormBEAddons.map((addon, index) =>
+      `${index + 1 + '. ' + addon}`  
+      ) : 'No backend addon installed'
+  }
 `;
 
   console.log(`
@@ -43,7 +59,9 @@ export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
    scaffoldOpts.frontend
  )}
  
- ${addOnsText}
+ ${cqAddonsText}
+ ${feAddonsText}
+ ${beAddonsText}
   
  ${chalk.bold(LocaleData.postScaffold.headings.RUNNING_PROJECT)}\n
  1. ${LocaleData.postScaffold.instructions.NAV_TO_DIR}: ${chalk.greenBright(

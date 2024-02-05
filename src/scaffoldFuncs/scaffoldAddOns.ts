@@ -5,7 +5,7 @@
  */
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
 import {buildScaffoldOutput} from '../utils/generalUtils.js';
-import {installPrettier, installSentry} from '../utils/scaffoldAddOnUtils.js';
+import {installPrettier, installSentry, installSentryForFrontend} from '../utils/scaffoldAddOnUtils.js';
 import STORMAddOn = STORMStackCLI.STORMAddOn;
 import LoggerMode = STORMStackCLI.LoggerMode;
 import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
@@ -14,6 +14,7 @@ import {LocaleManager} from '../cliHelpers/localeManager.js';
 import STORMBEAddon = STORMStackCLI.STORMBEAddon;
 import STORMFEAddon = STORMStackCLI.STORMFEAddon;
 import STORMCodeQualityAddon = STORMStackCLI.STORMCodeQualityAddon;
+import FrontendOpt = STORMStackCLI.FrontendOpt;
 
 function buildDummyOutput() {
   const output = buildScaffoldOutput();
@@ -70,11 +71,12 @@ export function scaffoldBackendAddons(stormBEAddon: STORMBEAddon) {
  * @function scaffoldFrontendAddons
  * @description Helper function that installs frontend addons for the STORM stack
  * @param {STORMFEAddon} stormFEAddon
+ * @param {FrontendOpt} frontendOpt
  */
-export function scaffoldFrontendAddons(stormFEAddon: STORMFEAddon) {
+export function scaffoldFrontendAddons(stormFEAddon: STORMFEAddon, frontendOpt: FrontendOpt) {
   const frontendAddonInstallOpts: Record<STORMFEAddon, () => Promise<ScaffoldOutput>> = {
     sentry: async function(): Promise<ScaffoldOutput> {
-      return await installSentry(process.cwd());
+      return installSentryForFrontend(process.cwd(), frontendOpt);
     },
     storybook: async function(): Promise<ScaffoldOutput> {
       return buildDummyOutput();
@@ -149,13 +151,15 @@ export async function installBEAddons(backendAddons: Array<STORMBEAddon>, logger
  * @function installFEAddons
  * @description Handles installing Frontend addons into a STORM stack project
  * @param {Array<STORMFEAddon>} frontendAddons
+ * @param {FrontendOpt} frontendOpt
  * @param {LoggerMode} loggerMode
  */
-export async function installFEAddons(frontendAddons: Array<STORMFEAddon>, loggerMode: LoggerMode): Promise<void> {
+export async function installFEAddons(frontendAddons: Array<STORMFEAddon>, frontendOpt: FrontendOpt, loggerMode: LoggerMode): Promise<void> {
   const verbose = loggerMode === 'verbose';
   for (const addon of frontendAddons) {
     if (verbose) ConsoleLogger.printCLIProcessInfoMessage(`Installing Frontend Addon`, addon);
-    const addonResult = await scaffoldFrontendAddons(addon)();
+
+    const addonResult = await scaffoldFrontendAddons(addon, frontendOpt)();
 
     if (!addonResult.success) {
       if (verbose) {
@@ -195,7 +199,7 @@ export async function installCQAddons(codeQualityAddons: Array<STORMCodeQualityA
 }
 
 /**
- *
+ * @deprecated
  * @param {Array<STORMAddOn>} addOnOpts
  * @param {LoggerMode} loggerMode
  * @description Handles installation of all scaffold options

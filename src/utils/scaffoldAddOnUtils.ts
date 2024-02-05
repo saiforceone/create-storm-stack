@@ -19,6 +19,7 @@ import {platform} from 'os';
 import {PATH_CONSTANTS} from "../constants/pathConstants.js";
 import STORMBackendAddonsFile = STORMStackCLI.STORMBackendAddonsFile;
 import FrontendOpt = STORMStackCLI.FrontendOpt;
+import STORMSpecificFrontendAddonsFile = STORMStackCLI.STORMSpecificFrontendAddonsFile;
 
 /**
  * @returns {Promise<STORMAddOnsFile|undefined>}
@@ -158,7 +159,7 @@ async function installSentryForBackend(currentUrl: string, isWindows: boolean, p
 
     if (isWindows) stormAddonsAutoloadPath = normalizeWinFilePath(stormAddonsAutoloadPath);
 
-    await appendFile(stormAddonsAutoloadPath, `from . import addons_sentry\n`);
+    await appendFile(stormAddonsAutoloadPath, `\nfrom .addon_sentry import *\n`);
     output.success = true;
     return output;
   } catch (e) {
@@ -174,22 +175,40 @@ async function installSentryForBackend(currentUrl: string, isWindows: boolean, p
  * @param {string} projectPath the path of the scaffolded project
  * @param {FrontendOpt} frontendOpt the frontend that Sentry should be installed for
  */
-// export async function installSentryForFrontend(projectPath: string, frontendOpt: FrontendOpt): Promise<ScaffoldOutput> {
-//   const output = buildScaffoldOutput();
-//   const isWindows = platform() === 'win32';
-//   try {
-//
-//     const currentUrl = import.meta.url;
-//
-//
-//     output.success = true;
-//     return output;
-//   } catch (e) {
-//     output.message = (e as Error).message;
-//     return output;
-//   }
-//
-// }
+export async function installSentryForFrontend(projectPath: string, frontendOpt: FrontendOpt): Promise<ScaffoldOutput> {
+  const output = buildScaffoldOutput();
+  const isWindows = platform() === 'win32';
+  try {
+
+    const currentUrl = import.meta.url;
+    let frontendAddonsFilePath = path.resolve(
+      new URL(currentUrl).pathname,
+      PATH_CONSTANTS.PATH_FRONTEND_SPECIFIC_ADDONS,
+    );
+
+    if (isWindows) frontendAddonsFilePath = normalizeWinFilePath(frontendAddonsFilePath);
+    const frontendAddonsData = await readFile(frontendAddonsFilePath, {encoding: 'utf-8'});
+    const frontendAddonsPkg = JSON.parse(frontendAddonsData) as STORMSpecificFrontendAddonsFile;
+
+    if (!frontendAddonsPkg) {
+      output.message = 'Failed to read package data';
+      return output;
+    }
+
+    // build the installation string for the platform
+    const fePackages = frontendAddonsPkg.sentry[frontendOpt].packages;
+    const pkgString = Object.keys(fePackages).map(p => `${p}@${fePackages[p]}`).join(' ');
+    const installationString = `${COMMAND_CONSTANTS.CMD_NPM_DEV_INSTALL} ${pkgString}`;
+
+    await execaCommand(installationString);
+
+    output.success = true;
+    return output;
+  } catch (e) {
+    output.message = (e as Error).message;
+    return output;
+  }
+}
 
 /**
  * @function installSentry

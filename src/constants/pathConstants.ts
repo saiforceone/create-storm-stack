@@ -17,6 +17,7 @@ export const PATH_CONSTANTS = {
   PATH_STORM_ADDONS: '../../../templates/STORMAddOns',
   PATH_WEB_CORE_ADDONS: '../../../configs/webAddonDependencies.json',
   PATH_FRONTEND_TEMPLATES: '../../../templates/STORMFrontendTemplates',
+  PATH_FRONTEND_SPECIFIC_ADDONS: '../../../configs/specificFEAddonDependencies.json',
   DIR_NAME_FE_CONFIG: 'storm_config',
   FILE_FE_APP_CONFIG: 'storm_config.json',
   FILE_PACKAGE_JSON: 'package.json',

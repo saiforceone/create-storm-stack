@@ -73,6 +73,9 @@ declare namespace STORMStackCLI {
     frontendBasePath: string;
     frontendEntryPoint: FrontendEntryPointOpt;
     frontendExtensions: string[];
+    codeQualityAddons: STORMCodeQualityAddon[];
+    frontendAddons: STORMFEAddon[];
+    backendAddons: STORMBEAddon[];
   };
 
   // structure of the frontend dependencies file
@@ -310,8 +313,12 @@ declare namespace STORMStackCLI {
     detail?: string;
   };
 
+  export type STORMSpecificFrontendDep = Record<FrontendOpt, STORMPackageFile>;
+
   /**
    * Represents a STORM/Tempest Backend addons file
    */
   export type STORMBackendAddonsFile = Record<STORMBEAddon, STORMPackageFile>;
+
+  export type STORMSpecificFrontendAddonsFile = Record<STORMFEAddon, STORMSpecificFrontendDep>;
 }

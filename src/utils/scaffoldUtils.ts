@@ -535,6 +535,9 @@ export async function updateProjectConfiguration(
       feConfigData[scaffoldOptions.frontend].extensions;
     configData.frontendBasePath =
       feConfigData[scaffoldOptions.frontend].basePath;
+    configData.codeQualityAddons = scaffoldOptions.stormCQAddons;
+    configData.frontendAddons = scaffoldOptions.stormFEAddons;
+    configData.backendAddons = scaffoldOptions.stormBEAddons;
 
     let configDestPath = path.join(
       projectPath,

@@ -58,22 +58,18 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         }
         feSetupSpinner.succeed();
 
-        if (cliAnswers.installPrettier) {
-          const prettierSpinner = ora(
-            `${LocaleData.frontend.info.INSTALL_FE_ADDON}: Prettier`
-          ).start();
-          const { message: prettierMsg, success: prettierSuccess } =
-            await scaffoldAddOns('prettier')();
-          if (!prettierSuccess) {
-            prettierSpinner.fail(prettierMsg);
-            process.exit(1);
-          }
-          prettierSpinner.succeed();
-        }
-
         // todo: remove this
-        // if (cliAnswers.stormAddons.length) {
-        //   await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
+        // if (cliAnswers.installPrettier) {
+        //   const prettierSpinner = ora(
+        //     `${LocaleData.frontend.info.INSTALL_FE_ADDON}: Prettier`
+        //   ).start();
+        //   const { message: prettierMsg, success: prettierSuccess } =
+        //     await scaffoldAddOns('prettier')();
+        //   if (!prettierSuccess) {
+        //     prettierSpinner.fail(prettierMsg);
+        //     process.exit(1);
+        //   }
+        //   prettierSpinner.succeed();
         // }
 
         if (cliAnswers.stormCQAddons.length) {
@@ -81,7 +77,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         }
 
         if (cliAnswers.stormFEAddons.length) {
-          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.loggerMode);
+          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.frontend, cliAnswers.loggerMode);
         }
 
         if (cliAnswers.stormBEAddons.length) {
@@ -135,18 +131,8 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         }
 
         if (cliAnswers.stormFEAddons.length) {
-          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.loggerMode);
+          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.frontend, cliAnswers.loggerMode);
         }
-
-        // scaffold frontend addons
-        // todo: remove this
-        // await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
-
-        // add-ons
-        // todo: remove this as well
-        // if (cliAnswers.stormAddons.length) {
-        //   await installScaffoldAddOns(cliAnswers.stormAddons, cliAnswers.loggerMode);
-        // }
 
         // scaffold backend addons
         if (cliAnswers.stormBEAddons.length) {

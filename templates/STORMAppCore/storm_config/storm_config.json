@@ -5,5 +5,8 @@
   "frontend": "",
   "frontendBasePath": "",
   "frontendEntryPoint": "",
-  "frontendExtensions": []
+  "frontendExtensions": [],
+  "codeQualityAddons": [],
+  "frontendAddons": [],
+  "backendAddons": []
 }
