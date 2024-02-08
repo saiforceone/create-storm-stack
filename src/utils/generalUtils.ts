@@ -28,6 +28,7 @@ export function buildScaffoldOutput(): ScaffoldOutput {
   };
 }
 
+// todo: delete me!
 export function pluralize(word: string): string {
   const vowels = 'aeiou';
   const irregulars: Record<string, string> = {

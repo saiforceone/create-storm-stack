@@ -110,22 +110,6 @@ export function scaffoldCodeQualityAddons(stormQCAddon: STORMCodeQualityAddon) {
 }
 
 /**
- * // todo: remove this once installing addons via other prompt works properly
- * @deprecated
- * @function buildAddOns
- * @param scaffoldOpts
- * @description Helper function that returns a list of ST🌀RM Stack addons based on
- * project options (scaffoldOpts)
- */
-export function buildAddOns(scaffoldOpts: ScaffoldOpts): Array<STORMAddOn> {
-  const addOnsList: Array<STORMAddOn> = [];
-
-  if (scaffoldOpts.installPrettier) addOnsList.push('prettier')
-
-  return addOnsList;
-}
-
-/**
  * @function installBEAddons
  * @description Handles installing backend addons into a STORM stack project
  * @param {Array<STORMBEAddon>} backendAddons

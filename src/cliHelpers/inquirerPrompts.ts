@@ -37,16 +37,9 @@ export function getCLIPrompts(): QuestionCollection {
       type: 'list',
       choices: ['react', 'vue'],
     },
-    // ST🌀RM Add Ons
-    {
-      message: `${localeData.cli.prompts.INSTALL_ADDON}: Prettier`,
-      name: 'installPrettier',
-      type: 'confirm',
-      default: false,
-    },
     // Optional ST🌀RM Code Quality add-ons
     {
-      message: `Select ST🌀RM Code Quality Add Ons`,
+      message: localeData.cli.prompts.INSTALL_CODE_QUALITY_ADDON,
       name: 'stormCQAddons',
       type: 'checkbox',
       choices: [
@@ -58,7 +51,7 @@ export function getCLIPrompts(): QuestionCollection {
     },
     // Optional ST🌀RM Frontend addons
     {
-      message: `Select ST🌀RM Frontend Addons`,
+      message: localeData.cli.prompts.INSTALL_FRONTEND_ADDON,
       name: 'stormFEAddons',
       type: 'checkbox',
       choices: [
@@ -70,7 +63,7 @@ export function getCLIPrompts(): QuestionCollection {
     },
     // Optional ST🌀RM Backend addons
     {
-      message: 'Select ST🌀RM Backend Addons',
+      message: localeData.cli.prompts.INSTALL_BACKEND_ADDON,
       name: 'stormBEAddons',
       type: 'checkbox',
       choices: [

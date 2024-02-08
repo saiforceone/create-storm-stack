@@ -35,7 +35,6 @@ declare namespace STORMStackCLI {
     projectName: string;
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
-    installPrettier: boolean;
     stormAddons: STORMAddOn[];
     stormCQAddons: STORMCodeQualityAddon[];
     stormFEAddons: STORMFEAddon[];
@@ -186,6 +185,9 @@ declare namespace STORMStackCLI {
         LOGGING_MODE: string;
         INSTALL_ADDON: string;
         ENABLE_OPTION: string;
+        INSTALL_CODE_QUALITY_ADDON: string;
+        INSTALL_FRONTEND_ADDON: string;
+        INSTALL_BACKEND_ADDON: string;
       };
       error: {
         INSTALL_ADDON: string;
@@ -243,6 +245,11 @@ declare namespace STORMStackCLI {
       PROJECT_SUMMARY: string;
       headings: {
         ADDONS_INSTALLED: string;
+        BACKEND_ADDONS_INSTALLED: string;
+        FRONTEND_ADDONS_INSTALLED: string;
+        CODE_QUALITY_ADDONS_INSTALLED: string;
+        FRONTEND_INSTRUCTIONS: string;
+        BACKEND_INSTRUCTIONS: string;
         PROJECT_SUMMARY: string;
         RUNNING_PROJECT: string;
       };
