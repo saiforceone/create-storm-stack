@@ -535,6 +535,9 @@ export async function updateProjectConfiguration(
       feConfigData[scaffoldOptions.frontend].extensions;
     configData.frontendBasePath =
       feConfigData[scaffoldOptions.frontend].basePath;
+    configData.codeQualityAddons = scaffoldOptions.stormCQAddons;
+    configData.frontendAddons = scaffoldOptions.stormFEAddons;
+    configData.backendAddons = scaffoldOptions.stormBEAddons;
 
     let configDestPath = path.join(
       projectPath,
@@ -669,6 +672,7 @@ export async function buildInitialEnvAtDest(
     parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_VITE_PORT] = String(
       projectConfig.vitePort
     );
+    parsedEnv[FILE_UTIL_CONSTANTS.ENV_KEY_SENTRY_DSN] = 'ADD-YOUR-SENTRY-DSN';
 
     // Write default database uri by itself
     parsedEnv[
@@ -821,4 +825,19 @@ export async function enableGit(
       ConsoleLogger.printLog(`${LocaleData.backend.error.ENABLE_GIT}`, 'error');
     return output;
   }
+}
+
+/**
+ * @function getFrontendEntrypoint
+ * @description Helper function that gets the frontend entry point
+ * @param {FrontendOpt} frontend
+ * @returns {string}
+ */
+export function getFrontendEntrypoint(frontend: FrontendOpt): string {
+  const entrypoints: Record<FrontendOpt, string> = {
+    react: 'main.tsx',
+    vue: 'main.ts'
+  };
+
+  return `storm_fe_${frontend}/src/${entrypoints[frontend]}`;
 }

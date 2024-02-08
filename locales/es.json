@@ -73,7 +73,10 @@
       "FRONTEND_CHOICE": "¿Qué interfaz te gustaría usar?",
       "LOGGING_MODE": "What kind of logging should we use - ES",
       "INSTALL_ADDON": "Install ST\uD83C\uDF00RM Stack addon (optional) - ES",
-      "ENABLE_OPTION": "Enable additional option (optional) - ES"
+      "ENABLE_OPTION": "Enable additional option (optional) - ES",
+      "INSTALL_CODE_QUALITY_ADDON": "Select ST\uD83C\uDF00RM Code Quality Addons - ES",
+      "INSTALL_FRONTEND_ADDON": "Select ST\uD83C\uDF00RM Frontend Addons - ES",
+      "INSTALL_BACKEND_ADDON": "Select ST\uD83C\uDF00RM Backend Addons - ES"
     },
     "error": {
       "INSTALL_ADDON": "Failed to install ST\uD83C\uDF00RM addon - ES",
@@ -156,6 +159,11 @@
     "PROJECT_SUMMARY": "Project Summary - ES",
     "headings": {
       "ADDONS_INSTALLED": "Addons Installed - ES",
+      "BACKEND_ADDONS_INSTALLED": "Backend Addons Installed - ES",
+      "FRONTEND_ADDONS_INSTALLED": "Frontend Addons Installed - ES",
+      "CODE_QUALITY_ADDONS_INSTALLED": "Code Quality Addons Installed - ES",
+      "FRONTEND_INSTRUCTIONS": "Frontend Instructions - es",
+      "BACKEND_INSTRUCTIONS": "Backend Instructions - es",
       "PROJECT_SUMMARY": "Project Summary - ES",
       "RUNNING_PROJECT": "Running your ST\uD83C\uDF00RM Stack project - ES"
     },

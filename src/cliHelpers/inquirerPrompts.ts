@@ -9,6 +9,7 @@ import type { QuestionCollection } from 'inquirer';
 // ST🌀RM Stack Imports
 import { validateProjectOrModuleName } from '../utils/generalUtils.js';
 import { LocaleManager } from './localeManager.js';
+import inquirer from "inquirer";
 
 /**
  * @function getCLIPrompts
@@ -36,14 +37,42 @@ export function getCLIPrompts(): QuestionCollection {
       type: 'list',
       choices: ['react', 'vue'],
     },
-    // ST🌀RM Add Ons
+    // Optional ST🌀RM Code Quality add-ons
     {
-      message: `${localeData.cli.prompts.INSTALL_ADDON}: Prettier`,
-      name: 'installPrettier',
-      type: 'confirm',
-      default: false,
+      message: localeData.cli.prompts.INSTALL_CODE_QUALITY_ADDON,
+      name: 'stormCQAddons',
+      type: 'checkbox',
+      choices: [
+        {
+          name: 'Prettier (code style)',
+          value: 'prettier',
+        },
+      ]
     },
-    // GIT option
+    // Optional ST🌀RM Frontend addons
+    {
+      message: localeData.cli.prompts.INSTALL_FRONTEND_ADDON,
+      name: 'stormFEAddons',
+      type: 'checkbox',
+      choices: [
+        {
+          name: 'Sentry (FE Logging)',
+          value: 'sentry',
+        }
+      ],
+    },
+    // Optional ST🌀RM Backend addons
+    {
+      message: localeData.cli.prompts.INSTALL_BACKEND_ADDON,
+      name: 'stormBEAddons',
+      type: 'checkbox',
+      choices: [
+        {
+          name: 'Sentry (BE Logging)',
+          value: 'sentry'
+        }
+      ]
+    },
     {
       message: `${localeData.cli.prompts.ENABLE_OPTION}: Git`,
       name: 'enableGit',

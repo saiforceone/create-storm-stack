@@ -35,7 +35,10 @@ declare namespace STORMStackCLI {
     projectName: string;
     frontend: FrontendOpt;
     loggerMode: LoggerMode;
-    installPrettier: boolean;
+    stormAddons: STORMAddOn[];
+    stormCQAddons: STORMCodeQualityAddon[];
+    stormFEAddons: STORMFEAddon[];
+    stormBEAddons: STORMBEAddon[];
     enableGit: boolean;
   };
 
@@ -69,6 +72,9 @@ declare namespace STORMStackCLI {
     frontendBasePath: string;
     frontendEntryPoint: FrontendEntryPointOpt;
     frontendExtensions: string[];
+    codeQualityAddons: STORMCodeQualityAddon[];
+    frontendAddons: STORMFEAddon[];
+    backendAddons: STORMBEAddon[];
   };
 
   // structure of the frontend dependencies file
@@ -87,7 +93,17 @@ declare namespace STORMStackCLI {
   export type STORMFrontendOptFile = Record<FrontendOpt, FrontendOptData>;
 
   // STORM stack addon
-  export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest';
+  // todo: remove this
+  export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest' | 'sentry';
+
+  // STORM Code quality Addon options
+  export type STORMCodeQualityAddon = 'prettier' | 'eslint' | 'pycodestyle';
+
+  // STORM Frontend Addon options
+  export type STORMFEAddon = 'sentry' | 'storybook' | 'vitest';
+
+  // STORM Backend Addon options
+  export type STORMBEAddon = 'sentry' | 'vercel';
 
   export type STORMAddOnsStructure = {
     packages: Record<string, string>;
@@ -169,6 +185,9 @@ declare namespace STORMStackCLI {
         LOGGING_MODE: string;
         INSTALL_ADDON: string;
         ENABLE_OPTION: string;
+        INSTALL_CODE_QUALITY_ADDON: string;
+        INSTALL_FRONTEND_ADDON: string;
+        INSTALL_BACKEND_ADDON: string;
       };
       error: {
         INSTALL_ADDON: string;
@@ -226,6 +245,11 @@ declare namespace STORMStackCLI {
       PROJECT_SUMMARY: string;
       headings: {
         ADDONS_INSTALLED: string;
+        BACKEND_ADDONS_INSTALLED: string;
+        FRONTEND_ADDONS_INSTALLED: string;
+        CODE_QUALITY_ADDONS_INSTALLED: string;
+        FRONTEND_INSTRUCTIONS: string;
+        BACKEND_INSTRUCTIONS: string;
         PROJECT_SUMMARY: string;
         RUNNING_PROJECT: string;
       };
@@ -295,4 +319,13 @@ declare namespace STORMStackCLI {
     message: string;
     detail?: string;
   };
+
+  export type STORMSpecificFrontendDep = Record<FrontendOpt, STORMPackageFile>;
+
+  /**
+   * Represents a STORM/Tempest Backend addons file
+   */
+  export type STORMBackendAddonsFile = Record<STORMBEAddon, STORMPackageFile>;
+
+  export type STORMSpecificFrontendAddonsFile = Record<STORMFEAddon, STORMSpecificFrontendDep>;
 }

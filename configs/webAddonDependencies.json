@@ -1,0 +1,7 @@
+{
+  "sentry": {
+    "packages": {
+      "sentry-sdk[starlette]": "*"
+    }
+  }
+}

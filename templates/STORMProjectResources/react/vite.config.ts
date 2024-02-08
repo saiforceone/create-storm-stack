@@ -3,8 +3,10 @@
  * @description Base vite config file for React
  * */
 import * as path from 'path';
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import viteReact from '@vitejs/plugin-react';
+// Developer Note: uncomment the line below if you are using Sentry or delete if not
+// import viteReact from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import stormConfig from './storm_config/storm_config.json';
 
@@ -14,6 +16,11 @@ export default defineConfig({
     viteReact({
       include: '**/*.disabled',
     }),
+    // Developer Note: uncomment the lines below if you are using Sentry or delete them if not
+    // sentryVitePlugin({
+    //   org: "", // Developer Note: Add your Sentry org and project
+    //   project: ""
+    // }),
   ],
   root: path.resolve(`${stormConfig.frontendBasePath}`),
   base: '/static/',
