@@ -221,7 +221,7 @@ export async function copyWebTemplateFiles(
     // 4. copy support files
     let supportFilesTemplatePath = path.resolve(
       normalizedPath,
-      PATH_CONSTANTS.PATH_VITE_HMR_TAGS
+      PATH_CONSTANTS.PATH_STORM_SUPPORT_FILES
     );
 
     if (platform() === 'win32')

@@ -1,4 +1,4 @@
-# author: SaiForceOne
+# author: create-storm-stack
 # description: Adds the functionality to support vite's HMR when in debug
 # mode and a normal script tag that points to main.js when not in Debug
 import os

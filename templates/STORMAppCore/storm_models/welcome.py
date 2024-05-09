@@ -1,9 +1,18 @@
-# ST🌀RM Stack CLI
+# author: create-storm-stack / ST🌀RM Stack CLI
+
 # core imports
-import datetime
 import mongoengine as me
+from _base import StormModel
 
 
-class Welcome(me.Document):
+class Welcome(StormModel):
+	"""
+	📝 Developer Note: This model is to provide you with an idea of models should be constructed.
+	You may choose to delete this model since based on this.
+	"""
 	label = me.StringField(required=True, max_length=200)
-	updated_at = me.DateTimeField(default=datetime.datetime.utcnow)
+
+	meta = {
+		# 📝 Developer Note: use this to specify the name for your collection in MongoDB
+		'collection': 'welcome'
+	}
