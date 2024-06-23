@@ -1,0 +1,27 @@
+# Create-Storm-Stack code quality and enforcement workflow
+name: quality-checks
+on:
+  push:
+    branches:
+      - "*"
+jobs:
+  format-code:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install deps
+        run: npm install --legacy-peer-deps
+
+      - name: Run Prettier Check
+        run: npm run prettier:check
+
+      - name: Lint Source Files
+        run: npm run lint

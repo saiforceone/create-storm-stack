@@ -9,15 +9,17 @@ import ora from 'ora';
 
 // STORM Stack Imports
 import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
-import {scaffoldCore} from '../scaffoldFuncs/scaffoldCore.js';
-import {ConsoleLogger} from '../utils/consoleLogger.js';
-import {scaffoldFrontend} from '../scaffoldFuncs/scaffoldFrontend.js';
-import {scaffoldPost} from '../scaffoldFuncs/scaffoldPost.js';
+import { scaffoldCore } from '../scaffoldFuncs/scaffoldCore.js';
+import { ConsoleLogger } from '../utils/consoleLogger.js';
+import { scaffoldFrontend } from '../scaffoldFuncs/scaffoldFrontend.js';
+import { scaffoldPost } from '../scaffoldFuncs/scaffoldPost.js';
 import {
-  installBEAddons, installCQAddons, installFEAddons,
+  installBEAddons,
+  installCQAddons,
+  installFEAddons,
 } from '../scaffoldFuncs/scaffoldAddOns.js';
-import {LocaleManager} from './localeManager.js';
-import {enableGit} from '../utils/scaffoldUtils.js';
+import { LocaleManager } from './localeManager.js';
+import { enableGit } from '../utils/scaffoldUtils.js';
 
 /**
  * @function execCLIInstallation
@@ -35,7 +37,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         const coreSetupSpinner = ora(
           LocaleData.backend.info.INSTALL_BASE_DEPS
         ).start();
-        const {message: coreMessage, success: coreSuccess} =
+        const { message: coreMessage, success: coreSuccess } =
           await scaffoldCore(cliAnswers);
         if (!coreSuccess) {
           coreSetupSpinner.fail(coreMessage);
@@ -48,7 +50,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
             cliAnswers.frontend
           )})...`
         ).start();
-        const {message: feMessage, success: feSuccess} =
+        const { message: feMessage, success: feSuccess } =
           await scaffoldFrontend(cliAnswers);
         if (!feSuccess) {
           feSetupSpinner.fail(feMessage);
@@ -57,22 +59,32 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         feSetupSpinner.succeed();
 
         if (cliAnswers.stormCQAddons.length) {
-          await installCQAddons(cliAnswers.stormCQAddons, cliAnswers.loggerMode);
+          await installCQAddons(
+            cliAnswers.stormCQAddons,
+            cliAnswers.loggerMode
+          );
         }
 
         if (cliAnswers.stormFEAddons.length) {
-          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.frontend, cliAnswers.loggerMode);
+          await installFEAddons(
+            cliAnswers.stormFEAddons,
+            cliAnswers.frontend,
+            cliAnswers.loggerMode
+          );
         }
 
         if (cliAnswers.stormBEAddons.length) {
-          await installBEAddons(cliAnswers.stormBEAddons, cliAnswers.loggerMode);
+          await installBEAddons(
+            cliAnswers.stormBEAddons,
+            cliAnswers.loggerMode
+          );
         }
 
         if (cliAnswers.enableGit) {
           const gitSpinner = ora(
             `${LocaleData.backend.info.ENABLE_GIT}`
           ).start();
-          const {message: gitMsg, success: gitSuccess} = await enableGit(
+          const { message: gitMsg, success: gitSuccess } = await enableGit(
             cliAnswers.loggerMode
           );
           gitSuccess ? gitSpinner.succeed() : gitSpinner.warn(gitMsg);
@@ -81,7 +93,7 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         const psSetupSpinner = ora(
           LocaleData.postScaffold.RUN_POST_PROCESSES
         ).start();
-        const {message: psMessage, success: psSuccess} =
+        const { message: psMessage, success: psSuccess } =
           await scaffoldPost(cliAnswers);
         if (!psSuccess) {
           psSetupSpinner.fail(psMessage);
@@ -111,16 +123,26 @@ export function execCLIInstallation(cliAnswers: ScaffoldOpts) {
         // 2. Scaffold Add-ons
         // scaffold code quality addons
         if (cliAnswers.stormCQAddons.length) {
-          await installCQAddons(cliAnswers.stormCQAddons, cliAnswers.loggerMode);
+          await installCQAddons(
+            cliAnswers.stormCQAddons,
+            cliAnswers.loggerMode
+          );
         }
 
         if (cliAnswers.stormFEAddons.length) {
-          await installFEAddons(cliAnswers.stormFEAddons, cliAnswers.frontend, cliAnswers.loggerMode);
+          await installFEAddons(
+            cliAnswers.stormFEAddons,
+            cliAnswers.frontend,
+            cliAnswers.loggerMode
+          );
         }
 
         // scaffold backend addons
         if (cliAnswers.stormBEAddons.length) {
-          await installBEAddons(cliAnswers.stormBEAddons, cliAnswers.loggerMode);
+          await installBEAddons(
+            cliAnswers.stormBEAddons,
+            cliAnswers.loggerMode
+          );
         }
 
         // Git

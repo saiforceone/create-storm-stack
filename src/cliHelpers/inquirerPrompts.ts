@@ -9,7 +9,6 @@ import type { QuestionCollection } from 'inquirer';
 // ST🌀RM Stack Imports
 import { validateProjectOrModuleName } from '../utils/generalUtils.js';
 import { LocaleManager } from './localeManager.js';
-import inquirer from "inquirer";
 
 /**
  * @function getCLIPrompts
@@ -47,7 +46,7 @@ export function getCLIPrompts(): QuestionCollection {
           name: 'Prettier (code style)',
           value: 'prettier',
         },
-      ]
+      ],
     },
     // Optional ST🌀RM Frontend addons
     {
@@ -58,7 +57,7 @@ export function getCLIPrompts(): QuestionCollection {
         {
           name: 'Sentry (FE Logging)',
           value: 'sentry',
-        }
+        },
       ],
     },
     // Optional ST🌀RM Backend addons
@@ -69,9 +68,9 @@ export function getCLIPrompts(): QuestionCollection {
       choices: [
         {
           name: 'Sentry (BE Logging)',
-          value: 'sentry'
-        }
-      ]
+          value: 'sentry',
+        },
+      ],
     },
     {
       message: `${localeData.cli.prompts.ENABLE_OPTION}: Git`,
