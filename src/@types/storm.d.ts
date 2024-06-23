@@ -133,6 +133,7 @@ declare namespace STORMStackCLI {
     CREATE_CONTROLLER: string;
     CREATE_FE_COMPONENT: string;
     CREATE_MODEL: string;
+    CREATE_DTO: string;
     LOAD_STORM_CONFIG: string;
     LOAD_STORM_MODULES: string;
     MODULE_CREATE: string;

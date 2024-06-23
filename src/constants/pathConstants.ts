@@ -10,7 +10,7 @@ export const PATH_CONSTANTS = {
   DIR_NAME_SUPPORT: 'support',
   PATH_WEB_APP_CORE_TEMPLATE: `../../../templates/STORMAppCore`,
   PATH_WEB_BASE_TEMPLATE: '../../../templates/STORMBaseTemplates',
-  PATH_VITE_HMR_TAGS: '../../../templates/STORMHmr',
+  PATH_STORM_SUPPORT_FILES: '../../../templates/STORMSupport',
   FILE_WEB_APP_CORE_DEPS: '../../../configs/webCoreDependencies.json',
   FILE_FRONTEND_CORE_DEPS: '../../../configs/viteBaseDependencies.json',
   FILE_FRONTEND_MAIN_DEPS: '../../../configs/frontendDependencies.json',

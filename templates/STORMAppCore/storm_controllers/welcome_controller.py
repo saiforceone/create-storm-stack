@@ -6,8 +6,11 @@
 from starlette.endpoints import HTTPEndpoint
 from starlette.responses import JSONResponse
 
+# STORM stack imports
+from storm_controllers._base_controller import StormBaseController
 
-class WelcomeController(HTTPEndpoint):
+
+class WelcomeController(StormBaseController):
     """
     Represents an example of what a controller should look like for the STRM
     Stack. As this is an example, you should use this as a reference.
