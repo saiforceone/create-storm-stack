@@ -4,13 +4,16 @@
  * from the CLI prompts
  */
 import ScaffoldOutput = STORMStackCLI.ScaffoldOutput;
-import {buildScaffoldOutput} from '../utils/generalUtils.js';
-import {installPrettier, installSentry, installSentryForFrontend} from '../utils/scaffoldAddOnUtils.js';
+import { buildScaffoldOutput } from '../utils/generalUtils.js';
+import {
+  installPrettier,
+  installSentry,
+  installSentryForFrontend,
+} from '../utils/scaffoldAddOnUtils.js';
 import STORMAddOn = STORMStackCLI.STORMAddOn;
 import LoggerMode = STORMStackCLI.LoggerMode;
-import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
-import {ConsoleLogger} from '../utils/consoleLogger.js';
-import {LocaleManager} from '../cliHelpers/localeManager.js';
+import { ConsoleLogger } from '../utils/consoleLogger.js';
+import { LocaleManager } from '../cliHelpers/localeManager.js';
 import STORMBEAddon = STORMStackCLI.STORMBEAddon;
 import STORMFEAddon = STORMStackCLI.STORMFEAddon;
 import STORMCodeQualityAddon = STORMStackCLI.STORMCodeQualityAddon;
@@ -21,7 +24,6 @@ function buildDummyOutput() {
   output.message = 'Not implemented';
   return output;
 }
-
 
 /**
  * @deprecated
@@ -44,7 +46,7 @@ export function scaffoldAddOns(stormAddOn: STORMAddOn) {
     },
     sentry: async function () {
       return await installSentry(process.cwd());
-    }
+    },
   };
 
   return addOnInstallOpts[stormAddOn];
@@ -56,14 +58,17 @@ export function scaffoldAddOns(stormAddOn: STORMAddOn) {
  * @param {STORMBEAddon} stormBEAddon the addon to be installed
  */
 export function scaffoldBackendAddons(stormBEAddon: STORMBEAddon) {
-  const backendAddonInstallOpts: Record<STORMBEAddon, () => Promise<ScaffoldOutput>> = {
+  const backendAddonInstallOpts: Record<
+    STORMBEAddon,
+    () => Promise<ScaffoldOutput>
+  > = {
     sentry: async function (): Promise<ScaffoldOutput> {
       return await installSentry(process.cwd());
     },
-    vercel: async function(): Promise<ScaffoldOutput> {
+    vercel: async function (): Promise<ScaffoldOutput> {
       return buildDummyOutput();
-    }
-  }
+    },
+  };
   return backendAddonInstallOpts[stormBEAddon];
 }
 
@@ -73,19 +78,24 @@ export function scaffoldBackendAddons(stormBEAddon: STORMBEAddon) {
  * @param {STORMFEAddon} stormFEAddon
  * @param {FrontendOpt} frontendOpt
  */
-export function scaffoldFrontendAddons(stormFEAddon: STORMFEAddon, frontendOpt: FrontendOpt) {
-  const frontendAddonInstallOpts: Record<STORMFEAddon, () => Promise<ScaffoldOutput>> = {
-    sentry: async function(): Promise<ScaffoldOutput> {
+export function scaffoldFrontendAddons(
+  stormFEAddon: STORMFEAddon,
+  frontendOpt: FrontendOpt
+) {
+  const frontendAddonInstallOpts: Record<
+    STORMFEAddon,
+    () => Promise<ScaffoldOutput>
+  > = {
+    sentry: async function (): Promise<ScaffoldOutput> {
       return installSentryForFrontend(process.cwd(), frontendOpt);
     },
-    storybook: async function(): Promise<ScaffoldOutput> {
+    storybook: async function (): Promise<ScaffoldOutput> {
       return buildDummyOutput();
     },
-    vitest: async function(): Promise<ScaffoldOutput> {
+    vitest: async function (): Promise<ScaffoldOutput> {
       return buildDummyOutput();
-    }
-
-  }
+    },
+  };
   return frontendAddonInstallOpts[stormFEAddon];
 }
 
@@ -95,17 +105,20 @@ export function scaffoldFrontendAddons(stormFEAddon: STORMFEAddon, frontendOpt: 
  * @param {STORMCodeQualityAddon} stormQCAddon
  */
 export function scaffoldCodeQualityAddons(stormQCAddon: STORMCodeQualityAddon) {
-  const codeQualityAddonInstallOpts: Record<STORMCodeQualityAddon, () => Promise<ScaffoldOutput>> = {
-    prettier: async function(): Promise<ScaffoldOutput> {
+  const codeQualityAddonInstallOpts: Record<
+    STORMCodeQualityAddon,
+    () => Promise<ScaffoldOutput>
+  > = {
+    prettier: async function (): Promise<ScaffoldOutput> {
       return await installPrettier(process.cwd());
     },
-    eslint: async function(): Promise<ScaffoldOutput> {
+    eslint: async function (): Promise<ScaffoldOutput> {
       return buildDummyOutput();
     },
-    pycodestyle: async function(): Promise<ScaffoldOutput> {
+    pycodestyle: async function (): Promise<ScaffoldOutput> {
       return buildDummyOutput();
-    }
-  }
+    },
+  };
   return codeQualityAddonInstallOpts[stormQCAddon];
 }
 
@@ -115,19 +128,30 @@ export function scaffoldCodeQualityAddons(stormQCAddon: STORMCodeQualityAddon) {
  * @param {Array<STORMBEAddon>} backendAddons
  * @param {LoggerMode} loggerMode
  */
-export async function installBEAddons(backendAddons: Array<STORMBEAddon>, loggerMode: LoggerMode): Promise<void> {
+export async function installBEAddons(
+  backendAddons: Array<STORMBEAddon>,
+  loggerMode: LoggerMode
+): Promise<void> {
   const verbose = loggerMode === 'verbose';
 
   for (const addon of backendAddons) {
-    if (verbose) ConsoleLogger.printCLIProcessInfoMessage(`Installing Backend Addon`, addon);
+    if (verbose)
+      ConsoleLogger.printCLIProcessInfoMessage(
+        `Installing Backend Addon`,
+        addon
+      );
     const addOnResult = await scaffoldBackendAddons(addon)();
 
     if (!addOnResult.success) {
-      if (verbose) ConsoleLogger.printCLIProcessErrorMessage(`${addOnResult.message}`);
+      if (verbose)
+        ConsoleLogger.printCLIProcessErrorMessage(`${addOnResult.message}`);
       process.exit(1);
     }
 
-    if (verbose) ConsoleLogger.printCLIProcessSuccessMessage({message: 'Successfully installed addon'});
+    if (verbose)
+      ConsoleLogger.printCLIProcessSuccessMessage({
+        message: 'Successfully installed addon',
+      });
   }
 }
 
@@ -138,25 +162,32 @@ export async function installBEAddons(backendAddons: Array<STORMBEAddon>, logger
  * @param {FrontendOpt} frontendOpt
  * @param {LoggerMode} loggerMode
  */
-export async function installFEAddons(frontendAddons: Array<STORMFEAddon>, frontendOpt: FrontendOpt, loggerMode: LoggerMode): Promise<void> {
+export async function installFEAddons(
+  frontendAddons: Array<STORMFEAddon>,
+  frontendOpt: FrontendOpt,
+  loggerMode: LoggerMode
+): Promise<void> {
   const verbose = loggerMode === 'verbose';
   for (const addon of frontendAddons) {
-    if (verbose) ConsoleLogger.printCLIProcessInfoMessage(`Installing Frontend Addon`, addon);
+    if (verbose)
+      ConsoleLogger.printCLIProcessInfoMessage(
+        `Installing Frontend Addon`,
+        addon
+      );
 
     const addonResult = await scaffoldFrontendAddons(addon, frontendOpt)();
 
     if (!addonResult.success) {
       if (verbose) {
-        ConsoleLogger.printCLIProcessErrorMessage(
-          `${addonResult.message}`
-        );
+        ConsoleLogger.printCLIProcessErrorMessage(`${addonResult.message}`);
       }
       process.exit(1);
     }
 
-    if (verbose) ConsoleLogger.printCLIProcessSuccessMessage({
-      message: 'Successfully installed frontend addon',
-    });
+    if (verbose)
+      ConsoleLogger.printCLIProcessSuccessMessage({
+        message: 'Successfully installed frontend addon',
+      });
   }
 }
 
@@ -166,19 +197,28 @@ export async function installFEAddons(frontendAddons: Array<STORMFEAddon>, front
  * @param {Array<STORMCodeQualityAddon>} codeQualityAddons
  * @param {LoggerMode} loggerMode
  */
-export async function installCQAddons(codeQualityAddons: Array<STORMCodeQualityAddon>, loggerMode: LoggerMode): Promise<void> {
+export async function installCQAddons(
+  codeQualityAddons: Array<STORMCodeQualityAddon>,
+  loggerMode: LoggerMode
+): Promise<void> {
   const verbose = loggerMode === 'verbose';
   for (const addon of codeQualityAddons) {
-    if (verbose) ConsoleLogger.printCLIProcessInfoMessage(`Installing Code Quality addons`, addon);
+    if (verbose)
+      ConsoleLogger.printCLIProcessInfoMessage(
+        `Installing Code Quality addons`,
+        addon
+      );
     const addonResult = await scaffoldCodeQualityAddons(addon)();
     if (!addonResult.success) {
-      if (verbose) ConsoleLogger.printCLIProcessErrorMessage(`${addonResult.message}`);
+      if (verbose)
+        ConsoleLogger.printCLIProcessErrorMessage(`${addonResult.message}`);
       process.exit(1);
     }
-    if (verbose) ConsoleLogger.printCLIProcessSuccessMessage({
-      message: 'Successfully installed code quality addon',
-      detail: addon,
-    });
+    if (verbose)
+      ConsoleLogger.printCLIProcessSuccessMessage({
+        message: 'Successfully installed code quality addon',
+        detail: addon,
+      });
   }
 }
 

@@ -8,7 +8,7 @@ import chalk from 'chalk';
 // ST🌀RM Stack Imports
 import ScaffoldOpts = STORMStackCLI.ScaffoldOpts;
 import { LocaleManager } from './localeManager.js';
-import {getFrontendEntrypoint} from "../utils/scaffoldUtils.js";
+import { getFrontendEntrypoint } from '../utils/scaffoldUtils.js';
 
 /**
  * @function printScaffoldSummary
@@ -20,49 +20,66 @@ export function printScaffoldSummary(scaffoldOpts: ScaffoldOpts): void {
   const LocaleData = LocaleManager.getInstance().getLocaleData();
 
   const cqAddonsText = `
- ${chalk.underline(LocaleData.postScaffold.headings.CODE_QUALITY_ADDONS_INSTALLED)}\n
+ ${chalk.underline(
+   LocaleData.postScaffold.headings.CODE_QUALITY_ADDONS_INSTALLED
+ )}\n
  ${
-    scaffoldOpts.stormCQAddons.length ?
-      scaffoldOpts.stormCQAddons.map((addon, index) => 
-      `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`
-      ) : 'N/A'
-  }
+   scaffoldOpts.stormCQAddons.length
+     ? scaffoldOpts.stormCQAddons.map(
+         (addon, index) => `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`
+       )
+     : 'N/A'
+ }
 `;
 
   const feAddonsText = `
- ${chalk.underline(LocaleData.postScaffold.headings.FRONTEND_ADDONS_INSTALLED)}\n
+ ${chalk.underline(
+   LocaleData.postScaffold.headings.FRONTEND_ADDONS_INSTALLED
+ )}\n
  ${
-    scaffoldOpts.stormFEAddons.length ?
-      scaffoldOpts.stormFEAddons.map((addon, index) =>
-      `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`  
-      ) : 'N/A'
-  }
+   scaffoldOpts.stormFEAddons.length
+     ? scaffoldOpts.stormFEAddons.map(
+         (addon, index) => `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`
+       )
+     : 'N/A'
+ }
 `;
 
   const beAddonsText = `
  ${chalk.underline(LocaleData.postScaffold.headings.BACKEND_INSTRUCTIONS)}\n
  ${
-    scaffoldOpts.stormBEAddons.length ?
-      scaffoldOpts.stormBEAddons.map((addon, index) =>
-      `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`  
-      ) : 'N/A'
-  }
+   scaffoldOpts.stormBEAddons.length
+     ? scaffoldOpts.stormBEAddons.map(
+         (addon, index) => `${chalk.bold.greenBright(index + 1 + '. ' + addon)}`
+       )
+     : 'N/A'
+ }
 `;
 
   let sentryInstructions = ``;
 
   if (scaffoldOpts.stormBEAddons.includes('sentry')) {
     sentryInstructions += `
- ${chalk.underline(`${LocaleData.postScaffold.headings.BACKEND_INSTRUCTIONS}: Sentry`)}\n
- To use Sentry with your application, you will need to add your DSN to your ${chalk.dim('.env')} file\n
-`
+ ${chalk.underline(
+   `${LocaleData.postScaffold.headings.BACKEND_INSTRUCTIONS}: Sentry`
+ )}\n
+ To use Sentry with your application, you will need to add your DSN to your ${chalk.dim(
+   '.env'
+ )} file\n
+`;
   }
 
   if (scaffoldOpts.stormFEAddons.includes('sentry')) {
     sentryInstructions += `
- ${chalk.underline(`${LocaleData.postScaffold.headings.FRONTEND_INSTRUCTIONS}: Sentry`)}\n
- To use Sentry with your (${scaffoldOpts.frontend}) application, uncomment the marked code in the following files
- ${chalk.dim(`${getFrontendEntrypoint(scaffoldOpts.frontend)}`)} and provide an appropriate ${chalk.dim('DSN')}.
+ ${chalk.underline(
+   `${LocaleData.postScaffold.headings.FRONTEND_INSTRUCTIONS}: Sentry`
+ )}\n
+ To use Sentry with your (${
+   scaffoldOpts.frontend
+ }) application, uncomment the marked code in the following files
+ ${chalk.dim(
+   `${getFrontendEntrypoint(scaffoldOpts.frontend)}`
+ )} and provide an appropriate ${chalk.dim('DSN')}.
 `;
   }
 

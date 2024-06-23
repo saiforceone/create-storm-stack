@@ -94,7 +94,12 @@ declare namespace STORMStackCLI {
 
   // STORM stack addon
   // todo: remove this
-  export type STORMAddOn = 'prettier' | 'eslint' | 'storybook' | 'vitetest' | 'sentry';
+  export type STORMAddOn =
+    | 'prettier'
+    | 'eslint'
+    | 'storybook'
+    | 'vitetest'
+    | 'sentry';
 
   // STORM Code quality Addon options
   export type STORMCodeQualityAddon = 'prettier' | 'eslint' | 'pycodestyle';
@@ -328,5 +333,8 @@ declare namespace STORMStackCLI {
    */
   export type STORMBackendAddonsFile = Record<STORMBEAddon, STORMPackageFile>;
 
-  export type STORMSpecificFrontendAddonsFile = Record<STORMFEAddon, STORMSpecificFrontendDep>;
+  export type STORMSpecificFrontendAddonsFile = Record<
+    STORMFEAddon,
+    STORMSpecificFrontendDep
+  >;
 }

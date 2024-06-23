@@ -836,7 +836,7 @@ export async function enableGit(
 export function getFrontendEntrypoint(frontend: FrontendOpt): string {
   const entrypoints: Record<FrontendOpt, string> = {
     react: 'main.tsx',
-    vue: 'main.ts'
+    vue: 'main.ts',
   };
 
   return `storm_fe_${frontend}/src/${entrypoints[frontend]}`;
